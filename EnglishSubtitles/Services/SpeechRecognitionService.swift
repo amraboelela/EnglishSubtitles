@@ -20,9 +20,9 @@ class SpeechRecognitionService {
 
     private func loadModel() async {
         do {
-            // Use base model (~75MB) - optimized for iPhone
-            // Other options: .tiny (~40MB), .small (~244MB), .medium (~769MB)
-            whisperKit = try await WhisperKit(variant: .base)
+            // Use default model for now
+            // TODO: Specify base model when API is clarified
+            whisperKit = try await WhisperKit()
         } catch {
             print("Failed to load WhisperKit model: \(error)")
         }
