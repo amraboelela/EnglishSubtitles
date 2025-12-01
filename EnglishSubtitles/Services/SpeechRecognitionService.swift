@@ -11,12 +11,11 @@ import AVFoundation
 
 /// Service that handles multilingual speech-to-text and translation using WhisperKit
 class SpeechRecognitionService {
-    private var whisperKit: WhisperKit?
     private var audioStreamManager: AudioStreamManager?
+    private var whisperKitManager: WhisperKitManager?
 
     // Callbacks for updates
     private var translationCallback: ((String, Int) -> Void)?
-    private var progressCallback: ((Double) -> Void)?
 
     // Audio buffer accumulation
     private var audioBuffer: [Float] = []
@@ -31,7 +30,7 @@ class SpeechRecognitionService {
     private var segmentNumber = 0 // Track segment number
 
     init(onProgress: ((Double) -> Void)? = nil) {
-        progressCallback = onProgress
+        whisperKitManager = WhisperKitManager(onProgress: onProgress)
         Task {
             await loadModel()
         }
@@ -39,102 +38,10 @@ class SpeechRecognitionService {
 
     private func loadModel() async {
         do {
-            print("Starting model load...")
-
-            // Step 1: Copy files (10% of progress)
-            progressCallback?(0.05)
-            let modelPath = try await copyBundledModelToDocuments()
-            print("Model path: \(modelPath)")
-            progressCallback?(0.10)
-
-            // Step 2: Load WhisperKit (90% of progress)
-            // Simulate progress during loading since WhisperKit doesn't provide callbacks
-            progressCallback?(0.15)
-
-            // Start simulating progress in background (60 seconds from 15% to 95%)
-            let progressTask = Task {
-                // 80% range over 60 seconds = ~1.3% per second
-                for progress in stride(from: 0.15, to: 0.95, by: 0.013) {
-                    try? await Task.sleep(for: .seconds(1.0))
-                    self.progressCallback?(progress)
-                }
-            }
-
-            whisperKit = try await WhisperKit(
-                modelFolder: modelPath,
-                computeOptions: ModelComputeOptions(
-                    audioEncoderCompute: .cpuAndNeuralEngine,
-                    textDecoderCompute: .cpuAndNeuralEngine
-                ),
-                verbose: false,
-                logLevel: .error
-            )
-
-            // Cancel progress simulation and set to 100%
-            progressTask.cancel()
-            progressCallback?(1.0)
-            print("Model loaded successfully!")
+            try await whisperKitManager?.loadModel()
         } catch {
             print("Failed to load WhisperKit model: \(error)")
-            progressCallback?(0.0) // Reset on error
         }
-    }
-
-    private func copyBundledModelToDocuments() async throws -> String {
-        let fileManager = FileManager.default
-        guard let documentsPath = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first else {
-            throw AudioStreamError.engineSetupFailed
-        }
-
-        let modelDestPath = documentsPath.appendingPathComponent("openai_whisper-medium")
-
-        // Clean up any incomplete HuggingFace downloads that might conflict
-        let hfCachePath = documentsPath.appendingPathComponent("huggingface")
-        if fileManager.fileExists(atPath: hfCachePath.path) {
-            try? fileManager.removeItem(at: hfCachePath)
-        }
-
-        let requiredFiles = ["config.json", "generation_config.json", "tokenizer.json", "tokenizer_config.json", "AudioEncoder.mlmodelc", "MelSpectrogram.mlmodelc", "TextDecoder.mlmodelc"]
-
-        // Check if all required files already exist in Documents
-        if fileManager.fileExists(atPath: modelDestPath.path) {
-            var allFilesExist = true
-            for file in requiredFiles {
-                let filePath = modelDestPath.appendingPathComponent(file)
-                if !fileManager.fileExists(atPath: filePath.path) {
-                    allFilesExist = false
-                    break
-                }
-            }
-
-            if allFilesExist {
-                return modelDestPath.path
-            } else {
-                try? fileManager.removeItem(at: modelDestPath)
-            }
-        }
-
-        // Model files are in bundle root - copy them to Documents/openai_whisper-medium/
-        // Use the bundle for this class, not Bundle.main (which may be test bundle)
-        let bundle = Bundle(for: SpeechRecognitionService.self)
-        guard let bundleResourcePath = bundle.resourcePath else {
-            throw AudioStreamError.engineSetupFailed
-        }
-
-        // Create destination directory
-        try fileManager.createDirectory(at: modelDestPath, withIntermediateDirectories: true)
-
-        // Copy each file/folder
-        for file in requiredFiles {
-            let sourcePath = (bundleResourcePath as NSString).appendingPathComponent(file)
-            let destPath = modelDestPath.appendingPathComponent(file)
-
-            if fileManager.fileExists(atPath: sourcePath) {
-                try fileManager.copyItem(atPath: sourcePath, toPath: destPath.path)
-            }
-        }
-
-        return modelDestPath.path
     }
 
     /// Start translating audio to English
@@ -143,7 +50,7 @@ class SpeechRecognitionService {
     func startListening(
         onTranslationUpdate: @escaping (String, Int) -> Void
     ) async -> Bool {
-        guard whisperKit != nil else {
+        guard whisperKitManager?.whisperKit != nil else {
             print("WhisperKit not initialized")
             return false
         }
@@ -171,10 +78,10 @@ class SpeechRecognitionService {
 
     private func accumulateAudio(_ buffer: AVAudioPCMBuffer) async {
         // Resample to 16kHz if needed
-        let resampledBuffer = resampleIfNeeded(buffer)
+        let resampledBuffer = AudioStreamManager.resampleIfNeeded(buffer)
 
         // Convert to float array
-        let audioData = convertBufferToFloatArray(resampledBuffer)
+        let audioData = AudioStreamManager.convertBufferToFloatArray(resampledBuffer)
 
         // Accumulate samples
         audioBuffer.append(contentsOf: audioData)
@@ -195,15 +102,15 @@ class SpeechRecognitionService {
             let isSilentOrMusic = await isSilenceOrMusic(chunk)
 
             if isSilentOrMusic {
-                // Only process silence detection if we weren't already silent
+                // Only log once when silence starts
                 if !lastChunkWasSilent {
                     print("🔇 Silence/music detected - ending segment #\(segmentNumber)")
+                    print("🔄 Resetting buffer")
                     lastChunkWasSilent = true
                     segmentNumber += 1
                 }
 
-                // Reset buffer for new segment
-                print("🔄 Resetting buffer")
+                // Clear buffer during silence to prevent memory buildup
                 audioBuffer.removeAll(keepingCapacity: true)
                 lastProcessedCount = 0
             } else {
@@ -224,7 +131,7 @@ class SpeechRecognitionService {
         guard !samples.isEmpty else { return true }
 
         // Check RMS for silence
-        let rms = calculateRMS(samples)
+        let rms = AudioStreamManager.calculateRMS(samples)
         if rms < silenceThreshold {
             return true
         }
@@ -240,7 +147,7 @@ class SpeechRecognitionService {
         }
 
         // Use WhisperKit to detect if it's music (no text detected)
-        guard let whisperKit = whisperKit else { return false }
+        guard let whisperKit = whisperKitManager?.whisperKit else { return false }
 
         do {
             let results = try await whisperKit.transcribe(
@@ -263,15 +170,8 @@ class SpeechRecognitionService {
         }
     }
 
-    private func calculateRMS(_ samples: [Float]) -> Float {
-        guard !samples.isEmpty else { return 0 }
-
-        let sumOfSquares = samples.reduce(0) { $0 + $1 * $1 }
-        return sqrt(sumOfSquares / Float(samples.count))
-    }
-
     private func processTranslation(_ audioData: [Float]) async {
-        guard let whisperKit = whisperKit else { return }
+        guard let whisperKit = whisperKitManager?.whisperKit else { return }
 
         // WhisperKit requires at least 1.0 seconds of audio (16000 samples at 16kHz)
         // Pad if necessary to prevent memory access errors
@@ -306,75 +206,6 @@ class SpeechRecognitionService {
         }
     }
 
-    private func resampleIfNeeded(_ buffer: AVAudioPCMBuffer) -> AVAudioPCMBuffer {
-        let format = buffer.format
-
-        // If already 16kHz, return as-is
-        if format.sampleRate == 16000 {
-            return buffer
-        }
-
-        // Create target format: 16kHz mono
-        guard let targetFormat = AVAudioFormat(
-            commonFormat: .pcmFormatFloat32,
-            sampleRate: 16000,
-            channels: 1,
-            interleaved: false
-        ),
-        let converter = AVAudioConverter(from: format, to: targetFormat) else {
-            return buffer
-        }
-
-        let capacity = AVAudioFrameCount(Double(buffer.frameLength) * (16000.0 / format.sampleRate))
-        guard let convertedBuffer = AVAudioPCMBuffer(pcmFormat: targetFormat, frameCapacity: capacity) else {
-            return buffer
-        }
-
-        var error: NSError?
-        let inputBlock: AVAudioConverterInputBlock = { inNumPackets, outStatus in
-            outStatus.pointee = .haveData
-            return buffer
-        }
-
-        converter.convert(to: convertedBuffer, error: &error, withInputFrom: inputBlock)
-
-        return error == nil ? convertedBuffer : buffer
-    }
-
-    private func convertBufferToFloatArray(_ buffer: AVAudioPCMBuffer) -> [Float] {
-        guard let channelData = buffer.floatChannelData else {
-            return []
-        }
-
-        let channelDataValue = channelData.pointee
-        let frameLength = Int(buffer.frameLength)
-
-        // WhisperKit expects mono audio at 16kHz
-        // If we have stereo, average the channels
-        let channelCount = Int(buffer.format.channelCount)
-
-        var samples: [Float] = []
-        samples.reserveCapacity(frameLength)
-
-        if channelCount == 1 {
-            // Mono audio - direct copy
-            for i in 0..<frameLength {
-                samples.append(channelDataValue[i])
-            }
-        } else {
-            // Stereo or multi-channel - average to mono
-            for i in 0..<frameLength {
-                var sum: Float = 0
-                for channel in 0..<channelCount {
-                    sum += channelData[channel][i]
-                }
-                samples.append(sum / Float(channelCount))
-            }
-        }
-
-        return samples
-    }
-
     func stopListening() {
         audioStreamManager?.stopRecording()
         audioStreamManager = nil
@@ -386,7 +217,7 @@ class SpeechRecognitionService {
     }
 
     var isReady: Bool {
-        return whisperKit != nil
+        return whisperKitManager?.whisperKit != nil
     }
 
     // MARK: - Testing Support
@@ -398,7 +229,7 @@ class SpeechRecognitionService {
     ///   - language: Optional language code (e.g., "tr" for Turkish, "en" for English)
     /// - Returns: The transcribed/translated text
     func processAudioFile(at audioFileURL: URL, task: DecodingTask, language: String? = nil) async throws -> String {
-        guard let whisperKit = whisperKit else {
+        guard let whisperKit = whisperKitManager?.whisperKit else {
             throw AudioStreamError.engineSetupFailed
         }
 
@@ -421,37 +252,9 @@ class SpeechRecognitionService {
 
         try audioFile.read(into: buffer)
 
-        // Resample to 16kHz if needed
-        let resampledBuffer: AVAudioPCMBuffer
-        if format.sampleRate != 16000 {
-            guard let converter = AVAudioConverter(from: format, to: targetFormat) else {
-                throw AudioStreamError.engineSetupFailed
-            }
-
-            let capacity = AVAudioFrameCount(Double(frameCount) * (16000.0 / format.sampleRate))
-            guard let convertedBuffer = AVAudioPCMBuffer(pcmFormat: targetFormat, frameCapacity: capacity) else {
-                throw AudioStreamError.engineSetupFailed
-            }
-
-            var error: NSError?
-            let inputBlock: AVAudioConverterInputBlock = { inNumPackets, outStatus in
-                outStatus.pointee = .haveData
-                return buffer
-            }
-
-            converter.convert(to: convertedBuffer, error: &error, withInputFrom: inputBlock)
-
-            if let error = error {
-                throw AudioStreamError.engineSetupFailed
-            }
-
-            resampledBuffer = convertedBuffer
-        } else {
-            resampledBuffer = buffer
-        }
-
-        // Convert to float array
-        let audioData = convertBufferToFloatArray(resampledBuffer)
+        // Resample to 16kHz if needed and convert to float array
+        let resampledBuffer = AudioStreamManager.resampleIfNeeded(buffer)
+        let audioData = AudioStreamManager.convertBufferToFloatArray(resampledBuffer)
 
         guard !audioData.isEmpty else {
             throw AudioStreamError.engineSetupFailed
@@ -472,61 +275,4 @@ class SpeechRecognitionService {
 
         return combinedText
     }
-}
-
-// MARK: - Audio Stream Manager
-
-class AudioStreamManager {
-    private var audioEngine: AVAudioEngine?
-    private var inputNode: AVAudioInputNode?
-    private var audioCallback: ((AVAudioPCMBuffer) -> Void)?
-
-    func startRecording(onAudioBuffer: @escaping (AVAudioPCMBuffer) -> Void) async throws {
-        audioCallback = onAudioBuffer
-
-        // Request microphone permission
-        let permissionGranted = await AVAudioApplication.requestRecordPermission()
-        guard permissionGranted else {
-            print("❌ Microphone permission denied")
-            throw AudioStreamError.permissionDenied
-        }
-
-        print("✓ Microphone permission granted")
-
-        // Setup audio engine
-        audioEngine = AVAudioEngine()
-        guard let audioEngine = audioEngine else {
-            throw AudioStreamError.engineSetupFailed
-        }
-
-        inputNode = audioEngine.inputNode
-        guard let inputNode = inputNode else {
-            throw AudioStreamError.inputNodeNotAvailable
-        }
-
-        let inputFormat = inputNode.outputFormat(forBus: 0)
-        print("🎤 Microphone format: \(inputFormat.sampleRate) Hz, \(inputFormat.channelCount) channels")
-
-        // Install tap with nil format to use the hardware's native format
-        // This is the safest approach - let the system choose the format
-        inputNode.installTap(onBus: 0, bufferSize: 4096, format: nil) { [weak self] buffer, time in
-            self?.audioCallback?(buffer)
-        }
-
-        try audioEngine.start()
-        print("✓ Audio engine started")
-    }
-
-    func stopRecording() {
-        audioEngine?.stop()
-        inputNode?.removeTap(onBus: 0)
-        audioEngine = nil
-        inputNode = nil
-    }
-}
-
-enum AudioStreamError: Error {
-    case permissionDenied
-    case engineSetupFailed
-    case inputNodeNotAvailable
 }
