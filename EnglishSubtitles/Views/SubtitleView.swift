@@ -16,15 +16,38 @@ struct SubtitleView: View {
                 .ignoresSafeArea()
 
             // Fullscreen English Subtitle
-            Text(vm.english.isEmpty ? "Listening..." : vm.english)
-                .font(.system(size: vm.english.isEmpty ? 40 : 60, weight: .bold))
-                .foregroundColor(.white)
-                .multilineTextAlignment(.center)
-                .padding(40)
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
+            VStack {
+                Spacer()
+                Text(displayText)
+                    .font(.system(size: fontSize, weight: .bold))
+                    .foregroundColor(.white)
+                    .multilineTextAlignment(.center)
+                    .padding(40)
+                Spacer()
+            }
         }
         .onAppear {
             vm.start()
+        }
+    }
+
+    private var displayText: String {
+        if vm.isModelLoading {
+            return "Loading..."
+        } else if vm.english.isEmpty {
+            return "Listening..."
+        } else {
+            return vm.english
+        }
+    }
+
+    private var fontSize: CGFloat {
+        if vm.isModelLoading {
+            return 50
+        } else if vm.english.isEmpty {
+            return 40
+        } else {
+            return 60
         }
     }
 }

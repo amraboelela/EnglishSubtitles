@@ -1,0 +1,8520 @@
+{
+    "3_ios16.gather_axis_batch_dims_indices_x": {
+        "dispatch": "CPU",
+        "supported": [
+            "CPU"
+        ],
+        "cost": 11.6709
+    },
+    "7_ios16.gather_axis_batch_dims_indices_x": {
+        "dispatch": "CPU",
+        "supported": [
+            "CPU"
+        ],
+        "cost": 0.1008
+    },
+    "8_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0003
+    },
+    "10_expand_dims_x_axes": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "12_expand_dims_x_axes": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "15_split_axis_x_split_sizes": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.7941
+    },
+    "18_split_axis_x_split_sizes": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.7941
+    },
+    "22_ios16.layer_norm_epsilon_x_axes": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "28_ios16.batch_norm_epsilon_gamma_mean_variance_x_beta": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "36_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "43_ios16.conv_groups_weight_x_dilations_strides_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "51_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "53_expand_dims_x_axes": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "55_expand_dims_x_axes": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "57_ios16.sub_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "58_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.058
+    },
+    "59_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0002
+    },
+    "60_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.1413
+    },
+    "61_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.058
+    },
+    "62_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0002
+    },
+    "63_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.1413
+    },
+    "65_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "67_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "69_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0635
+    },
+    "72_ios16.matmul_y_transpose_y_transpose_x_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0323
+    },
+    "74_expand_dims_x_axes": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "76_expand_dims_x_axes": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "77_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0012
+    },
+    "78_ios16.softmax_axis_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.001
+    },
+    "80_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0635
+    },
+    "83_ios16.matmul_y_transpose_y_transpose_x_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0323
+    },
+    "85_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "93_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "94_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0003
+    },
+    "97_ios16.layer_norm_epsilon_x_axes": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "101_ios16.batch_norm_epsilon_gamma_mean_variance_x_beta": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "109_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "116_ios16.conv_groups_weight_x_dilations_strides_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 1.0602
+    },
+    "124_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 1.0607
+    },
+    "126_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "128_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "130_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.2127
+    },
+    "133_ios16.matmul_y_transpose_y_transpose_x_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.1081
+    },
+    "134_ios16.softmax_axis_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0033
+    },
+    "136_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.2127
+    },
+    "139_ios16.matmul_y_transpose_y_transpose_x_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.1081
+    },
+    "141_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "149_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "150_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0003
+    },
+    "153_ios16.layer_norm_epsilon_x_axes": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "157_ios16.batch_norm_epsilon_gamma_mean_variance_x_beta": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "165_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0707
+    },
+    "167_ios16.gelu_mode_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0006
+    },
+    "175_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0707
+    },
+    "176_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0003
+    },
+    "180_ios16.layer_norm_epsilon_x_axes": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "184_ios16.batch_norm_epsilon_gamma_mean_variance_x_beta": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "192_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "199_ios16.conv_groups_weight_x_dilations_strides_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "207_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "208_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.058
+    },
+    "209_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0002
+    },
+    "210_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.1413
+    },
+    "211_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.058
+    },
+    "212_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0002
+    },
+    "213_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.1413
+    },
+    "215_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "217_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "219_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0635
+    },
+    "222_ios16.matmul_y_transpose_y_transpose_x_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0323
+    },
+    "223_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0012
+    },
+    "224_ios16.softmax_axis_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.001
+    },
+    "226_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0635
+    },
+    "229_ios16.matmul_y_transpose_y_transpose_x_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0323
+    },
+    "231_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "239_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "240_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0003
+    },
+    "243_ios16.layer_norm_epsilon_x_axes": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "247_ios16.batch_norm_epsilon_gamma_mean_variance_x_beta": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "255_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "262_ios16.conv_groups_weight_x_dilations_strides_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 1.0602
+    },
+    "270_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 1.0607
+    },
+    "272_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "274_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "276_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.2127
+    },
+    "279_ios16.matmul_y_transpose_y_transpose_x_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.1081
+    },
+    "280_ios16.softmax_axis_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0033
+    },
+    "282_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.2127
+    },
+    "285_ios16.matmul_y_transpose_y_transpose_x_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.1081
+    },
+    "287_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "295_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "296_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0003
+    },
+    "299_ios16.layer_norm_epsilon_x_axes": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "303_ios16.batch_norm_epsilon_gamma_mean_variance_x_beta": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "311_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0707
+    },
+    "313_ios16.gelu_mode_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0006
+    },
+    "321_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0707
+    },
+    "322_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0003
+    },
+    "326_ios16.layer_norm_epsilon_x_axes": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "330_ios16.batch_norm_epsilon_gamma_mean_variance_x_beta": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "338_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "345_ios16.conv_groups_weight_x_dilations_strides_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "353_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "354_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.058
+    },
+    "355_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0002
+    },
+    "356_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.1413
+    },
+    "357_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.058
+    },
+    "358_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0002
+    },
+    "359_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.1413
+    },
+    "361_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "363_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "365_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0635
+    },
+    "368_ios16.matmul_y_transpose_y_transpose_x_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0323
+    },
+    "369_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0012
+    },
+    "370_ios16.softmax_axis_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.001
+    },
+    "372_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0635
+    },
+    "375_ios16.matmul_y_transpose_y_transpose_x_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0323
+    },
+    "377_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "385_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "386_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0003
+    },
+    "389_ios16.layer_norm_epsilon_x_axes": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "393_ios16.batch_norm_epsilon_gamma_mean_variance_x_beta": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "401_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "408_ios16.conv_groups_weight_x_dilations_strides_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 1.0602
+    },
+    "416_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 1.0607
+    },
+    "418_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "420_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "422_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.2127
+    },
+    "425_ios16.matmul_y_transpose_y_transpose_x_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.1081
+    },
+    "426_ios16.softmax_axis_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0033
+    },
+    "428_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.2127
+    },
+    "431_ios16.matmul_y_transpose_y_transpose_x_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.1081
+    },
+    "433_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "441_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "442_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0003
+    },
+    "445_ios16.layer_norm_epsilon_x_axes": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "449_ios16.batch_norm_epsilon_gamma_mean_variance_x_beta": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "457_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0707
+    },
+    "459_ios16.gelu_mode_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0006
+    },
+    "467_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0707
+    },
+    "468_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0003
+    },
+    "472_ios16.layer_norm_epsilon_x_axes": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "476_ios16.batch_norm_epsilon_gamma_mean_variance_x_beta": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "484_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "491_ios16.conv_groups_weight_x_dilations_strides_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "499_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "500_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.058
+    },
+    "501_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0002
+    },
+    "502_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.1413
+    },
+    "503_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.058
+    },
+    "504_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0002
+    },
+    "505_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.1413
+    },
+    "507_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "509_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "511_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0635
+    },
+    "514_ios16.matmul_y_transpose_y_transpose_x_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0323
+    },
+    "515_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0012
+    },
+    "516_ios16.softmax_axis_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.001
+    },
+    "518_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0635
+    },
+    "521_ios16.matmul_y_transpose_y_transpose_x_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0323
+    },
+    "523_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "531_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "532_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0003
+    },
+    "535_ios16.layer_norm_epsilon_x_axes": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "539_ios16.batch_norm_epsilon_gamma_mean_variance_x_beta": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "547_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "554_ios16.conv_groups_weight_x_dilations_strides_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 1.0602
+    },
+    "562_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 1.0607
+    },
+    "564_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "566_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "568_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.2127
+    },
+    "571_ios16.matmul_y_transpose_y_transpose_x_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.1081
+    },
+    "572_ios16.softmax_axis_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0033
+    },
+    "574_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.2127
+    },
+    "577_ios16.matmul_y_transpose_y_transpose_x_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.1081
+    },
+    "579_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "587_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "588_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0003
+    },
+    "591_ios16.layer_norm_epsilon_x_axes": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "595_ios16.batch_norm_epsilon_gamma_mean_variance_x_beta": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "603_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0707
+    },
+    "605_ios16.gelu_mode_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0006
+    },
+    "613_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0707
+    },
+    "614_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0003
+    },
+    "618_ios16.layer_norm_epsilon_x_axes": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "622_ios16.batch_norm_epsilon_gamma_mean_variance_x_beta": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "630_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "637_ios16.conv_groups_weight_x_dilations_strides_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "645_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "646_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.058
+    },
+    "647_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0002
+    },
+    "648_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.1413
+    },
+    "649_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.058
+    },
+    "650_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0002
+    },
+    "651_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.1413
+    },
+    "653_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "655_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "657_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0635
+    },
+    "660_ios16.matmul_y_transpose_y_transpose_x_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0323
+    },
+    "661_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0012
+    },
+    "662_ios16.softmax_axis_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.001
+    },
+    "664_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0635
+    },
+    "667_ios16.matmul_y_transpose_y_transpose_x_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0323
+    },
+    "669_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "677_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "678_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0003
+    },
+    "681_ios16.layer_norm_epsilon_x_axes": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "685_ios16.batch_norm_epsilon_gamma_mean_variance_x_beta": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "693_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "700_ios16.conv_groups_weight_x_dilations_strides_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 1.0602
+    },
+    "708_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 1.0607
+    },
+    "710_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "712_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "714_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.2127
+    },
+    "717_ios16.matmul_y_transpose_y_transpose_x_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.1081
+    },
+    "718_ios16.softmax_axis_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0033
+    },
+    "720_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.2127
+    },
+    "723_ios16.matmul_y_transpose_y_transpose_x_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.1081
+    },
+    "725_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "733_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "734_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0003
+    },
+    "737_ios16.layer_norm_epsilon_x_axes": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "741_ios16.batch_norm_epsilon_gamma_mean_variance_x_beta": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "749_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0707
+    },
+    "751_ios16.gelu_mode_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0006
+    },
+    "759_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0707
+    },
+    "760_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0003
+    },
+    "764_ios16.layer_norm_epsilon_x_axes": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "768_ios16.batch_norm_epsilon_gamma_mean_variance_x_beta": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "776_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "783_ios16.conv_groups_weight_x_dilations_strides_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "791_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "792_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.058
+    },
+    "793_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0002
+    },
+    "794_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.1413
+    },
+    "795_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.058
+    },
+    "796_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0002
+    },
+    "797_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.1413
+    },
+    "799_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "801_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "803_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0635
+    },
+    "806_ios16.matmul_y_transpose_y_transpose_x_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0323
+    },
+    "807_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0012
+    },
+    "808_ios16.softmax_axis_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.001
+    },
+    "810_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0635
+    },
+    "813_ios16.matmul_y_transpose_y_transpose_x_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0323
+    },
+    "815_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "823_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "824_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0003
+    },
+    "827_ios16.layer_norm_epsilon_x_axes": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "831_ios16.batch_norm_epsilon_gamma_mean_variance_x_beta": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "839_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "846_ios16.conv_groups_weight_x_dilations_strides_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 1.0602
+    },
+    "854_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 1.0607
+    },
+    "856_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "858_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "860_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.2127
+    },
+    "863_ios16.matmul_y_transpose_y_transpose_x_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.1081
+    },
+    "864_ios16.softmax_axis_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0033
+    },
+    "866_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.2127
+    },
+    "869_ios16.matmul_y_transpose_y_transpose_x_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.1081
+    },
+    "871_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "879_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "880_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0003
+    },
+    "883_ios16.layer_norm_epsilon_x_axes": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "887_ios16.batch_norm_epsilon_gamma_mean_variance_x_beta": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "895_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0707
+    },
+    "897_ios16.gelu_mode_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0006
+    },
+    "905_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0707
+    },
+    "906_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0003
+    },
+    "910_ios16.layer_norm_epsilon_x_axes": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "914_ios16.batch_norm_epsilon_gamma_mean_variance_x_beta": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "922_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "929_ios16.conv_groups_weight_x_dilations_strides_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "937_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "938_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.058
+    },
+    "939_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0002
+    },
+    "940_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.1413
+    },
+    "941_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.058
+    },
+    "942_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0002
+    },
+    "943_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.1413
+    },
+    "945_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "947_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "949_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0635
+    },
+    "952_ios16.matmul_y_transpose_y_transpose_x_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0323
+    },
+    "953_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0012
+    },
+    "954_ios16.softmax_axis_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.001
+    },
+    "956_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0635
+    },
+    "959_ios16.matmul_y_transpose_y_transpose_x_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0323
+    },
+    "961_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "969_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "970_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0003
+    },
+    "973_ios16.layer_norm_epsilon_x_axes": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "977_ios16.batch_norm_epsilon_gamma_mean_variance_x_beta": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "985_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "992_ios16.conv_groups_weight_x_dilations_strides_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 1.0602
+    },
+    "1000_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 1.0607
+    },
+    "1002_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "1004_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "1006_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.2127
+    },
+    "1009_ios16.matmul_y_transpose_y_transpose_x_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.1081
+    },
+    "1010_ios16.softmax_axis_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0033
+    },
+    "1012_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.2127
+    },
+    "1015_ios16.matmul_y_transpose_y_transpose_x_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.1081
+    },
+    "1017_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "1025_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "1026_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0003
+    },
+    "1029_ios16.layer_norm_epsilon_x_axes": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "1033_ios16.batch_norm_epsilon_gamma_mean_variance_x_beta": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "1041_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0707
+    },
+    "1043_ios16.gelu_mode_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0006
+    },
+    "1051_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0707
+    },
+    "1052_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0003
+    },
+    "1056_ios16.layer_norm_epsilon_x_axes": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "1060_ios16.batch_norm_epsilon_gamma_mean_variance_x_beta": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "1068_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "1075_ios16.conv_groups_weight_x_dilations_strides_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "1083_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "1084_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.058
+    },
+    "1085_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0002
+    },
+    "1086_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.1413
+    },
+    "1087_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.058
+    },
+    "1088_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0002
+    },
+    "1089_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.1413
+    },
+    "1091_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "1093_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "1095_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0635
+    },
+    "1098_ios16.matmul_y_transpose_y_transpose_x_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0323
+    },
+    "1099_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0012
+    },
+    "1100_ios16.softmax_axis_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.001
+    },
+    "1102_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0635
+    },
+    "1105_ios16.matmul_y_transpose_y_transpose_x_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0323
+    },
+    "1107_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "1115_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "1116_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0003
+    },
+    "1119_ios16.layer_norm_epsilon_x_axes": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "1123_ios16.batch_norm_epsilon_gamma_mean_variance_x_beta": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "1131_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "1138_ios16.conv_groups_weight_x_dilations_strides_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 1.0602
+    },
+    "1146_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 1.0607
+    },
+    "1148_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "1150_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "1152_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.2127
+    },
+    "1155_ios16.matmul_y_transpose_y_transpose_x_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.1081
+    },
+    "1156_ios16.softmax_axis_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0033
+    },
+    "1158_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.2127
+    },
+    "1161_ios16.matmul_y_transpose_y_transpose_x_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.1081
+    },
+    "1163_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "1171_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "1172_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0003
+    },
+    "1175_ios16.layer_norm_epsilon_x_axes": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "1179_ios16.batch_norm_epsilon_gamma_mean_variance_x_beta": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "1187_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0707
+    },
+    "1189_ios16.gelu_mode_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0006
+    },
+    "1197_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0707
+    },
+    "1198_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0003
+    },
+    "1202_ios16.layer_norm_epsilon_x_axes": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "1206_ios16.batch_norm_epsilon_gamma_mean_variance_x_beta": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "1214_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "1221_ios16.conv_groups_weight_x_dilations_strides_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "1229_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "1230_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.058
+    },
+    "1231_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0002
+    },
+    "1232_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.1413
+    },
+    "1233_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.058
+    },
+    "1234_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0002
+    },
+    "1235_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.1413
+    },
+    "1237_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "1239_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "1241_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0635
+    },
+    "1244_ios16.matmul_y_transpose_y_transpose_x_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0323
+    },
+    "1245_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0012
+    },
+    "1246_ios16.softmax_axis_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.001
+    },
+    "1248_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0635
+    },
+    "1251_ios16.matmul_y_transpose_y_transpose_x_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0323
+    },
+    "1253_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "1261_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "1262_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0003
+    },
+    "1265_ios16.layer_norm_epsilon_x_axes": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "1269_ios16.batch_norm_epsilon_gamma_mean_variance_x_beta": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "1277_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "1284_ios16.conv_groups_weight_x_dilations_strides_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 1.0602
+    },
+    "1292_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 1.0607
+    },
+    "1294_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "1296_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "1298_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.2127
+    },
+    "1301_ios16.matmul_y_transpose_y_transpose_x_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.1081
+    },
+    "1302_ios16.softmax_axis_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0033
+    },
+    "1304_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.2127
+    },
+    "1307_ios16.matmul_y_transpose_y_transpose_x_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.1081
+    },
+    "1309_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "1317_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "1318_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0003
+    },
+    "1321_ios16.layer_norm_epsilon_x_axes": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "1325_ios16.batch_norm_epsilon_gamma_mean_variance_x_beta": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "1333_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0707
+    },
+    "1335_ios16.gelu_mode_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0006
+    },
+    "1343_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0707
+    },
+    "1344_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0003
+    },
+    "1348_ios16.layer_norm_epsilon_x_axes": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "1352_ios16.batch_norm_epsilon_gamma_mean_variance_x_beta": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "1360_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "1367_ios16.conv_groups_weight_x_dilations_strides_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "1375_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "1376_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.058
+    },
+    "1377_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0002
+    },
+    "1378_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.1413
+    },
+    "1379_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.058
+    },
+    "1380_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0002
+    },
+    "1381_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.1413
+    },
+    "1383_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "1385_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "1387_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0635
+    },
+    "1390_ios16.matmul_y_transpose_y_transpose_x_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0323
+    },
+    "1391_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0012
+    },
+    "1392_ios16.softmax_axis_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.001
+    },
+    "1394_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0635
+    },
+    "1397_ios16.matmul_y_transpose_y_transpose_x_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0323
+    },
+    "1399_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "1407_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "1408_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0003
+    },
+    "1411_ios16.layer_norm_epsilon_x_axes": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "1415_ios16.batch_norm_epsilon_gamma_mean_variance_x_beta": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "1423_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "1430_ios16.conv_groups_weight_x_dilations_strides_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 1.0602
+    },
+    "1438_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 1.0607
+    },
+    "1440_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "1442_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "1444_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.2127
+    },
+    "1447_ios16.matmul_y_transpose_y_transpose_x_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.1081
+    },
+    "1448_ios16.softmax_axis_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0033
+    },
+    "1450_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.2127
+    },
+    "1453_ios16.matmul_y_transpose_y_transpose_x_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.1081
+    },
+    "1455_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "1463_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "1464_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0003
+    },
+    "1467_ios16.layer_norm_epsilon_x_axes": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "1471_ios16.batch_norm_epsilon_gamma_mean_variance_x_beta": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "1479_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0707
+    },
+    "1481_ios16.gelu_mode_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0006
+    },
+    "1489_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0707
+    },
+    "1490_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0003
+    },
+    "1494_ios16.layer_norm_epsilon_x_axes": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "1498_ios16.batch_norm_epsilon_gamma_mean_variance_x_beta": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "1506_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "1513_ios16.conv_groups_weight_x_dilations_strides_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "1521_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "1522_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.058
+    },
+    "1523_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0002
+    },
+    "1524_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.1413
+    },
+    "1525_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.058
+    },
+    "1526_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0002
+    },
+    "1527_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.1413
+    },
+    "1529_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "1531_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "1533_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0635
+    },
+    "1536_ios16.matmul_y_transpose_y_transpose_x_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0323
+    },
+    "1537_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0012
+    },
+    "1538_ios16.softmax_axis_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.001
+    },
+    "1540_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0635
+    },
+    "1543_ios16.matmul_y_transpose_y_transpose_x_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0323
+    },
+    "1545_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "1553_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "1554_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0003
+    },
+    "1557_ios16.layer_norm_epsilon_x_axes": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "1561_ios16.batch_norm_epsilon_gamma_mean_variance_x_beta": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "1569_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "1576_ios16.conv_groups_weight_x_dilations_strides_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 1.0602
+    },
+    "1584_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 1.0607
+    },
+    "1586_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "1588_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "1590_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.2127
+    },
+    "1593_ios16.matmul_y_transpose_y_transpose_x_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.1081
+    },
+    "1594_ios16.softmax_axis_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0033
+    },
+    "1596_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.2127
+    },
+    "1599_ios16.matmul_y_transpose_y_transpose_x_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.1081
+    },
+    "1601_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "1609_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "1610_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0003
+    },
+    "1613_ios16.layer_norm_epsilon_x_axes": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "1617_ios16.batch_norm_epsilon_gamma_mean_variance_x_beta": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "1625_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0707
+    },
+    "1627_ios16.gelu_mode_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0006
+    },
+    "1635_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0707
+    },
+    "1636_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0003
+    },
+    "1640_ios16.layer_norm_epsilon_x_axes": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "1644_ios16.batch_norm_epsilon_gamma_mean_variance_x_beta": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "1652_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "1659_ios16.conv_groups_weight_x_dilations_strides_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "1667_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "1668_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.058
+    },
+    "1669_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0002
+    },
+    "1670_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.1413
+    },
+    "1671_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.058
+    },
+    "1672_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0002
+    },
+    "1673_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.1413
+    },
+    "1675_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "1677_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "1679_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0635
+    },
+    "1682_ios16.matmul_y_transpose_y_transpose_x_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0323
+    },
+    "1683_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0012
+    },
+    "1684_ios16.softmax_axis_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.001
+    },
+    "1686_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0635
+    },
+    "1689_ios16.matmul_y_transpose_y_transpose_x_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0323
+    },
+    "1691_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "1699_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "1700_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0003
+    },
+    "1703_ios16.layer_norm_epsilon_x_axes": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "1707_ios16.batch_norm_epsilon_gamma_mean_variance_x_beta": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "1715_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "1722_ios16.conv_groups_weight_x_dilations_strides_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 1.0602
+    },
+    "1730_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 1.0607
+    },
+    "1732_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "1734_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "1736_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.2127
+    },
+    "1739_ios16.matmul_y_transpose_y_transpose_x_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.1081
+    },
+    "1740_ios16.softmax_axis_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0033
+    },
+    "1742_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.2127
+    },
+    "1745_ios16.matmul_y_transpose_y_transpose_x_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.1081
+    },
+    "1747_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "1755_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "1756_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0003
+    },
+    "1759_ios16.layer_norm_epsilon_x_axes": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "1763_ios16.batch_norm_epsilon_gamma_mean_variance_x_beta": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "1771_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0707
+    },
+    "1773_ios16.gelu_mode_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0006
+    },
+    "1781_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0707
+    },
+    "1782_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0003
+    },
+    "1786_ios16.layer_norm_epsilon_x_axes": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "1790_ios16.batch_norm_epsilon_gamma_mean_variance_x_beta": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "1798_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "1805_ios16.conv_groups_weight_x_dilations_strides_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "1813_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "1814_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.058
+    },
+    "1815_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0002
+    },
+    "1816_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.1413
+    },
+    "1817_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.058
+    },
+    "1818_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0002
+    },
+    "1819_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.1413
+    },
+    "1821_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "1823_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "1825_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0635
+    },
+    "1828_ios16.matmul_y_transpose_y_transpose_x_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0323
+    },
+    "1829_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0012
+    },
+    "1830_ios16.softmax_axis_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.001
+    },
+    "1832_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0635
+    },
+    "1835_ios16.matmul_y_transpose_y_transpose_x_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0323
+    },
+    "1837_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "1845_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "1846_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0003
+    },
+    "1849_ios16.layer_norm_epsilon_x_axes": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "1853_ios16.batch_norm_epsilon_gamma_mean_variance_x_beta": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "1861_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "1868_ios16.conv_groups_weight_x_dilations_strides_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 1.0602
+    },
+    "1876_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 1.0607
+    },
+    "1878_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "1880_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "1882_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.2127
+    },
+    "1885_ios16.matmul_y_transpose_y_transpose_x_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.1081
+    },
+    "1886_ios16.softmax_axis_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0033
+    },
+    "1888_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.2127
+    },
+    "1891_ios16.matmul_y_transpose_y_transpose_x_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.1081
+    },
+    "1893_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "1901_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "1902_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0003
+    },
+    "1905_ios16.layer_norm_epsilon_x_axes": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "1909_ios16.batch_norm_epsilon_gamma_mean_variance_x_beta": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "1917_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0707
+    },
+    "1919_ios16.gelu_mode_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0006
+    },
+    "1927_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0707
+    },
+    "1928_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0003
+    },
+    "1932_ios16.layer_norm_epsilon_x_axes": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "1936_ios16.batch_norm_epsilon_gamma_mean_variance_x_beta": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "1944_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "1951_ios16.conv_groups_weight_x_dilations_strides_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "1959_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "1960_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.058
+    },
+    "1961_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0002
+    },
+    "1962_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.1413
+    },
+    "1963_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.058
+    },
+    "1964_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0002
+    },
+    "1965_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.1413
+    },
+    "1967_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "1969_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "1971_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0635
+    },
+    "1974_ios16.matmul_y_transpose_y_transpose_x_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0323
+    },
+    "1975_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0012
+    },
+    "1976_ios16.softmax_axis_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.001
+    },
+    "1978_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0635
+    },
+    "1981_ios16.matmul_y_transpose_y_transpose_x_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0323
+    },
+    "1983_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "1991_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "1992_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0003
+    },
+    "1995_ios16.layer_norm_epsilon_x_axes": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "1999_ios16.batch_norm_epsilon_gamma_mean_variance_x_beta": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "2007_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "2014_ios16.conv_groups_weight_x_dilations_strides_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 1.0602
+    },
+    "2022_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 1.0607
+    },
+    "2024_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "2026_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "2028_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.2127
+    },
+    "2031_ios16.matmul_y_transpose_y_transpose_x_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.1081
+    },
+    "2032_ios16.softmax_axis_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0033
+    },
+    "2034_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.2127
+    },
+    "2037_ios16.matmul_y_transpose_y_transpose_x_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.1081
+    },
+    "2039_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "2047_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "2048_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0003
+    },
+    "2051_ios16.layer_norm_epsilon_x_axes": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "2055_ios16.batch_norm_epsilon_gamma_mean_variance_x_beta": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "2063_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0707
+    },
+    "2065_ios16.gelu_mode_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0006
+    },
+    "2073_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0707
+    },
+    "2074_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0003
+    },
+    "2078_ios16.layer_norm_epsilon_x_axes": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "2082_ios16.batch_norm_epsilon_gamma_mean_variance_x_beta": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "2090_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "2097_ios16.conv_groups_weight_x_dilations_strides_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "2105_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "2106_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.058
+    },
+    "2107_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0002
+    },
+    "2108_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.1413
+    },
+    "2109_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.058
+    },
+    "2110_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0002
+    },
+    "2111_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.1413
+    },
+    "2113_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "2115_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "2117_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0635
+    },
+    "2120_ios16.matmul_y_transpose_y_transpose_x_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0323
+    },
+    "2121_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0012
+    },
+    "2122_ios16.softmax_axis_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.001
+    },
+    "2124_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0635
+    },
+    "2127_ios16.matmul_y_transpose_y_transpose_x_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0323
+    },
+    "2129_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "2137_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "2138_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0003
+    },
+    "2141_ios16.layer_norm_epsilon_x_axes": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "2145_ios16.batch_norm_epsilon_gamma_mean_variance_x_beta": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "2153_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "2160_ios16.conv_groups_weight_x_dilations_strides_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 1.0602
+    },
+    "2168_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 1.0607
+    },
+    "2170_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "2172_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "2174_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.2127
+    },
+    "2177_ios16.matmul_y_transpose_y_transpose_x_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.1081
+    },
+    "2178_ios16.softmax_axis_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0033
+    },
+    "2180_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.2127
+    },
+    "2183_ios16.matmul_y_transpose_y_transpose_x_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.1081
+    },
+    "2185_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "2193_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "2194_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0003
+    },
+    "2197_ios16.layer_norm_epsilon_x_axes": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "2201_ios16.batch_norm_epsilon_gamma_mean_variance_x_beta": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "2209_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0707
+    },
+    "2211_ios16.gelu_mode_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0006
+    },
+    "2219_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0707
+    },
+    "2220_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0003
+    },
+    "2224_ios16.layer_norm_epsilon_x_axes": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "2228_ios16.batch_norm_epsilon_gamma_mean_variance_x_beta": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "2236_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "2243_ios16.conv_groups_weight_x_dilations_strides_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "2251_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "2252_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.058
+    },
+    "2253_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0002
+    },
+    "2254_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.1413
+    },
+    "2255_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.058
+    },
+    "2256_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0002
+    },
+    "2257_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.1413
+    },
+    "2259_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "2261_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "2263_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0635
+    },
+    "2266_ios16.matmul_y_transpose_y_transpose_x_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0323
+    },
+    "2267_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0012
+    },
+    "2268_ios16.softmax_axis_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.001
+    },
+    "2270_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0635
+    },
+    "2273_ios16.matmul_y_transpose_y_transpose_x_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0323
+    },
+    "2275_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "2283_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "2284_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0003
+    },
+    "2287_ios16.layer_norm_epsilon_x_axes": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "2291_ios16.batch_norm_epsilon_gamma_mean_variance_x_beta": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "2299_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "2306_ios16.conv_groups_weight_x_dilations_strides_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 1.0602
+    },
+    "2314_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 1.0607
+    },
+    "2316_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "2318_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "2320_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.2127
+    },
+    "2323_ios16.matmul_y_transpose_y_transpose_x_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.1081
+    },
+    "2324_ios16.softmax_axis_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0033
+    },
+    "2326_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.2127
+    },
+    "2329_ios16.matmul_y_transpose_y_transpose_x_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.1081
+    },
+    "2331_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "2339_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "2340_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0003
+    },
+    "2343_ios16.layer_norm_epsilon_x_axes": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "2347_ios16.batch_norm_epsilon_gamma_mean_variance_x_beta": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "2355_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0707
+    },
+    "2357_ios16.gelu_mode_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0006
+    },
+    "2365_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0707
+    },
+    "2366_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0003
+    },
+    "2370_ios16.layer_norm_epsilon_x_axes": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "2374_ios16.batch_norm_epsilon_gamma_mean_variance_x_beta": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "2382_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "2389_ios16.conv_groups_weight_x_dilations_strides_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "2397_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "2398_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.058
+    },
+    "2399_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0002
+    },
+    "2400_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.1413
+    },
+    "2401_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.058
+    },
+    "2402_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0002
+    },
+    "2403_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.1413
+    },
+    "2405_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "2407_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "2409_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0635
+    },
+    "2412_ios16.matmul_y_transpose_y_transpose_x_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0323
+    },
+    "2413_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0012
+    },
+    "2414_ios16.softmax_axis_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.001
+    },
+    "2416_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0635
+    },
+    "2419_ios16.matmul_y_transpose_y_transpose_x_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0323
+    },
+    "2421_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "2429_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "2430_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0003
+    },
+    "2433_ios16.layer_norm_epsilon_x_axes": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "2437_ios16.batch_norm_epsilon_gamma_mean_variance_x_beta": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "2445_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "2452_ios16.conv_groups_weight_x_dilations_strides_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 1.0602
+    },
+    "2460_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 1.0607
+    },
+    "2462_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "2464_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "2466_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.2127
+    },
+    "2469_ios16.matmul_y_transpose_y_transpose_x_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.1081
+    },
+    "2470_ios16.softmax_axis_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0033
+    },
+    "2472_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.2127
+    },
+    "2475_ios16.matmul_y_transpose_y_transpose_x_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.1081
+    },
+    "2477_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "2485_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "2486_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0003
+    },
+    "2489_ios16.layer_norm_epsilon_x_axes": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "2493_ios16.batch_norm_epsilon_gamma_mean_variance_x_beta": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "2501_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0707
+    },
+    "2503_ios16.gelu_mode_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0006
+    },
+    "2511_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0707
+    },
+    "2512_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0003
+    },
+    "2516_ios16.layer_norm_epsilon_x_axes": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "2520_ios16.batch_norm_epsilon_gamma_mean_variance_x_beta": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "2528_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "2535_ios16.conv_groups_weight_x_dilations_strides_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "2543_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "2544_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.058
+    },
+    "2545_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0002
+    },
+    "2546_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.1413
+    },
+    "2547_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.058
+    },
+    "2548_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0002
+    },
+    "2549_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.1413
+    },
+    "2551_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "2553_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "2555_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0635
+    },
+    "2558_ios16.matmul_y_transpose_y_transpose_x_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0323
+    },
+    "2559_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0012
+    },
+    "2560_ios16.softmax_axis_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.001
+    },
+    "2562_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0635
+    },
+    "2565_ios16.matmul_y_transpose_y_transpose_x_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0323
+    },
+    "2567_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "2575_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "2576_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0003
+    },
+    "2579_ios16.layer_norm_epsilon_x_axes": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "2583_ios16.batch_norm_epsilon_gamma_mean_variance_x_beta": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "2591_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "2598_ios16.conv_groups_weight_x_dilations_strides_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 1.0602
+    },
+    "2606_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 1.0607
+    },
+    "2608_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "2610_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "2612_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.2127
+    },
+    "2615_ios16.matmul_y_transpose_y_transpose_x_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.1081
+    },
+    "2616_ios16.softmax_axis_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0033
+    },
+    "2618_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.2127
+    },
+    "2621_ios16.matmul_y_transpose_y_transpose_x_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.1081
+    },
+    "2623_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "2631_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "2632_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0003
+    },
+    "2635_ios16.layer_norm_epsilon_x_axes": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "2639_ios16.batch_norm_epsilon_gamma_mean_variance_x_beta": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "2647_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0707
+    },
+    "2649_ios16.gelu_mode_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0006
+    },
+    "2657_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0707
+    },
+    "2658_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0003
+    },
+    "2662_ios16.layer_norm_epsilon_x_axes": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "2666_ios16.batch_norm_epsilon_gamma_mean_variance_x_beta": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "2674_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "2681_ios16.conv_groups_weight_x_dilations_strides_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "2689_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "2690_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.058
+    },
+    "2691_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0002
+    },
+    "2692_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.1413
+    },
+    "2693_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.058
+    },
+    "2694_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0002
+    },
+    "2695_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.1413
+    },
+    "2697_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "2699_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "2701_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0635
+    },
+    "2704_ios16.matmul_y_transpose_y_transpose_x_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0323
+    },
+    "2705_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0012
+    },
+    "2706_ios16.softmax_axis_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.001
+    },
+    "2708_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0635
+    },
+    "2711_ios16.matmul_y_transpose_y_transpose_x_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0323
+    },
+    "2713_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "2721_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "2722_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0003
+    },
+    "2725_ios16.layer_norm_epsilon_x_axes": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "2729_ios16.batch_norm_epsilon_gamma_mean_variance_x_beta": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "2737_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "2744_ios16.conv_groups_weight_x_dilations_strides_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 1.0602
+    },
+    "2752_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 1.0607
+    },
+    "2754_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "2756_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "2758_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.2127
+    },
+    "2761_ios16.matmul_y_transpose_y_transpose_x_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.1081
+    },
+    "2762_ios16.softmax_axis_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0033
+    },
+    "2764_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.2127
+    },
+    "2767_ios16.matmul_y_transpose_y_transpose_x_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.1081
+    },
+    "2769_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "2777_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "2778_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0003
+    },
+    "2781_ios16.layer_norm_epsilon_x_axes": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "2785_ios16.batch_norm_epsilon_gamma_mean_variance_x_beta": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "2793_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0707
+    },
+    "2795_ios16.gelu_mode_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0006
+    },
+    "2803_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0707
+    },
+    "2804_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0003
+    },
+    "2808_ios16.layer_norm_epsilon_x_axes": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "2812_ios16.batch_norm_epsilon_gamma_mean_variance_x_beta": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "2820_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "2827_ios16.conv_groups_weight_x_dilations_strides_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "2835_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "2836_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.058
+    },
+    "2837_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0002
+    },
+    "2838_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.1413
+    },
+    "2839_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.058
+    },
+    "2840_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0002
+    },
+    "2841_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.1413
+    },
+    "2843_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "2845_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "2847_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0635
+    },
+    "2850_ios16.matmul_y_transpose_y_transpose_x_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0323
+    },
+    "2851_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0012
+    },
+    "2852_ios16.softmax_axis_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.001
+    },
+    "2854_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0635
+    },
+    "2857_ios16.matmul_y_transpose_y_transpose_x_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0323
+    },
+    "2859_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "2867_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "2868_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0003
+    },
+    "2871_ios16.layer_norm_epsilon_x_axes": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "2875_ios16.batch_norm_epsilon_gamma_mean_variance_x_beta": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "2883_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "2890_ios16.conv_groups_weight_x_dilations_strides_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 1.0602
+    },
+    "2898_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 1.0607
+    },
+    "2900_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "2902_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "2904_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.2127
+    },
+    "2907_ios16.matmul_y_transpose_y_transpose_x_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.1081
+    },
+    "2908_ios16.softmax_axis_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0033
+    },
+    "2910_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.2127
+    },
+    "2913_ios16.matmul_y_transpose_y_transpose_x_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.1081
+    },
+    "2915_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "2923_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "2924_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0003
+    },
+    "2927_ios16.layer_norm_epsilon_x_axes": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "2931_ios16.batch_norm_epsilon_gamma_mean_variance_x_beta": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "2939_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0707
+    },
+    "2941_ios16.gelu_mode_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0006
+    },
+    "2949_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0707
+    },
+    "2950_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0003
+    },
+    "2954_ios16.layer_norm_epsilon_x_axes": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "2958_ios16.batch_norm_epsilon_gamma_mean_variance_x_beta": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "2966_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "2973_ios16.conv_groups_weight_x_dilations_strides_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "2981_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "2982_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.058
+    },
+    "2983_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0002
+    },
+    "2984_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.1413
+    },
+    "2985_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.058
+    },
+    "2986_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0002
+    },
+    "2987_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.1413
+    },
+    "2989_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "2991_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "2993_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0635
+    },
+    "2996_ios16.matmul_y_transpose_y_transpose_x_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0323
+    },
+    "2997_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0012
+    },
+    "2998_ios16.softmax_axis_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.001
+    },
+    "3000_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0635
+    },
+    "3003_ios16.matmul_y_transpose_y_transpose_x_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0323
+    },
+    "3005_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "3013_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "3014_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0003
+    },
+    "3017_ios16.layer_norm_epsilon_x_axes": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "3021_ios16.batch_norm_epsilon_gamma_mean_variance_x_beta": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "3029_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "3036_ios16.conv_groups_weight_x_dilations_strides_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 1.0602
+    },
+    "3044_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 1.0607
+    },
+    "3046_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "3048_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "3050_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.2127
+    },
+    "3053_ios16.matmul_y_transpose_y_transpose_x_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.1081
+    },
+    "3054_ios16.softmax_axis_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0033
+    },
+    "3056_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.2127
+    },
+    "3059_ios16.matmul_y_transpose_y_transpose_x_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.1081
+    },
+    "3061_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "3069_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "3070_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0003
+    },
+    "3073_ios16.layer_norm_epsilon_x_axes": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "3077_ios16.batch_norm_epsilon_gamma_mean_variance_x_beta": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "3085_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0707
+    },
+    "3087_ios16.gelu_mode_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0006
+    },
+    "3095_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0707
+    },
+    "3096_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0003
+    },
+    "3100_ios16.layer_norm_epsilon_x_axes": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "3104_ios16.batch_norm_epsilon_gamma_mean_variance_x_beta": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "3112_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "3119_ios16.conv_groups_weight_x_dilations_strides_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "3127_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "3128_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.058
+    },
+    "3129_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0002
+    },
+    "3130_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.1413
+    },
+    "3131_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.058
+    },
+    "3132_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0002
+    },
+    "3133_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.1413
+    },
+    "3135_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "3137_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "3139_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0635
+    },
+    "3142_ios16.matmul_y_transpose_y_transpose_x_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0323
+    },
+    "3143_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0012
+    },
+    "3144_ios16.softmax_axis_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.001
+    },
+    "3146_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0635
+    },
+    "3149_ios16.matmul_y_transpose_y_transpose_x_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0323
+    },
+    "3151_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "3159_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "3160_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0003
+    },
+    "3163_ios16.layer_norm_epsilon_x_axes": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "3167_ios16.batch_norm_epsilon_gamma_mean_variance_x_beta": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "3175_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "3182_ios16.conv_groups_weight_x_dilations_strides_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 1.0602
+    },
+    "3190_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 1.0607
+    },
+    "3192_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "3194_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "3196_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.2127
+    },
+    "3199_ios16.matmul_y_transpose_y_transpose_x_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.1081
+    },
+    "3200_ios16.softmax_axis_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0033
+    },
+    "3202_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.2127
+    },
+    "3205_ios16.matmul_y_transpose_y_transpose_x_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.1081
+    },
+    "3207_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "3215_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "3216_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0003
+    },
+    "3219_ios16.layer_norm_epsilon_x_axes": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "3223_ios16.batch_norm_epsilon_gamma_mean_variance_x_beta": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "3231_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0707
+    },
+    "3233_ios16.gelu_mode_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0006
+    },
+    "3241_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0707
+    },
+    "3242_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0003
+    },
+    "3246_ios16.layer_norm_epsilon_x_axes": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "3250_ios16.batch_norm_epsilon_gamma_mean_variance_x_beta": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "3258_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "3265_ios16.conv_groups_weight_x_dilations_strides_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "3273_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "3274_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.058
+    },
+    "3275_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0002
+    },
+    "3276_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.1413
+    },
+    "3277_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.058
+    },
+    "3278_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0002
+    },
+    "3279_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.1413
+    },
+    "3281_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "3283_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "3285_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0635
+    },
+    "3288_ios16.matmul_y_transpose_y_transpose_x_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0323
+    },
+    "3289_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0012
+    },
+    "3290_ios16.softmax_axis_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.001
+    },
+    "3292_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0635
+    },
+    "3295_ios16.matmul_y_transpose_y_transpose_x_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0323
+    },
+    "3297_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "3305_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "3306_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0003
+    },
+    "3309_ios16.layer_norm_epsilon_x_axes": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "3313_ios16.batch_norm_epsilon_gamma_mean_variance_x_beta": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "3321_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "3328_ios16.conv_groups_weight_x_dilations_strides_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 1.0602
+    },
+    "3336_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 1.0607
+    },
+    "3338_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "3340_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "3342_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.2127
+    },
+    "3345_ios16.matmul_y_transpose_y_transpose_x_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.1081
+    },
+    "3346_ios16.softmax_axis_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0033
+    },
+    "3348_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.2127
+    },
+    "3351_ios16.matmul_y_transpose_y_transpose_x_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.1081
+    },
+    "3353_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "3361_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "3362_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0003
+    },
+    "3365_ios16.layer_norm_epsilon_x_axes": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "3369_ios16.batch_norm_epsilon_gamma_mean_variance_x_beta": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "3377_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0707
+    },
+    "3379_ios16.gelu_mode_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0006
+    },
+    "3387_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0707
+    },
+    "3388_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0003
+    },
+    "3392_ios16.layer_norm_epsilon_x_axes": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "3396_ios16.batch_norm_epsilon_gamma_mean_variance_x_beta": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "3404_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "3411_ios16.conv_groups_weight_x_dilations_strides_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "3419_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "3420_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.058
+    },
+    "3421_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0002
+    },
+    "3422_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.1413
+    },
+    "3423_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.058
+    },
+    "3424_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0002
+    },
+    "3425_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.1413
+    },
+    "3427_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "3429_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "3431_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0635
+    },
+    "3434_ios16.matmul_y_transpose_y_transpose_x_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0323
+    },
+    "3435_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0012
+    },
+    "3436_ios16.softmax_axis_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.001
+    },
+    "3438_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0635
+    },
+    "3441_ios16.matmul_y_transpose_y_transpose_x_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0323
+    },
+    "3443_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "3451_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "3452_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0003
+    },
+    "3455_ios16.layer_norm_epsilon_x_axes": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "3459_ios16.batch_norm_epsilon_gamma_mean_variance_x_beta": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "3467_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "3474_ios16.conv_groups_weight_x_dilations_strides_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 1.0602
+    },
+    "3482_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 1.0607
+    },
+    "3484_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "3486_ios16.mul_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "3488_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.2127
+    },
+    "3491_ios16.matmul_y_transpose_y_transpose_x_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.1081
+    },
+    "3492_ios16.softmax_axis_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0033
+    },
+    "3494_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.2127
+    },
+    "3497_ios16.matmul_y_transpose_y_transpose_x_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.1081
+    },
+    "3499_ios16.reshape_shape_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "3507_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0177
+    },
+    "3508_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0003
+    },
+    "3511_ios16.layer_norm_epsilon_x_axes": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "3515_ios16.batch_norm_epsilon_gamma_mean_variance_x_beta": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "3523_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0707
+    },
+    "3525_ios16.gelu_mode_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0006
+    },
+    "3533_ios16.conv_groups_bias_weight_dilations_strides_x_pad_pad_type": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0707
+    },
+    "3534_ios16.add_x_y": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0003
+    },
+    "3537_ios16.layer_norm_epsilon_x_axes": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "3541_ios16.batch_norm_epsilon_gamma_mean_variance_x_beta": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "3543_squeeze_x_axes": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0001
+    },
+    "3546_transpose_x_perm": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0003
+    },
+    "3547_ios16.linear_weight_x_bias": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.001
+    },
+    "3550_concat_axis_values_interleave": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0012
+    },
+    "3553_concat_axis_values_interleave": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0012
+    },
+    "3557_slice_by_index_begin_end_end_mask_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0018
+    },
+    "3562_slice_by_index_begin_end_end_mask_squeeze_mask_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0002
+    },
+    "3566_slice_by_index_begin_end_end_mask_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0018
+    },
+    "3571_slice_by_index_begin_end_end_mask_squeeze_mask_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0002
+    },
+    "3575_slice_by_index_begin_end_end_mask_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0018
+    },
+    "3580_slice_by_index_begin_end_end_mask_squeeze_mask_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0002
+    },
+    "3584_slice_by_index_begin_end_end_mask_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0018
+    },
+    "3589_slice_by_index_begin_end_end_mask_squeeze_mask_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0002
+    },
+    "3593_slice_by_index_begin_end_end_mask_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0018
+    },
+    "3598_slice_by_index_begin_end_end_mask_squeeze_mask_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0002
+    },
+    "3602_slice_by_index_begin_end_end_mask_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0018
+    },
+    "3607_slice_by_index_begin_end_end_mask_squeeze_mask_x": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0002
+    },
+    "3610_concat_axis_values_interleave": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0005
+    },
+    "3613_ios16.reduce_mean_x_keep_dims_axes": {
+        "dispatch": "ANE",
+        "supported": [
+            "CPU",
+            "ANE"
+        ],
+        "cost": 0.0007
+    }
+}

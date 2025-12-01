@@ -38,13 +38,21 @@ WhisperKit supports two tasks:
 2. **`.translate`** - Converts speech directly to English
 
 ### Data Flow
-1. User taps "Start" → `SubtitlesViewModel.start()`
-2. `SpeechRecognitionService.startTranscribing()` begins listening with `.transcribe` task
-3. `SpeechRecognitionService.startTranslating()` begins listening with `.translate` task
-4. Both tasks run simultaneously on the same audio stream
-5. Transcribed text (original language) updates `SubtitlesViewModel.original`
-6. Translated text (English) updates `SubtitlesViewModel.english`
-7. UI displays both original and English translation in fullscreen
+1. App launches → `SubtitleView` appears with "Listening..." text
+2. `SubtitleView.onAppear` automatically calls `SubtitlesViewModel.start()`
+3. `SpeechRecognitionService.startTranscribing()` begins real-time audio capture with `.transcribe` task
+4. `SpeechRecognitionService.startTranslating()` begins real-time audio capture with `.translate` task
+5. Both tasks process the same audio stream from the device microphone
+6. Transcribed text (original language) updates `SubtitlesViewModel.original`
+7. Translated text (English) updates `SubtitlesViewModel.english`
+8. UI displays English translation in fullscreen (60pt bold white text on black background)
+
+### Implementation Details
+- **Audio Capture**: Uses `AVAudioEngine` to capture microphone input in real-time
+- **Audio Processing**: Converts `AVAudioPCMBuffer` to Float arrays for WhisperKit
+- **Real-time Transcription**: Processes audio buffers as they arrive from the microphone
+- **Permissions**: Requires microphone access (NSMicrophoneUsageDescription in Info.plist)
+- **Auto-start**: App automatically begins listening when launched
 
 ## Development Setup
 
@@ -79,11 +87,16 @@ xcodebuild test -project EnglishSubtitles.xcodeproj -scheme EnglishSubtitles -de
 
 ## Key Files
 
-- `EnglishSubtitlesApp.swift:11` - App entry point (no Firebase)
-- `SubtitlesViewModel.swift:19` - Starts both transcribe and translate tasks
-- `SpeechRecognitionService.swift:32` - `.transcribe` task implementation
-- `SpeechRecognitionService.swift:49` - `.translate` task implementation
-- `SubtitleView.swift:10` - Main UI entry point
+- `EnglishSubtitlesApp.swift:11` - App entry point
+- `SubtitleView.swift:26` - Auto-starts listening with `.onAppear { vm.start() }`
+- `SubtitlesViewModel.swift:19` - Starts both transcribe and translate tasks simultaneously
+- `SpeechRecognitionService.swift:40` - Real-time transcription with audio capture
+- `SpeechRecognitionService.swift:70` - Real-time translation to English with audio capture
+- `SpeechRecognitionService.swift:97` - Audio buffer processing for transcription
+- `SpeechRecognitionService.swift:118` - Audio buffer processing for translation
+- `SpeechRecognitionService.swift:166` - AudioStreamManager for microphone input
+- `SpeechRecognitionService.swift:170` - `processAudioFile()` method for testing with audio files
+- `project.pbxproj` - Contains INFOPLIST_KEY_NSMicrophoneUsageDescription for microphone permissions
 
 ## Notes
 
@@ -94,16 +107,27 @@ xcodebuild test -project EnglishSubtitles.xcodeproj -scheme EnglishSubtitles -de
 - 100% free - no API costs
 - Everything runs on-device for privacy and offline support
 - Fullscreen display for maximum readability
+- Auto-starts listening when app launches
+- Black background with huge white text for viewing while watching content
 
 ## Model Configuration
 
-The app uses WhisperKit's `base` model by default in `SpeechRecognitionService.swift:25`:
+The app uses WhisperKit's `base` model by default in `SpeechRecognitionService.swift:30`:
 ```swift
-whisperKit = try await WhisperKit(variant: .base)
+whisperKit = try await WhisperKit(model: "base")
 ```
 
-Available variants:
-- `.tiny` (~40MB) - Fastest, use if base is too slow
-- `.base` (~75MB) - **Default** - Best for iPhone
-- `.small` (~244MB) - Higher accuracy
-- `.medium` (~769MB) - Not recommended for mobile
+Available models:
+- `tiny` (~40MB) - Fastest, use if base is too slow
+- `base` (~75MB) - **Default** - Best for iPhone
+- `small` (~244MB) - Higher accuracy
+- `medium` (~769MB) - Not recommended for mobile
+
+## Permissions
+
+The app requires microphone access for real-time audio capture. This is configured in `project.pbxproj`:
+```
+INFOPLIST_KEY_NSMicrophoneUsageDescription = "EnglishSubtitles needs access to your microphone to transcribe and translate speech in real-time.";
+```
+
+This setting is added to both Debug and Release build configurations.

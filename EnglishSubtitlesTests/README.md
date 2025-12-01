@@ -12,21 +12,27 @@ This directory contains unit tests for the EnglishSubtitles app using a Turkish 
 ## Test Coverage
 
 ### 1. Audio File Tests
-- ✅ `testAudioFileExists()` - Verifies test audio file is in bundle
+- ✅ `testAudioFileExists()` - Verifies test audio file can be located
 
-### 2. SpeechRecognitionService Tests
-- ✅ `testSpeechRecognitionServiceInitialization()` - Tests WhisperKit model loading
-- ✅ `testTranscriptionWithTurkishAudio()` - Tests `.transcribe` task (Turkish → Turkish text)
-- ✅ `testTranslationWithTurkishAudio()` - Tests `.translate` task (Turkish → English)
+### 2. SpeechRecognitionService Tests (Real WhisperKit Processing)
+- ✅ `testSpeechRecognitionServiceInitialization()` - Tests WhisperKit model loading (waits up to 60s)
+- ✅ `testTranscriptionWithTurkishAudio()` - **Real transcription** using `processAudioFile()` with `.transcribe` task
+  - Processes actual audio file `fateh-1.m4a`
+  - Expects Turkish text output
+  - Verifies transcription is not empty
+- ✅ `testTranslationWithTurkishAudio()` - **Real translation** using `processAudioFile()` with `.translate` task
+  - Processes actual audio file `fateh-1.m4a`
+  - Expects English translation output
+  - Verifies translation contains key English words
 
-### 3. SubtitlesViewModel Tests
+### 3. SubtitlesViewModel Tests (Microphone Integration)
 - ✅ `testSubtitlesViewModelInitialization()` - Tests initial state
-- ✅ `testSubtitlesViewModelStartStop()` - Tests start/stop recording
-- ✅ `testSubtitlesViewModelTranscriptionAndTranslation()` - Tests full workflow
+- ⚠️ `testSubtitlesViewModelStartStop()` - Tests start/stop with microphone capture (may fail without mic access)
+- ⚠️ `testSubtitlesViewModelTranscriptionAndTranslation()` - Tests full workflow (requires live mic input)
 
 ### 4. Model Tests
 - ✅ `testSubtitleModelCreation()` - Tests Subtitle model initialization
-- ✅ `testSubtitleEquality()` - Tests Subtitle equality
+- ✅ `testSubtitleEquality()` - Tests Subtitle UUID uniqueness
 
 ## Setup
 
@@ -68,26 +74,38 @@ xcodebuild test -project EnglishSubtitles.xcodeproj -scheme EnglishSubtitles -de
 When tests run successfully, you should see:
 
 ```
-✅ testAudioFileExists - Audio file found in bundle
-✅ testSpeechRecognitionServiceInitialization - WhisperKit loaded
-✅ testTranscriptionWithTurkishAudio - Turkish text transcribed
-   Output: "Haydi. Emret sultanım" (or similar)
-✅ testTranslationWithTurkishAudio - English translation verified
-   Output: "Come on. As you order my sultan" (or similar)
-✅ testSubtitlesViewModelInitialization - ViewModel initialized
-✅ testSubtitlesViewModelStartStop - Start/stop works
-✅ testSubtitlesViewModelTranscriptionAndTranslation - Full workflow works
+✅ testAudioFileExists - Audio file found
+✅ testSpeechRecognitionServiceInitialization - WhisperKit loaded (may take 60s on first run)
+✅ testTranscriptionWithTurkishAudio - REAL transcription processed
+   Output: Turkish text (e.g., "Haydi. Emret sultanım" or similar)
+✅ testTranslationWithTurkishAudio - REAL translation to English
+   Output: English text (e.g., "Come on. As you order my sultan" or similar)
+✅ testSubtitlesViewModelInitialization - ViewModel initialized correctly
+⚠️  testSubtitlesViewModelStartStop - May show isRecording=false (no mic in tests)
+⚠️  testSubtitlesViewModelTranscriptionAndTranslation - Empty text (no mic input)
 ✅ testSubtitleModelCreation - Model creation works
 ✅ testSubtitleEquality - Model equality works
 ```
 
 ## Notes
 
-- **First run takes ~5 seconds**: WhisperKit downloads base model (~75MB) on first run
-- **Model size**: Base model is optimized for iPhone - only 75MB
-- **Transcription accuracy**: WhisperKit may not transcribe exactly "Haydi. Emret sultanım" but should be close
-- **Translation accuracy**: We check for keywords ("come", "sultan", "order") rather than exact match
-- **Real audio processing**: Some tests are placeholders because they require actual audio stream processing
+### Real Audio Processing ✅
+- **`testTranscriptionWithTurkishAudio`** and **`testTranslationWithTurkishAudio`** now perform REAL WhisperKit processing
+- These tests use `SpeechRecognitionService.processAudioFile()` to process the actual audio file
+- WhisperKit's `.transcribe` task transcribes in the original language (Turkish)
+- WhisperKit's `.translate` task translates directly to English
+- **First run takes up to 60 seconds** for WhisperKit to download the base model (~75MB)
+- **Subsequent runs are faster** as the model is cached
+
+### Microphone Tests ⚠️
+- ViewModel tests attempt real-time microphone capture but won't have audio in automated tests
+- These tests verify the interface works without crashing
+- For full testing, run the app on a device or simulator and speak into the microphone
+
+### Accuracy
+- **Transcription**: WhisperKit may transcribe slight variations of "Haydi. Emret sultanım"
+- **Translation**: We check for keywords ("come", "sultan", "order", "command") rather than exact match
+- Results may vary slightly between runs due to model behavior
 
 ## Troubleshooting
 
