@@ -11,19 +11,29 @@ import SwiftUI
 /// Main ViewModel that uses WhisperKit for both transcription and translation
 @MainActor
 class SubtitlesViewModel: ObservableObject {
-    @Published var original: String = ""
     @Published var english: String = ""
     @Published var isRecording: Bool = false
     @Published var isModelLoading: Bool = true
+    @Published var loadingProgress: Double = 0.0
 
-    private let speechRecognition = SpeechRecognitionService()
+    private var currentTextSegment = -1 // Track which segment is currently displayed on screen
+
+    private var speechRecognition: SpeechRecognitionService!
 
     init() {
+        // Initialize service with progress callback
+        speechRecognition = SpeechRecognitionService { [weak self] progress in
+            Task { @MainActor in
+                self?.loadingProgress = progress
+            }
+        }
+
         // Monitor when the model is ready
         Task {
             while !speechRecognition.isReady {
                 try? await Task.sleep(for: .seconds(0.5))
             }
+            loadingProgress = 1.0
             isModelLoading = false
         }
 
@@ -47,8 +57,10 @@ class SubtitlesViewModel: ObservableObject {
             queue: .main
         ) { [weak self] _ in
             // App returning to foreground - restart recording if model is ready
-            if self?.speechRecognition.isReady == true && self?.isRecording == false {
-                self?.start()
+            Task { @MainActor in
+                if self?.speechRecognition.isReady == true && self?.isRecording == false {
+                    self?.start()
+                }
             }
         }
     }
@@ -60,29 +72,34 @@ class SubtitlesViewModel: ObservableObject {
                 try? await Task.sleep(for: .seconds(0.5))
             }
 
-            // Start both transcription (.transcribe task) and translation (.translate task)
-            async let transcribeSuccess = speechRecognition.startTranscribing { [weak self] text in
+            // Start listening - translates audio to English
+            let success = await speechRecognition.startListening { [weak self] englishText, segmentNumber in
                 Task { @MainActor in
-                    self?.original = text
+                    guard let self = self else { return }
+
+                    // If this is a different segment than what's currently displayed, clear first
+                    if self.currentTextSegment != segmentNumber {
+                        print("🧹 Clearing screen (switching from segment #\(self.currentTextSegment) to #\(segmentNumber))")
+                        self.english = ""
+                        self.currentTextSegment = segmentNumber
+                        // Small delay to ensure UI updates
+                        try? await Task.sleep(for: .milliseconds(100))
+                    }
+
+                    print("📝 Displaying: \(englishText)")
+                    self.english = englishText
                 }
             }
 
-            async let translateSuccess = speechRecognition.startTranslating { [weak self] englishText in
-                Task { @MainActor in
-                    self?.english = englishText
-                }
-            }
-
-            let (transcribed, translated) = await (transcribeSuccess, translateSuccess)
-
-            if transcribed && translated {
+            if success {
                 isRecording = true
             }
         }
     }
 
     func stop() {
-        speechRecognition.stopTranscribing()
+        speechRecognition.stopListening()
         isRecording = false
+        currentTextSegment = -1
     }
 }

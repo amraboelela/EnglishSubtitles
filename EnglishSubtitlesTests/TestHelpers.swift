@@ -76,6 +76,11 @@ enum TestHelpers {
         return nil
     }
 
+    /// Get the path to 001.mp3 (alias for bundledQuranAudioPath)
+    static func bundled001AudioPath() -> String? {
+        return bundledQuranAudioPath()
+    }
+
     /// Wait for WhisperKit model to load with progress updates
     /// - Parameters:
     ///   - service: The SpeechRecognitionService to check

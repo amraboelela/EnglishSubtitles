@@ -15,10 +15,23 @@ class SpeechRecognitionService {
     private var audioStreamManager: AudioStreamManager?
 
     // Callbacks for updates
-    private var transcriptCallback: ((String) -> Void)?
-    private var translationCallback: ((String) -> Void)?
+    private var translationCallback: ((String, Int) -> Void)?
+    private var progressCallback: ((Double) -> Void)?
 
-    init() {
+    // Audio buffer accumulation
+    private var audioBuffer: [Float] = []
+    private let segmentDuration: Double = 1.5 // Process every 1.5 seconds
+    private let sampleRate: Double = 16000.0
+    private var isProcessing = false
+    private var lastProcessedCount = 0
+
+    // Silence detection
+    private let silenceThreshold: Float = 0.01 // RMS threshold for silence
+    private var lastChunkWasSilent = false
+    private var segmentNumber = 0 // Track segment number
+
+    init(onProgress: ((Double) -> Void)? = nil) {
+        progressCallback = onProgress
         Task {
             await loadModel()
         }
@@ -27,9 +40,25 @@ class SpeechRecognitionService {
     private func loadModel() async {
         do {
             print("Starting model load...")
-            // Copy bundled model files to Documents directory
+
+            // Step 1: Copy files (10% of progress)
+            progressCallback?(0.05)
             let modelPath = try await copyBundledModelToDocuments()
             print("Model path: \(modelPath)")
+            progressCallback?(0.10)
+
+            // Step 2: Load WhisperKit (90% of progress)
+            // Simulate progress during loading since WhisperKit doesn't provide callbacks
+            progressCallback?(0.15)
+
+            // Start simulating progress in background (60 seconds from 15% to 95%)
+            let progressTask = Task {
+                // 80% range over 60 seconds = ~1.3% per second
+                for progress in stride(from: 0.15, to: 0.95, by: 0.013) {
+                    try? await Task.sleep(for: .seconds(1.0))
+                    self.progressCallback?(progress)
+                }
+            }
 
             whisperKit = try await WhisperKit(
                 modelFolder: modelPath,
@@ -40,9 +69,14 @@ class SpeechRecognitionService {
                 verbose: false,
                 logLevel: .error
             )
+
+            // Cancel progress simulation and set to 100%
+            progressTask.cancel()
+            progressCallback?(1.0)
             print("Model loaded successfully!")
         } catch {
             print("Failed to load WhisperKit model: \(error)")
+            progressCallback?(0.0) // Reset on error
         }
     }
 
@@ -103,57 +137,29 @@ class SpeechRecognitionService {
         return modelDestPath.path
     }
 
-    /// Start transcribing audio in the original language
-    /// - Parameter onTranscriptUpdate: Callback with transcribed text in original language
-    /// - Returns: Success status
-    func startTranscribing(onTranscriptUpdate: @escaping (String) -> Void) async -> Bool {
-        guard let whisperKit = whisperKit else {
-            print("WhisperKit not initialized")
-            return false
-        }
-
-        transcriptCallback = onTranscriptUpdate
-
-        // Start audio streaming for transcription
-        if audioStreamManager == nil {
-            audioStreamManager = AudioStreamManager()
-        }
-
-        do {
-            try await audioStreamManager?.startRecording { [weak self] audioBuffer in
-                guard let self = self else { return }
-                Task {
-                    await self.processAudioForTranscription(audioBuffer)
-                }
-            }
-            return true
-        } catch {
-            print("Failed to start audio recording: \(error)")
-            return false
-        }
-    }
-
     /// Start translating audio to English
-    /// - Parameter onTranslationUpdate: Callback with English translation
+    /// - Parameter onTranslationUpdate: Callback with English translation and segment number
     /// - Returns: Success status
-    func startTranslating(onTranslationUpdate: @escaping (String) -> Void) async -> Bool {
-        guard let whisperKit = whisperKit else {
+    func startListening(
+        onTranslationUpdate: @escaping (String, Int) -> Void
+    ) async -> Bool {
+        guard whisperKit != nil else {
             print("WhisperKit not initialized")
             return false
         }
 
         translationCallback = onTranslationUpdate
 
-        // Start audio streaming for translation
+        // Start audio streaming - single stream for both tasks
         if audioStreamManager == nil {
             audioStreamManager = AudioStreamManager()
         }
 
         do {
-            try await audioStreamManager?.startRecording { [weak self] audioBuffer in
+            try await audioStreamManager?.startRecording { [weak self] buffer in
                 guard let self = self else { return }
                 Task {
-                    await self.processAudioForTranslation(audioBuffer)
+                    await self.accumulateAudio(buffer)
                 }
             }
             return true
@@ -163,55 +169,140 @@ class SpeechRecognitionService {
         }
     }
 
-    private func processAudioForTranscription(_ audioBuffer: AVAudioPCMBuffer) async {
-        guard let whisperKit = whisperKit else { return }
+    private func accumulateAudio(_ buffer: AVAudioPCMBuffer) async {
+        // Resample to 16kHz if needed
+        let resampledBuffer = resampleIfNeeded(buffer)
 
-        do {
-            // Resample to 16kHz if needed
-            let resampledBuffer = resampleIfNeeded(audioBuffer)
+        // Convert to float array
+        let audioData = convertBufferToFloatArray(resampledBuffer)
 
-            // Convert audio buffer to format WhisperKit expects
-            let audioData = convertBufferToFloatArray(resampledBuffer)
+        // Accumulate samples
+        audioBuffer.append(contentsOf: audioData)
 
-            // Transcribe with .transcribe task (maintains original language)
-            let results = try await whisperKit.transcribe(
-                audioArray: audioData,
-                decodeOptions: DecodingOptions(task: .transcribe)
-            )
+        let currentDuration = Double(audioBuffer.count) / sampleRate
+        let newAudioDuration = Double(audioBuffer.count - lastProcessedCount) / sampleRate
 
-            // Extract text from all segments
-            let text = results.map { $0.text }.joined(separator: " ")
-            if !text.isEmpty {
-                transcriptCallback?(text)
+        // Process every 1.5 seconds of NEW audio (not already processing)
+        if newAudioDuration >= segmentDuration && !isProcessing {
+            isProcessing = true
+
+            // Get the new 1.5s chunk to check for silence/music
+            let chunkStart = lastProcessedCount
+            let chunkEnd = audioBuffer.count
+            let chunk = Array(audioBuffer[chunkStart..<chunkEnd])
+
+            // Check if this chunk is silence or music
+            let isSilentOrMusic = await isSilenceOrMusic(chunk)
+
+            if isSilentOrMusic {
+                // Only process silence detection if we weren't already silent
+                if !lastChunkWasSilent {
+                    print("🔇 Silence/music detected - ending segment #\(segmentNumber)")
+                    lastChunkWasSilent = true
+                    segmentNumber += 1
+                }
+
+                // Reset buffer for new segment
+                print("🔄 Resetting buffer")
+                audioBuffer.removeAll(keepingCapacity: true)
+                lastProcessedCount = 0
+            } else {
+                // Process entire buffer from the beginning (with growing context)
+                let audioToProcess = audioBuffer
+                lastProcessedCount = audioBuffer.count
+
+                print("🎯 Processing buffer: \(String(format: "%.2f", Double(audioToProcess.count) / sampleRate))s")
+                await processTranslation(audioToProcess)
+                lastChunkWasSilent = false
             }
-        } catch {
-            print("Transcription error: \(error)")
+
+            isProcessing = false
         }
     }
 
-    private func processAudioForTranslation(_ audioBuffer: AVAudioPCMBuffer) async {
-        guard let whisperKit = whisperKit else { return }
+    private func isSilenceOrMusic(_ samples: [Float]) async -> Bool {
+        guard !samples.isEmpty else { return true }
+
+        // Check RMS for silence
+        let rms = calculateRMS(samples)
+        if rms < silenceThreshold {
+            return true
+        }
+
+        // WhisperKit requires at least 1.0 seconds of audio (16000 samples at 16kHz)
+        let minSamples = Int(sampleRate * 1.0)
+        var processedSamples = samples
+
+        if processedSamples.count < minSamples {
+            print("⚠️ Chunk too short for music detection: \(processedSamples.count) samples, padding to \(minSamples)")
+            // Pad with silence to reach minimum length
+            processedSamples.append(contentsOf: [Float](repeating: 0.0, count: minSamples - processedSamples.count))
+        }
+
+        // Use WhisperKit to detect if it's music (no text detected)
+        guard let whisperKit = whisperKit else { return false }
 
         do {
-            // Resample to 16kHz if needed
-            let resampledBuffer = resampleIfNeeded(audioBuffer)
+            let results = try await whisperKit.transcribe(
+                audioArray: processedSamples,
+                decodeOptions: DecodingOptions(task: .translate, language: "tr")
+            )
 
-            // Convert audio buffer to format WhisperKit expects
-            let audioData = convertBufferToFloatArray(resampledBuffer)
+            // If no segments or empty text, it's likely music
+            let text = results.map { $0.text }.joined(separator: " ").trimmingCharacters(in: .whitespaces)
+            let isMusic = text.isEmpty || text.count < 3 // Very short text is likely noise/music
 
+            if isMusic {
+                print("🎵 Music detected (no speech)")
+            }
+
+            return isMusic
+        } catch {
+            print("❌ Error checking for music: \(error)")
+            return false
+        }
+    }
+
+    private func calculateRMS(_ samples: [Float]) -> Float {
+        guard !samples.isEmpty else { return 0 }
+
+        let sumOfSquares = samples.reduce(0) { $0 + $1 * $1 }
+        return sqrt(sumOfSquares / Float(samples.count))
+    }
+
+    private func processTranslation(_ audioData: [Float]) async {
+        guard let whisperKit = whisperKit else { return }
+
+        // WhisperKit requires at least 1.0 seconds of audio (16000 samples at 16kHz)
+        // Pad if necessary to prevent memory access errors
+        let minSamples = Int(sampleRate * 1.0)
+        var processedAudio = audioData
+
+        if processedAudio.count < minSamples {
+            print("⚠️ Audio too short: \(processedAudio.count) samples, padding to \(minSamples)")
+            // Pad with silence (zeros) to reach minimum length
+            processedAudio.append(contentsOf: [Float](repeating: 0.0, count: minSamples - processedAudio.count))
+        }
+
+        do {
             // Translate with .translate task (converts to English)
             let results = try await whisperKit.transcribe(
-                audioArray: audioData,
-                decodeOptions: DecodingOptions(task: .translate)
+                audioArray: processedAudio,
+                decodeOptions: DecodingOptions(task: .translate, language: "tr")
             )
 
             // Extract text from all segments
-            let text = results.map { $0.text }.joined(separator: " ")
+            let text = results.map { $0.text }.joined(separator: " ").trimmingCharacters(in: .whitespaces)
+
             if !text.isEmpty {
-                translationCallback?(text)
+                print("🌍 Segment #\(segmentNumber): \(text)")
+                print("📝 Sending to ViewModel: segment #\(segmentNumber)")
+                translationCallback?(text, segmentNumber)
+            } else {
+                print("⚠️ Empty result for segment #\(segmentNumber)")
             }
         } catch {
-            print("Translation error: \(error)")
+            print("❌ Translation error: \(error)")
         }
     }
 
@@ -284,9 +375,14 @@ class SpeechRecognitionService {
         return samples
     }
 
-    func stopTranscribing() {
+    func stopListening() {
         audioStreamManager?.stopRecording()
         audioStreamManager = nil
+        audioBuffer.removeAll()
+        isProcessing = false
+        lastProcessedCount = 0
+        lastChunkWasSilent = false
+        segmentNumber = 0
     }
 
     var isReady: Bool {
@@ -391,8 +487,11 @@ class AudioStreamManager {
         // Request microphone permission
         let permissionGranted = await AVAudioApplication.requestRecordPermission()
         guard permissionGranted else {
+            print("❌ Microphone permission denied")
             throw AudioStreamError.permissionDenied
         }
+
+        print("✓ Microphone permission granted")
 
         // Setup audio engine
         audioEngine = AVAudioEngine()
@@ -405,6 +504,9 @@ class AudioStreamManager {
             throw AudioStreamError.inputNodeNotAvailable
         }
 
+        let inputFormat = inputNode.outputFormat(forBus: 0)
+        print("🎤 Microphone format: \(inputFormat.sampleRate) Hz, \(inputFormat.channelCount) channels")
+
         // Install tap with nil format to use the hardware's native format
         // This is the safest approach - let the system choose the format
         inputNode.installTap(onBus: 0, bufferSize: 4096, format: nil) { [weak self] buffer, time in
@@ -412,6 +514,7 @@ class AudioStreamManager {
         }
 
         try audioEngine.start()
+        print("✓ Audio engine started")
     }
 
     func stopRecording() {
