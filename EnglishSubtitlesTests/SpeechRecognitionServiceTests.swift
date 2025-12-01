@@ -43,9 +43,8 @@ struct SpeechRecognitionServiceTests {
 
         let audioURL = URL(fileURLWithPath: audioPath)
 
-        // Transcribe the audio file with Turkish language specified
-        let transcribedText = try await service.processAudioFile(at: audioURL, task: .transcribe, language: "tr")
-
+        // Transcribe the audio file (auto-detect language)
+        let transcribedText = try await service.processAudioFile(at: audioURL, task: .transcribe)
         print("Transcribed (Turkish): \(transcribedText)")
 
         // Verify we got some transcription
@@ -78,9 +77,8 @@ struct SpeechRecognitionServiceTests {
 
         let audioURL = URL(fileURLWithPath: audioPath)
 
-        // Translate the audio file to English (source: Turkish)
-        let translatedText = try await service.processAudioFile(at: audioURL, task: .translate, language: "tr")
-
+        // Translate the audio file to English (auto-detect source language)
+        let translatedText = try await service.processAudioFile(at: audioURL, task: .translate)
         print("Translated (English): \(translatedText)")
 
         // Verify we got some translation
@@ -94,5 +92,77 @@ struct SpeechRecognitionServiceTests {
                              translatedText.lowercased().contains("command")
 
         #expect(hasEnglishWords, "Translation should contain expected English words (come, sultan, order, or command)")
+    }
+
+    @Test func testTranscriptionWithArabicQuran() async throws {
+        let service = SpeechRecognitionService()
+
+        // Wait for model to load
+        let isReady = await TestHelpers.waitForWhisperKit(service)
+
+        guard isReady else {
+            Issue.record("WhisperKit model not loaded")
+            return
+        }
+
+        guard let audioPath = TestHelpers.bundledQuranAudioPath() else {
+            Issue.record("Quran audio file not found")
+            return
+        }
+
+        // Test with Quran recitation (Arabic)
+        let quranURL = URL(fileURLWithPath: audioPath)
+
+        // Transcribe the Quran audio (auto-detect Arabic)
+        let transcribedText = try await service.processAudioFile(at: quranURL, task: .transcribe)
+        print("Transcribed (Arabic Quran): \(transcribedText)")
+
+        // Verify we got some transcription
+        #expect(!transcribedText.isEmpty, "Should transcribe Arabic Quran recitation")
+
+        // Surah Al-Fatiha contains these common Arabic words
+        let hasArabicWords = transcribedText.contains("الله") ||  // Allah
+                            transcribedText.contains("الرحمن") ||  // Ar-Rahman
+                            transcribedText.contains("الرحيم") ||  // Ar-Raheem
+                            transcribedText.lowercased().contains("allah") ||
+                            transcribedText.lowercased().contains("rahman")
+
+        #expect(hasArabicWords, "Transcription should contain expected Arabic words from Al-Fatiha")
+    }
+
+    @Test func testTranslationWithArabicQuran() async throws {
+        let service = SpeechRecognitionService()
+
+        // Wait for model to load
+        let isReady = await TestHelpers.waitForWhisperKit(service)
+
+        guard isReady else {
+            Issue.record("WhisperKit model not loaded")
+            return
+        }
+
+        guard let audioPath = TestHelpers.bundledQuranAudioPath() else {
+            Issue.record("Quran audio file not found")
+            return
+        }
+
+        // Test with Quran recitation (Arabic)
+        let quranURL = URL(fileURLWithPath: audioPath)
+
+        // Translate the Quran audio to English (auto-detect Arabic)
+        let translatedText = try await service.processAudioFile(at: quranURL, task: .translate)
+        print("Translated (English): \(translatedText)")
+
+        // Verify we got some translation
+        #expect(!translatedText.isEmpty, "Should translate Arabic Quran to English")
+
+        // Al-Fatiha translation should contain these key English words
+        let hasEnglishWords = translatedText.lowercased().contains("allah") ||
+                             translatedText.lowercased().contains("god") ||
+                             translatedText.lowercased().contains("merciful") ||
+                             translatedText.lowercased().contains("compassionate") ||
+                             translatedText.lowercased().contains("lord")
+
+        #expect(hasEnglishWords, "Translation should contain expected English words from Al-Fatiha")
     }
 }

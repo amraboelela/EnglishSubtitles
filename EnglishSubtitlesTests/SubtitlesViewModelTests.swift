@@ -89,15 +89,10 @@ struct SubtitlesViewModelTests {
         let audioURL = URL(fileURLWithPath: audioPath)
 
         // Process the actual audio file for both transcription and translation
-        print("Processing audio file for transcription and translation...")
-
-        async let transcriptionTask = service.processAudioFile(at: audioURL, task: .transcribe, language: "tr")
-        async let translationTask = service.processAudioFile(at: audioURL, task: .translate, language: "tr")
+        async let transcriptionTask = service.processAudioFile(at: audioURL, task: .transcribe)
+        async let translationTask = service.processAudioFile(at: audioURL, task: .translate)
 
         let (originalText, englishText) = await (try transcriptionTask, try translationTask)
-
-        print("Transcription result: '\(originalText)'")
-        print("Translation result: '\(englishText)'")
 
         // Verify we got actual results
         #expect(!originalText.isEmpty, "Should transcribe Turkish audio")

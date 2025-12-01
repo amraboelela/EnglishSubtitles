@@ -44,6 +44,38 @@ enum TestHelpers {
         return nil
     }
 
+    /// Get the path to the bundled Quran audio file
+    static func bundledQuranAudioPath() -> String? {
+        let fileManager = FileManager.default
+
+        // 1. Try all loaded bundles
+        for bundle in Bundle.allBundles {
+            if let url = bundle.url(forResource: "001", withExtension: "mp3") {
+                print("Found Quran audio in bundle: \(bundle.bundlePath)")
+                return url.path
+            }
+        }
+
+        // 2. Try the main app bundle
+        if let url = Bundle.main.url(forResource: "001", withExtension: "mp3") {
+            return url.path
+        }
+
+        // 3. Try project root (for development) using #filePath
+        let projectRoot = URL(fileURLWithPath: #filePath)
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+            .appendingPathComponent("001.mp3")
+
+        if fileManager.fileExists(atPath: projectRoot.path) {
+            print("Found Quran audio in project root: \(projectRoot.path)")
+            return projectRoot.path
+        }
+
+        print("✗ Quran audio file not found in any expected location")
+        return nil
+    }
+
     /// Wait for WhisperKit model to load with progress updates
     /// - Parameters:
     ///   - service: The SpeechRecognitionService to check

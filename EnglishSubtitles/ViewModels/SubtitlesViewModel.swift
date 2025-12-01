@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 /// Main ViewModel that uses WhisperKit for both transcription and translation
 @MainActor
@@ -24,6 +25,31 @@ class SubtitlesViewModel: ObservableObject {
                 try? await Task.sleep(for: .seconds(0.5))
             }
             isModelLoading = false
+        }
+
+        // Handle app lifecycle
+        setupLifecycleObservers()
+    }
+
+    private func setupLifecycleObservers() {
+        NotificationCenter.default.addObserver(
+            forName: UIApplication.willResignActiveNotification,
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            // App going to background - stop recording
+            self?.stop()
+        }
+
+        NotificationCenter.default.addObserver(
+            forName: UIApplication.didBecomeActiveNotification,
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            // App returning to foreground - restart recording if model is ready
+            if self?.speechRecognition.isReady == true && self?.isRecording == false {
+                self?.start()
+            }
         }
     }
 

@@ -26,19 +26,21 @@ class SpeechRecognitionService {
 
     private func loadModel() async {
         do {
-            print("Loading WhisperKit model...")
-
+            print("Starting model load...")
             // Copy bundled model files to Documents directory
             let modelPath = try await copyBundledModelToDocuments()
+            print("Model path: \(modelPath)")
 
-            print("Found model at: \(modelPath)")
             whisperKit = try await WhisperKit(
                 modelFolder: modelPath,
-                computeOptions: ModelComputeOptions(),
-                verbose: true,
-                logLevel: .debug
+                computeOptions: ModelComputeOptions(
+                    audioEncoderCompute: .cpuAndNeuralEngine,
+                    textDecoderCompute: .cpuAndNeuralEngine
+                ),
+                verbose: false,
+                logLevel: .error
             )
-            print("WhisperKit model loaded successfully")
+            print("Model loaded successfully!")
         } catch {
             print("Failed to load WhisperKit model: \(error)")
         }
@@ -50,13 +52,12 @@ class SpeechRecognitionService {
             throw AudioStreamError.engineSetupFailed
         }
 
-        let modelDestPath = documentsPath.appendingPathComponent("openai_whisper-base")
+        let modelDestPath = documentsPath.appendingPathComponent("openai_whisper-medium")
 
         // Clean up any incomplete HuggingFace downloads that might conflict
         let hfCachePath = documentsPath.appendingPathComponent("huggingface")
         if fileManager.fileExists(atPath: hfCachePath.path) {
             try? fileManager.removeItem(at: hfCachePath)
-            print("Cleaned up HuggingFace cache to avoid conflicts")
         }
 
         let requiredFiles = ["config.json", "generation_config.json", "tokenizer.json", "tokenizer_config.json", "AudioEncoder.mlmodelc", "MelSpectrogram.mlmodelc", "TextDecoder.mlmodelc"]
@@ -67,22 +68,19 @@ class SpeechRecognitionService {
             for file in requiredFiles {
                 let filePath = modelDestPath.appendingPathComponent(file)
                 if !fileManager.fileExists(atPath: filePath.path) {
-                    print("Missing file: \(file)")
                     allFilesExist = false
                     break
                 }
             }
 
             if allFilesExist {
-                print("Model already exists in Documents directory with all required files")
                 return modelDestPath.path
             } else {
-                print("Model directory exists but missing some files, will recopy")
                 try? fileManager.removeItem(at: modelDestPath)
             }
         }
 
-        // Model files are in bundle root - copy them to Documents/openai_whisper-base/
+        // Model files are in bundle root - copy them to Documents/openai_whisper-medium/
         // Use the bundle for this class, not Bundle.main (which may be test bundle)
         let bundle = Bundle(for: SpeechRecognitionService.self)
         guard let bundleResourcePath = bundle.resourcePath else {
@@ -99,9 +97,6 @@ class SpeechRecognitionService {
 
             if fileManager.fileExists(atPath: sourcePath) {
                 try fileManager.copyItem(atPath: sourcePath, toPath: destPath.path)
-                print("Copied \(file) to Documents")
-            } else {
-                print("WARNING: \(file) not found in bundle")
             }
         }
 
@@ -172,8 +167,11 @@ class SpeechRecognitionService {
         guard let whisperKit = whisperKit else { return }
 
         do {
+            // Resample to 16kHz if needed
+            let resampledBuffer = resampleIfNeeded(audioBuffer)
+
             // Convert audio buffer to format WhisperKit expects
-            let audioData = convertBufferToFloatArray(audioBuffer)
+            let audioData = convertBufferToFloatArray(resampledBuffer)
 
             // Transcribe with .transcribe task (maintains original language)
             let results = try await whisperKit.transcribe(
@@ -195,8 +193,11 @@ class SpeechRecognitionService {
         guard let whisperKit = whisperKit else { return }
 
         do {
+            // Resample to 16kHz if needed
+            let resampledBuffer = resampleIfNeeded(audioBuffer)
+
             // Convert audio buffer to format WhisperKit expects
-            let audioData = convertBufferToFloatArray(audioBuffer)
+            let audioData = convertBufferToFloatArray(resampledBuffer)
 
             // Translate with .translate task (converts to English)
             let results = try await whisperKit.transcribe(
@@ -214,9 +215,43 @@ class SpeechRecognitionService {
         }
     }
 
+    private func resampleIfNeeded(_ buffer: AVAudioPCMBuffer) -> AVAudioPCMBuffer {
+        let format = buffer.format
+
+        // If already 16kHz, return as-is
+        if format.sampleRate == 16000 {
+            return buffer
+        }
+
+        // Create target format: 16kHz mono
+        guard let targetFormat = AVAudioFormat(
+            commonFormat: .pcmFormatFloat32,
+            sampleRate: 16000,
+            channels: 1,
+            interleaved: false
+        ),
+        let converter = AVAudioConverter(from: format, to: targetFormat) else {
+            return buffer
+        }
+
+        let capacity = AVAudioFrameCount(Double(buffer.frameLength) * (16000.0 / format.sampleRate))
+        guard let convertedBuffer = AVAudioPCMBuffer(pcmFormat: targetFormat, frameCapacity: capacity) else {
+            return buffer
+        }
+
+        var error: NSError?
+        let inputBlock: AVAudioConverterInputBlock = { inNumPackets, outStatus in
+            outStatus.pointee = .haveData
+            return buffer
+        }
+
+        converter.convert(to: convertedBuffer, error: &error, withInputFrom: inputBlock)
+
+        return error == nil ? convertedBuffer : buffer
+    }
+
     private func convertBufferToFloatArray(_ buffer: AVAudioPCMBuffer) -> [Float] {
         guard let channelData = buffer.floatChannelData else {
-            print("ERROR: No float channel data available")
             return []
         }
 
@@ -226,7 +261,6 @@ class SpeechRecognitionService {
         // WhisperKit expects mono audio at 16kHz
         // If we have stereo, average the channels
         let channelCount = Int(buffer.format.channelCount)
-        print("Audio format - Channels: \(channelCount), Sample Rate: \(buffer.format.sampleRate), Frames: \(frameLength)")
 
         var samples: [Float] = []
         samples.reserveCapacity(frameLength)
@@ -245,16 +279,6 @@ class SpeechRecognitionService {
                 }
                 samples.append(sum / Float(channelCount))
             }
-        }
-
-        print("Converted \(samples.count) samples from \(channelCount) channel(s)")
-
-        // Check for silence
-        let maxAmplitude = samples.map { abs($0) }.max() ?? 0
-        print("Max amplitude: \(maxAmplitude)")
-
-        if maxAmplitude < 0.001 {
-            print("WARNING: Audio appears to be silent (max amplitude < 0.001)")
         }
 
         return samples
@@ -279,48 +303,37 @@ class SpeechRecognitionService {
     /// - Returns: The transcribed/translated text
     func processAudioFile(at audioFileURL: URL, task: DecodingTask, language: String? = nil) async throws -> String {
         guard let whisperKit = whisperKit else {
-            print("ERROR: WhisperKit not initialized")
             throw AudioStreamError.engineSetupFailed
         }
-
-        print("Loading audio file: \(audioFileURL.lastPathComponent)")
 
         // Load the audio file
         let audioFile = try AVAudioFile(forReading: audioFileURL)
         let format = audioFile.processingFormat
         let frameCount = UInt32(audioFile.length)
 
-        print("Audio file loaded - Format: \(format), Frames: \(frameCount)")
-
         // WhisperKit expects 16kHz mono PCM
         guard let targetFormat = AVAudioFormat(commonFormat: .pcmFormatFloat32,
                                                sampleRate: 16000,
                                                channels: 1,
                                                interleaved: false) else {
-            print("ERROR: Failed to create target audio format")
             throw AudioStreamError.engineSetupFailed
         }
 
         guard let buffer = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: frameCount) else {
-            print("ERROR: Failed to create audio buffer")
             throw AudioStreamError.engineSetupFailed
         }
 
         try audioFile.read(into: buffer)
-        print("Audio file read into buffer successfully")
 
         // Resample to 16kHz if needed
         let resampledBuffer: AVAudioPCMBuffer
         if format.sampleRate != 16000 {
-            print("Resampling from \(format.sampleRate)Hz to 16000Hz...")
             guard let converter = AVAudioConverter(from: format, to: targetFormat) else {
-                print("ERROR: Failed to create audio converter")
                 throw AudioStreamError.engineSetupFailed
             }
 
             let capacity = AVAudioFrameCount(Double(frameCount) * (16000.0 / format.sampleRate))
             guard let convertedBuffer = AVAudioPCMBuffer(pcmFormat: targetFormat, frameCapacity: capacity) else {
-                print("ERROR: Failed to create resampled buffer")
                 throw AudioStreamError.engineSetupFailed
             }
 
@@ -333,47 +346,33 @@ class SpeechRecognitionService {
             converter.convert(to: convertedBuffer, error: &error, withInputFrom: inputBlock)
 
             if let error = error {
-                print("ERROR: Audio conversion failed: \(error)")
                 throw AudioStreamError.engineSetupFailed
             }
 
             resampledBuffer = convertedBuffer
-            print("Resampling complete - new frame count: \(resampledBuffer.frameLength)")
         } else {
             resampledBuffer = buffer
         }
 
         // Convert to float array
         let audioData = convertBufferToFloatArray(resampledBuffer)
-        print("Converted to float array - Sample count: \(audioData.count)")
 
         guard !audioData.isEmpty else {
-            print("ERROR: Audio data is empty after conversion")
             throw AudioStreamError.engineSetupFailed
         }
 
         // Process with WhisperKit
-        print("Starting WhisperKit transcription with task: \(task)")
         var decodingOptions = DecodingOptions(task: task)
         if let language = language {
             decodingOptions.language = language
-            print("Using language: \(language)")
         }
         let results = try await whisperKit.transcribe(
             audioArray: audioData,
             decodeOptions: decodingOptions
         )
 
-        print("WhisperKit returned \(results.count) segments")
-
-        // Print each segment for debugging
-        for (index, result) in results.enumerated() {
-            print("  Segment \(index): \"\(result.text)\"")
-        }
-
         // Extract text from all segments
         let combinedText = results.map { $0.text }.joined(separator: " ")
-        print("Combined text (\(combinedText.count) chars): \"\(combinedText)\"")
 
         return combinedText
     }
@@ -406,9 +405,9 @@ class AudioStreamManager {
             throw AudioStreamError.inputNodeNotAvailable
         }
 
-        let recordingFormat = inputNode.outputFormat(forBus: 0)
-
-        inputNode.installTap(onBus: 0, bufferSize: 4096, format: recordingFormat) { [weak self] buffer, time in
+        // Install tap with nil format to use the hardware's native format
+        // This is the safest approach - let the system choose the format
+        inputNode.installTap(onBus: 0, bufferSize: 4096, format: nil) { [weak self] buffer, time in
             self?.audioCallback?(buffer)
         }
 
