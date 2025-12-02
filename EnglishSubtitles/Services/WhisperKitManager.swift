@@ -35,7 +35,10 @@ class WhisperKitManager {
         let progressTask = Task {
             // 80% range over 60 seconds = ~1.3% per second
             for progress in stride(from: 0.15, to: 0.95, by: 0.013) {
+                // Stop if task was cancelled
+                if Task.isCancelled { break }
                 try? await Task.sleep(for: .seconds(1.0))
+                if Task.isCancelled { break }
                 self.progressCallback?(progress)
             }
         }
@@ -50,8 +53,11 @@ class WhisperKitManager {
             logLevel: .error
         )
 
-        // Cancel progress simulation and set to 100%
+        // Cancel progress simulation and wait for it to stop
         progressTask.cancel()
+        _ = await progressTask.result
+
+        // Now safe to send final 1.0
         progressCallback?(1.0)
         print("Model loaded successfully!")
     }
@@ -100,16 +106,30 @@ class WhisperKitManager {
         // Create destination directory
         try fileManager.createDirectory(at: modelDestPath, withIntermediateDirectories: true)
 
-        // Copy each file/folder
+        // Copy each file/folder with concurrent-safe error handling
         for file in requiredFiles {
             let sourcePath = (bundleResourcePath as NSString).appendingPathComponent(file)
             let destPath = modelDestPath.appendingPathComponent(file)
 
+            // Skip if already exists (concurrent tests may have copied it)
+            if fileManager.fileExists(atPath: destPath.path) {
+                continue
+            }
+
+            // Copy from source if it exists
             if fileManager.fileExists(atPath: sourcePath) {
-                try fileManager.copyItem(atPath: sourcePath, toPath: destPath.path)
+                do {
+                    try fileManager.copyItem(atPath: sourcePath, toPath: destPath.path)
+                } catch let error as NSError {
+                    // If error is "file exists", another test copied it - ignore
+                    if error.code != 516 { // NSFileWriteFileExistsError
+                        throw error
+                    }
+                }
             }
         }
 
+        print("✓ Model files ready at: \(modelDestPath.path)")
         return modelDestPath.path
     }
 }

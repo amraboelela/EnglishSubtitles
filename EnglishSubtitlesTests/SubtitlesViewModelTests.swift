@@ -10,11 +10,11 @@ import Foundation
 @testable import EnglishSubtitles
 
 /// Tests for SubtitlesViewModel - State management and UI integration
-struct SubtitlesViewModelTests {
+@MainActor
+class SubtitlesViewModelTests {
 
     // MARK: - Initialization Tests
 
-    @MainActor
     @Test func testSubtitlesViewModelInitialization() async throws {
         let viewModel = SubtitlesViewModel()
 
@@ -25,7 +25,6 @@ struct SubtitlesViewModelTests {
 
     // MARK: - Lifecycle Tests
 
-    @MainActor
     @Test func testSubtitlesViewModelStartStop() async throws {
         let viewModel = SubtitlesViewModel()
 
@@ -67,7 +66,6 @@ struct SubtitlesViewModelTests {
 
     // MARK: - Audio Processing Tests
 
-    @MainActor
     @Test func testSubtitlesViewModelWithActualAudioFile() async throws {
         // This test uses the actual audio file instead of waiting for microphone input
         let service = SpeechRecognitionService()
@@ -113,7 +111,6 @@ struct SubtitlesViewModelTests {
 
     // MARK: - Segmentation Tests
 
-    @MainActor
     @Test func testCurrentTextSegmentTracking() async throws {
         let viewModel = SubtitlesViewModel()
 
@@ -142,7 +139,6 @@ struct SubtitlesViewModelTests {
         print("ViewModel ready for segment tracking")
     }
 
-    @MainActor
     @Test func testSegmentTransitionClearsScreen() async throws {
         // This test verifies the logic that when segment number changes,
         // the screen clears before showing new text

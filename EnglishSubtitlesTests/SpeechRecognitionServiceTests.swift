@@ -189,7 +189,7 @@ struct SpeechRecognitionServiceTests {
 
         // Track segments as they would appear in real-time
         var segments: [(segmentNumber: Int, text: String)] = []
-        var currentSegment = 0
+        //var currentSegment = 0
 
         // We'll split the audio into chunks to simulate real-time processing
         // and detect natural pauses between verses

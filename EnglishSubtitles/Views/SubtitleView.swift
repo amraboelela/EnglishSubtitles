@@ -36,6 +36,8 @@ struct SubtitleView: View {
                         .foregroundColor(.white)
                         .multilineTextAlignment(.center)
                         .padding(40)
+                        .minimumScaleFactor(0.3)
+                        .lineLimit(nil)
                     Spacer()
                 }
             }
