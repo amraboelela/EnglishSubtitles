@@ -36,7 +36,7 @@ struct SubtitleView: View {
                         .foregroundColor(.white)
                         .multilineTextAlignment(.center)
                         .padding(40)
-                        .minimumScaleFactor(0.3)
+                        .minimumScaleFactor(0.5)
                         .lineLimit(nil)
                     Spacer()
                 }
@@ -57,9 +57,9 @@ struct SubtitleView: View {
 
     private var fontSize: CGFloat {
         if vm.english.isEmpty {
-            return 40
+            return 30
         } else {
-            return 60
+            return 48
         }
     }
 }

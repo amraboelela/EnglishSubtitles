@@ -77,13 +77,10 @@ class SubtitlesViewModel: ObservableObject {
                 Task { @MainActor in
                     guard let self = self else { return }
 
-                    // If this is a different segment than what's currently displayed, clear first
+                    // Update current segment tracker
                     if self.currentTextSegment != segmentNumber {
-                        print("🧹 Clearing screen (switching from segment #\(self.currentTextSegment) to #\(segmentNumber))")
-                        self.english = ""
+                        print("🔄 Switching to segment #\(segmentNumber)")
                         self.currentTextSegment = segmentNumber
-                        // Small delay to ensure UI updates
-                        try? await Task.sleep(for: .milliseconds(100))
                     }
 
                     print("📝 Displaying: \(englishText)")
