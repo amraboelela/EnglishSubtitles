@@ -11,7 +11,6 @@ import SwiftUI
 /// Main ViewModel that uses WhisperKit for both transcription and translation
 @MainActor
 class SubtitlesViewModel: ObservableObject {
-
     @Published var english: String = ""
     @Published var isRecording: Bool = false
     @Published var isModelLoading: Bool = true
@@ -49,9 +48,7 @@ class SubtitlesViewModel: ObservableObject {
             queue: .main
         ) { [weak self] _ in
             // App going to background - stop recording
-            Task { @MainActor in
-                self?.stop()
-            }
+            self?.stop()
         }
 
         NotificationCenter.default.addObserver(
@@ -82,11 +79,11 @@ class SubtitlesViewModel: ObservableObject {
 
                     // Update current segment tracker
                     if self.currentTextSegment != segmentNumber {
-                        log("#subtitles 🔄 Switching to segment #\(segmentNumber)")
+                        print("🔄 Switching to segment #\(segmentNumber)")
                         self.currentTextSegment = segmentNumber
                     }
 
-                    log("#subtitles 📝 Displaying: \(englishText)")
+                    print("📝 Displaying: \(englishText)")
                     self.english = englishText
                 }
             }

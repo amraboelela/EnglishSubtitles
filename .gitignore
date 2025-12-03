@@ -65,5 +65,3 @@ fastlane/test_output
 .DS_Store
 
 *.mlmodelc
-log*.txt
-tools/.last_install_checksum

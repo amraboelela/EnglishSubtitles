@@ -10,7 +10,6 @@ import WhisperKit
 
 /// Manages WhisperKit model loading and initialization
 class WhisperKitManager {
-
     private var progressCallback: ((Double) -> Void)?
     private(set) var whisperKit: WhisperKit?
 
@@ -20,12 +19,12 @@ class WhisperKitManager {
 
     /// Load WhisperKit model with progress updates
     func loadModel() async throws {
-        log("#subtitles Starting model load...")
+        print("Starting model load...")
 
         // Step 1: Copy files (10% of progress)
         progressCallback?(0.05)
         let modelPath = try await copyBundledModelToDocuments()
-        log("#subtitles Model path: \(modelPath)")
+        print("Model path: \(modelPath)")
         progressCallback?(0.10)
 
         // Step 2: Load WhisperKit (90% of progress)
@@ -60,7 +59,7 @@ class WhisperKitManager {
 
         // Now safe to send final 1.0
         progressCallback?(1.0)
-        log("#subtitles Model loaded successfully!")
+        print("Model loaded successfully!")
     }
 
     private func copyBundledModelToDocuments() async throws -> String {
@@ -130,7 +129,7 @@ class WhisperKitManager {
             }
         }
 
-        log("#subtitles ✓ Model files ready at: \(modelDestPath.path)")
+        print("✓ Model files ready at: \(modelDestPath.path)")
         return modelDestPath.path
     }
 }
