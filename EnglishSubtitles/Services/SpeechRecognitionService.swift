@@ -11,6 +11,7 @@ import AVFoundation
 
 /// Service that handles multilingual speech-to-text and translation using WhisperKit
 class SpeechRecognitionService: @unchecked Sendable {
+
     private var audioStreamManager: AudioStreamManager?
     private var whisperKitManager: WhisperKitManager?
 
@@ -44,7 +45,7 @@ class SpeechRecognitionService: @unchecked Sendable {
         do {
             try await whisperKitManager?.loadModel()
         } catch {
-            print("Failed to load WhisperKit model: \(error)")
+            log("#subtitles Failed to load WhisperKit model: \(error.localizedDescription)")
         }
     }
 
@@ -55,7 +56,7 @@ class SpeechRecognitionService: @unchecked Sendable {
         onTranslationUpdate: @escaping (String, Int) -> Void
     ) async -> Bool {
         guard whisperKitManager?.whisperKit != nil else {
-            print("WhisperKit not initialized")
+            log("#subtitles WhisperKit not initialized")
             return false
         }
 
@@ -75,7 +76,7 @@ class SpeechRecognitionService: @unchecked Sendable {
             }
             return true
         } catch {
-            print("Failed to start audio recording: \(error)")
+            log("#subtitles Failed to start audio recording: \(error.localizedDescription)")
             return false
         }
     }
@@ -92,7 +93,7 @@ class SpeechRecognitionService: @unchecked Sendable {
         let now = CFAbsoluteTimeGetCurrent()
 
         // Check if we should process a segment (decision made inside queue, processing outside)
-        let segmentToProcess: ([Float], Int)? = await withCheckedContinuation { continuation in
+        let segmentToProcess: ([Float], Int, String, Double, Int)? = await withCheckedContinuation { continuation in
             audioQueue.async { [weak self] in
                 guard let self else {
                     continuation.resume(returning: nil)
@@ -138,11 +139,9 @@ class SpeechRecognitionService: @unchecked Sendable {
                         let audioToProcess = self.audioBuffer
                         let currentSegment = self.segmentNumber
 
-                        if silenceHit {
-                            print("🔇 Silence detected (\(String(format: "%.1f", silenceDuration))s) - processing segment #\(currentSegment) (\(audioToProcess.count) samples)")
-                        } else {
-                            print("⏱️ Max duration (\(String(format: "%.1f", currentDuration))s) - processing segment #\(currentSegment) (\(audioToProcess.count) samples)")
-                        }
+                        let reason = silenceHit ? "Silence" : "Max duration"
+                        let duration = silenceHit ? silenceDuration : currentDuration
+                        let sampleCount = audioToProcess.count
 
                         // Clear buffer and reset state
                         self.audioBuffer.removeAll(keepingCapacity: true)
@@ -150,11 +149,10 @@ class SpeechRecognitionService: @unchecked Sendable {
                         self.hasReceivedSpeech = false // Reset for next segment
 
                         // Return segment data to process outside the queue
-                        continuation.resume(returning: (audioToProcess, currentSegment))
+                        continuation.resume(returning: (audioToProcess, currentSegment, reason, duration, sampleCount))
                         return
                     } else {
                         // No speech received - just discard the silent buffer
-                        print("🗑️ Discarding silent buffer (\(self.audioBuffer.count) samples)")
                         self.audioBuffer.removeAll(keepingCapacity: true)
                         self.silenceStartTime = nil
                     }
@@ -165,14 +163,21 @@ class SpeechRecognitionService: @unchecked Sendable {
         }
 
         // Process segment OUTSIDE the audioQueue to avoid blocking
-        if let (audioToProcess, currentSegment) = segmentToProcess {
-            Task.detached { [weak self] in
+        if let (audioToProcess, currentSegment, reason, duration, _) = segmentToProcess {
+            // Log on main thread
+            if reason == "Silence" {
+                log("#subtitles 🔇 Silence detected (\(String(format: "%.1f", duration))s) - processing segment #\(currentSegment)")
+            } else {
+                log("#subtitles ⏱️ Max duration (\(String(format: "%.1f", duration))s) - processing segment #\(currentSegment)")
+            }
+
+            Task { [weak self] in
                 guard let self else { return }
-                print("🎯 Starting WhisperKit processing for segment #\(currentSegment)")
+                log("#subtitles 🎯 Starting WhisperKit processing for segment #\(currentSegment)")
                 await self.processTranslation(audioToProcess, segmentNumber: currentSegment)
-                print("✅ Completed WhisperKit processing for segment #\(currentSegment)")
+                log("#subtitles ✅ Completed WhisperKit processing for segment #\(currentSegment)")
                 await self.markProcessingComplete()
-                print("✅ Marked segment #\(currentSegment) as complete, ready for next segment")
+                log("#subtitles ✅ Marked segment #\(currentSegment) as complete, ready for next segment")
             }
         }
     }
@@ -189,14 +194,14 @@ class SpeechRecognitionService: @unchecked Sendable {
 
     private func processTranslation(_ audioData: [Float], segmentNumber: Int) async {
         guard let whisperKit = whisperKitManager?.whisperKit else {
-            await MainActor.run {
-                print("processTranslation, whisperKit is nil")
-            }
+            log("#subtitles processTranslation, whisperKit is nil")
             return
         }
-        await MainActor.run {
-            print("processTranslation audioData.count: \(audioData.count), segmentNumber: \(segmentNumber)")
-        }
+
+        let audioDuration = Double(audioData.count) / sampleRate
+        log("#subtitles 🎯 Starting translation for segment #\(segmentNumber) (\(String(format: "%.1f", audioDuration))s of audio)")
+
+        let startTime = Date()
 
         // WhisperKit requires at least 1.0 seconds of audio (16000 samples at 16kHz)
         // Pad if necessary to prevent memory access errors
@@ -204,7 +209,7 @@ class SpeechRecognitionService: @unchecked Sendable {
         var processedAudio = audioData
 
         if processedAudio.count < minSamples {
-            print("⚠️ Audio too short: \(processedAudio.count) samples, padding to \(minSamples)")
+            log("#subtitles ⚠️ Audio too short: \(processedAudio.count) samples, padding to \(minSamples)")
             // Pad with silence (zeros) to reach minimum length
             processedAudio.append(contentsOf: [Float](repeating: 0.0, count: minSamples - processedAudio.count))
         }
@@ -216,24 +221,22 @@ class SpeechRecognitionService: @unchecked Sendable {
                 decodeOptions: DecodingOptions(task: .translate, language: "tr")
             )
 
+            _ = Date().timeIntervalSince(startTime)
+
             // Extract text from all segments
             let text = results.map { $0.text }.joined(separator: " ").trimmingCharacters(in: .whitespaces)
 
             if !text.isEmpty {
-                await MainActor.run {
-                    print("🌍 Segment #\(segmentNumber) translation: \(text)")
-                    print("📝 Sending to ViewModel: segment #\(segmentNumber)")
-                }
+                log("#subtitles ✅ Segment #\(segmentNumber) translated (audio: \(String(format: "%.1f", audioDuration))s)")
+                log("#subtitles 🌍 Translation: \(text)")
+                log("#subtitles 📝 Sending to ViewModel")
                 translationCallback?(text, segmentNumber)
             } else {
-                await MainActor.run {
-                    print("⚠️ Empty result for segment #\(segmentNumber)")
-                }
+                log("#subtitles ⚠️ Empty result for segment #\(segmentNumber)")
             }
         } catch {
-            await MainActor.run {
-                print("❌ Translation error: \(error)")
-            }
+            _ = Date().timeIntervalSince(startTime)
+            log("#subtitles ❌ Translation error: \(error.localizedDescription)")
         }
     }
 
@@ -272,14 +275,6 @@ class SpeechRecognitionService: @unchecked Sendable {
         let audioFile = try AVAudioFile(forReading: audioFileURL)
         let format = audioFile.processingFormat
         let frameCount = UInt32(audioFile.length)
-
-        // WhisperKit expects 16kHz mono PCM
-        guard let targetFormat = AVAudioFormat(commonFormat: .pcmFormatFloat32,
-                                               sampleRate: 16000,
-                                               channels: 1,
-                                               interleaved: false) else {
-            throw AudioStreamError.engineSetupFailed
-        }
 
         guard let buffer = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: frameCount) else {
             throw AudioStreamError.engineSetupFailed

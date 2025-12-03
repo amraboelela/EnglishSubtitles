@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import UIKit
 
 struct SubtitleView: View {
     @StateObject private var vm = SubtitlesViewModel()
@@ -43,7 +44,13 @@ struct SubtitleView: View {
             }
         }
         .onAppear {
+            // Prevent screen from sleeping while app is in foreground
+            UIApplication.shared.isIdleTimerDisabled = true
             vm.start()
+        }
+        .onDisappear {
+            // Re-enable auto-lock when leaving the view
+            UIApplication.shared.isIdleTimerDisabled = false
         }
     }
 
