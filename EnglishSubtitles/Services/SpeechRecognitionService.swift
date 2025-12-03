@@ -20,7 +20,7 @@ class SpeechRecognitionService: @unchecked Sendable {
     // Audio buffer accumulation (protected by serial queue)
     private let audioQueue = DispatchQueue(label: "com.englishsubtitles.audioprocessing")
     private var audioBuffer: [Float] = []
-    private let maxSegmentDuration: Double = 7.0 // Process when buffer reaches 7 seconds
+    private let maxSegmentDuration: Double = 15.0 // Process when buffer reaches 15 seconds
     private let sampleRate: Double = 16000.0
     private var isProcessing = false
 
@@ -188,15 +188,7 @@ class SpeechRecognitionService: @unchecked Sendable {
     }
 
     private func processTranslation(_ audioData: [Float], segmentNumber: Int) async {
-        guard let whisperKit = whisperKitManager?.whisperKit else {
-            await MainActor.run {
-                print("processTranslation, whisperKit is nil")
-            }
-            return
-        }
-        await MainActor.run {
-            print("processTranslation audioData.count: \(audioData.count), segmentNumber: \(segmentNumber)")
-        }
+        guard let whisperKit = whisperKitManager?.whisperKit else { return }
 
         // WhisperKit requires at least 1.0 seconds of audio (16000 samples at 16kHz)
         // Pad if necessary to prevent memory access errors
@@ -220,20 +212,14 @@ class SpeechRecognitionService: @unchecked Sendable {
             let text = results.map { $0.text }.joined(separator: " ").trimmingCharacters(in: .whitespaces)
 
             if !text.isEmpty {
-                await MainActor.run {
-                    print("🌍 Segment #\(segmentNumber) translation: \(text)")
-                    print("📝 Sending to ViewModel: segment #\(segmentNumber)")
-                }
+                print("🌍 Segment #\(segmentNumber) translation: \(text)")
+                print("📝 Sending to ViewModel: segment #\(segmentNumber)")
                 translationCallback?(text, segmentNumber)
             } else {
-                await MainActor.run {
-                    print("⚠️ Empty result for segment #\(segmentNumber)")
-                }
+                print("⚠️ Empty result for segment #\(segmentNumber)")
             }
         } catch {
-            await MainActor.run {
-                print("❌ Translation error: \(error)")
-            }
+            print("❌ Translation error: \(error)")
         }
     }
 
