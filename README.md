@@ -56,10 +56,10 @@ EnglishSubtitles/
 The main service handling real-time speech translation with advanced filtering:
 
 **Key Features:**
-- **5-Second Segments**: Processes audio in 5-second chunks for optimal performance
+- **Natural Segments**: Processes audio until natural silence breaks (1.0s silence threshold)
+- **WhisperKit Limit**: Only forces processing at 29 seconds (respects model's 30s limit)
 - **Memory Optimized**: Uses async queue operations to prevent iOS memory kills
 - **Smart Filtering**: Comprehensive hallucination detection and blocking
-- **Silence Detection**: Intelligent segment boundaries (1.0s silence threshold)
 
 **Hallucination Filter:**
 Automatically blocks common WhisperKit false positives:

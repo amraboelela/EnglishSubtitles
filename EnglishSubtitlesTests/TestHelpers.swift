@@ -82,9 +82,6 @@ enum TestHelpers {
     }
 
     /// Wait for WhisperKit model to load with progress updates
-    /// - Parameters:
-    ///   - service: The SpeechRecognitionService to check
-    ///   - maxWait: Maximum wait time in seconds (default 180 for initial download)
     /// - Returns: True if model loaded, false if timeout
     static func waitForWhisperKit(_ service: SpeechRecognitionService, maxWait: Double = 180.0) async -> Bool {
         var waited = 0.0

@@ -53,7 +53,9 @@ class SubtitlesViewModel: ObservableObject {
             queue: .main
         ) { [weak self] _ in
             // App going to background - unload model to free memory
-            self?.unloadModel()
+            Task { @MainActor in
+                self?.unloadModel()
+            }
         }
 
         NotificationCenter.default.addObserver(
@@ -77,7 +79,9 @@ class SubtitlesViewModel: ObservableObject {
             queue: .main
         ) { [weak self] _ in
             // App terminating - unload model to clean up
-            self?.unloadModel()
+            Task { @MainActor in
+                self?.unloadModel()
+            }
         }
     }
 

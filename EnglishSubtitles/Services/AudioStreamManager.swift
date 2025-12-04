@@ -60,8 +60,7 @@ class AudioStreamManager {
     // MARK: - Audio Processing Utilities
 
     /// Resample audio buffer to 16kHz mono if needed
-    /// - Parameter buffer: Source audio buffer
-    /// - Returns: Resampled buffer at 16kHz mono, or original if already 16kHz
+    /// - Returns: Resampled buffer at 16kHz mono, or original if already correct format
     static func resampleIfNeeded(_ buffer: AVAudioPCMBuffer) -> AVAudioPCMBuffer {
         let format = buffer.format
 
@@ -97,9 +96,8 @@ class AudioStreamManager {
         return error == nil ? convertedBuffer : buffer
     }
 
-    /// Convert audio buffer to float array
-    /// - Parameter buffer: Audio buffer to convert
-    /// - Returns: Float array suitable for WhisperKit (mono audio at 16kHz)
+    /// Convert audio buffer to float array suitable for WhisperKit (mono 16kHz)
+    /// - Returns: Float array (averages stereo channels if needed)
     static func convertBufferToFloatArray(_ buffer: AVAudioPCMBuffer) -> [Float] {
         guard let channelData = buffer.floatChannelData else {
             return []
@@ -135,8 +133,6 @@ class AudioStreamManager {
     }
 
     /// Calculate RMS (Root Mean Square) of audio samples
-    /// - Parameter samples: Audio samples
-    /// - Returns: RMS value
     static func calculateRMS(_ samples: [Float]) -> Float {
         guard !samples.isEmpty else { return 0 }
 
