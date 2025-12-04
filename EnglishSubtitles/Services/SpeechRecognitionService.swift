@@ -22,7 +22,6 @@ class SpeechRecognitionService: @unchecked Sendable {
     private let audioQueue = DispatchQueue(label: "com.englishsubtitles.audioprocessing")
     private var audioBuffer: [Float] = []
     private let maxSegmentDuration: Double = 5.0 // Process when buffer reaches 5 seconds
-    private let maxBufferDuration: Double = 10.0 // Hard limit to prevent unbounded buffer growth
     private let sampleRate: Double = 16000.0
     private var isProcessing = false
 
@@ -30,11 +29,10 @@ class SpeechRecognitionService: @unchecked Sendable {
     private let silenceThreshold: Float = 0.015 // RMS threshold for silence
     private let silenceDurationRequired: Double = 0.7 // Require 0.7s of silence to end segment
     private var silenceStartTime: Double? // When silence started
+    private var lastChunkWasSilent = true // Start as true since we haven't received speech yet
     private var segmentNumber = 0 // Track segment number
+    private var lastAudioTime: Double = 0 // Last time we received audio
     private var hasReceivedSpeech = false // Track if we've received any speech in this segment
-
-    // Translation configuration
-    private var sourceLanguage: String = "tr" // Default to Turkish
 
     init(onProgress: ((Double) -> Void)? = nil) {
         whisperKitManager = WhisperKitManager(onProgress: onProgress)
@@ -57,12 +55,9 @@ class SpeechRecognitionService: @unchecked Sendable {
     }
 
     /// Start translating audio to English
-    /// - Parameters:
-    ///   - sourceLanguage: Source language code (e.g., "tr" for Turkish, "ar" for Arabic). Defaults to "tr".
-    ///   - onTranslationUpdate: Callback with English translation and segment number
+    /// - Parameter onTranslationUpdate: Callback with English translation and segment number
     /// - Returns: Success status
     func startListening(
-        sourceLanguage: String = "tr",
         onTranslationUpdate: @escaping (String, Int) -> Void
     ) async -> Bool {
         guard whisperKitManager?.whisperKit != nil else {
@@ -70,7 +65,6 @@ class SpeechRecognitionService: @unchecked Sendable {
             return false
         }
 
-        self.sourceLanguage = sourceLanguage
         translationCallback = onTranslationUpdate
 
         // Start audio streaming - single stream for both tasks
@@ -104,90 +98,76 @@ class SpeechRecognitionService: @unchecked Sendable {
         let now = CFAbsoluteTimeGetCurrent()
 
         // Check if we should process a segment (decision made inside queue, processing outside)
-        let segmentToProcess: ([Float], Int)? = await audioQueue.sync { [weak self] in
-            guard let self else { return nil }
-
-            // Accumulate samples (thread-safe)
-            self.audioBuffer.append(contentsOf: audioData)
-
-            let currentDuration = Double(self.audioBuffer.count) / self.sampleRate
-
-            // Hard buffer limit: discard oldest audio if exceeded to prevent unbounded growth
-            if currentDuration > self.maxBufferDuration {
-                let maxSamples = Int(self.maxBufferDuration * self.sampleRate)
-                let excessSamples = self.audioBuffer.count - maxSamples
-                print("⚠️ Buffer overflow: \(String(format: "%.1f", currentDuration))s - discarding \(excessSamples) samples")
-                self.audioBuffer.removeFirst(excessSamples)
-            }
-
-            // Detect silence
-            let isSilent = rms < self.silenceThreshold
-
-            if isSilent {
-                // Start silence timer if not already started
-                if self.silenceStartTime == nil {
-                    self.silenceStartTime = now
+        let segmentToProcess: ([Float], Int)? = await withCheckedContinuation { continuation in
+            audioQueue.async { [weak self] in
+                guard let self else {
+                    continuation.resume(returning: nil)
+                    return
                 }
-            } else {
-                // Reset silence timer when we hear sound
-                self.silenceStartTime = nil
-                self.hasReceivedSpeech = true // Mark that we've received speech in this segment
+
+                // Update last audio time
+                self.lastAudioTime = now
+
+                // Accumulate samples (thread-safe)
+                self.audioBuffer.append(contentsOf: audioData)
+
+                let currentDuration = Double(self.audioBuffer.count) / self.sampleRate
+
+                // Detect silence
+                let isSilent = rms < self.silenceThreshold
+
+                if isSilent {
+                    // Start silence timer if not already started
+                    if self.silenceStartTime == nil {
+                        self.silenceStartTime = now
+                    }
+                } else {
+                    // Reset silence timer when we hear sound
+                    self.silenceStartTime = nil
+                    self.hasReceivedSpeech = true // Mark that we've received speech in this segment
+                }
+
+                // Calculate how long we've been silent
+                let silenceDuration = self.silenceStartTime != nil ? (now - self.silenceStartTime!) : 0
+
+                // Check if we should end the segment
+                let silenceHit = silenceDuration >= self.silenceDurationRequired
+                let durationHit = currentDuration >= self.maxSegmentDuration
+
+                // Process segment ONLY if we have actual speech content
+                if (silenceHit || durationHit) && !self.audioBuffer.isEmpty && !self.isProcessing {
+                    if self.hasReceivedSpeech {
+                        // We have speech content - prepare it for processing
+                        self.isProcessing = true
+
+                        // Copy buffer for processing
+                        let audioToProcess = self.audioBuffer
+                        let currentSegment = self.segmentNumber
+
+                        if silenceHit {
+                            print("🔇 Silence detected (\(String(format: "%.1f", silenceDuration))s) - processing segment #\(currentSegment) (\(audioToProcess.count) samples)")
+                        } else {
+                            print("⏱️ Max duration (\(String(format: "%.1f", currentDuration))s) - processing segment #\(currentSegment) (\(audioToProcess.count) samples)")
+                        }
+
+                        // Clear buffer and reset state
+                        self.audioBuffer.removeAll(keepingCapacity: true)
+                        self.silenceStartTime = nil
+                        self.hasReceivedSpeech = false // Reset for next segment
+
+                        // Return segment data to process outside the queue
+                        continuation.resume(returning: (audioToProcess, currentSegment))
+                        return
+                    } else {
+                        // No speech received - just discard the silent buffer
+                        print("🗑️ Discarding silent buffer (\(self.audioBuffer.count) samples)")
+                        self.audioBuffer.removeAll(keepingCapacity: true)
+                        self.silenceStartTime = nil
+                    }
+                }
+
+                continuation.resume(returning: nil)
             }
-
-            // Calculate how long we've been silent
-            let silenceDuration = self.silenceStartTime != nil ? (now - self.silenceStartTime!) : 0
-
-            // Check if we should end the segment
-            let silenceHit = silenceDuration >= self.silenceDurationRequired
-            let durationHit = currentDuration >= self.maxSegmentDuration
-
-            // Minimum samples to prevent processing noise (0.1 seconds)
-            let minSamples = Int(self.sampleRate * 0.1)
-
-            // ALWAYS break segments at maxSegmentDuration, even if already processing
-            // This prevents unbounded buffer growth
-            if durationHit && !self.audioBuffer.isEmpty && self.hasReceivedSpeech {
-                print("⏱️ Max duration (\(String(format: "%.1f", currentDuration))s) - forcing segment #\(self.segmentNumber) (\(self.audioBuffer.count) samples)")
-
-                // Mark as processing to prevent overlapping segments
-                self.isProcessing = true
-
-                // Copy buffer for processing
-                let audioToProcess = self.audioBuffer
-                let currentSegment = self.segmentNumber
-
-                // Clear buffer and reset state
-                self.audioBuffer.removeAll(keepingCapacity: true)
-                self.silenceStartTime = nil
-                self.hasReceivedSpeech = false
-                self.segmentNumber += 1
-
-                // Return segment data to process
-                return (audioToProcess, currentSegment)
-            }
-
-            // Process segment on silence ONLY if not currently processing and buffer has meaningful content
-            if silenceHit && self.audioBuffer.count >= minSamples && self.hasReceivedSpeech && !self.isProcessing {
-                print("🔇 Silence detected (\(String(format: "%.1f", silenceDuration))s) - processing segment #\(self.segmentNumber) (\(self.audioBuffer.count) samples)")
-
-                // Mark as processing to prevent overlapping segments
-                self.isProcessing = true
-
-                // Copy buffer for processing
-                let audioToProcess = self.audioBuffer
-                let currentSegment = self.segmentNumber
-
-                // Clear buffer and reset state
-                self.audioBuffer.removeAll(keepingCapacity: true)
-                self.silenceStartTime = nil
-                self.hasReceivedSpeech = false
-                self.segmentNumber += 1
-
-                // Return segment data to process
-                return (audioToProcess, currentSegment)
-            }
-
-            return nil
         }
 
         // Process segment OUTSIDE the audioQueue to avoid blocking
@@ -204,8 +184,12 @@ class SpeechRecognitionService: @unchecked Sendable {
     }
 
     private func markProcessingComplete() async {
-        await audioQueue.sync { [weak self] in
-            self?.isProcessing = false
+        await withCheckedContinuation { continuation in
+            audioQueue.async { [weak self] in
+                self?.isProcessing = false
+                self?.segmentNumber += 1  // Increment AFTER processing completes
+                continuation.resume()
+            }
         }
     }
 
@@ -227,7 +211,7 @@ class SpeechRecognitionService: @unchecked Sendable {
             // Translate with .translate task (converts to English)
             let results = try await whisperKit.transcribe(
                 audioArray: processedAudio,
-                decodeOptions: DecodingOptions(task: .translate, language: sourceLanguage)
+                decodeOptions: DecodingOptions(task: .translate, language: "tr")
             )
 
             // Extract text from all segments
@@ -252,8 +236,10 @@ class SpeechRecognitionService: @unchecked Sendable {
             audioBuffer.removeAll()
             isProcessing = false
             silenceStartTime = nil
+            lastChunkWasSilent = true // Reset to true (no speech state)
             segmentNumber = 0
-            hasReceivedSpeech = false
+            lastAudioTime = 0
+            hasReceivedSpeech = false // Reset speech tracking
         }
     }
 
@@ -279,6 +265,14 @@ class SpeechRecognitionService: @unchecked Sendable {
         let format = audioFile.processingFormat
         let frameCount = UInt32(audioFile.length)
 
+        // WhisperKit expects 16kHz mono PCM
+        guard let targetFormat = AVAudioFormat(commonFormat: .pcmFormatFloat32,
+                                               sampleRate: 16000,
+                                               channels: 1,
+                                               interleaved: false) else {
+            throw AudioStreamError.engineSetupFailed
+        }
+
         guard let buffer = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: frameCount) else {
             throw AudioStreamError.engineSetupFailed
         }
@@ -286,7 +280,6 @@ class SpeechRecognitionService: @unchecked Sendable {
         try audioFile.read(into: buffer)
 
         // Resample to 16kHz if needed and convert to float array
-        // AudioStreamManager.resampleIfNeeded() handles conversion to 16kHz mono PCM
         let resampledBuffer = AudioStreamManager.resampleIfNeeded(buffer)
         let audioData = AudioStreamManager.convertBufferToFloatArray(resampledBuffer)
 
