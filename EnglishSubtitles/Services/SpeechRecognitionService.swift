@@ -26,8 +26,8 @@ class SpeechRecognitionService: @unchecked Sendable {
     private var isProcessing = false
 
     // Silence detection
-    private let silenceThreshold: Float = 0.015 // RMS threshold for silence
-    private let silenceDurationRequired: Double = 0.7 // Require 0.7s of silence to end segment
+    private let silenceThreshold: Float = 0.025 // Slightly higher RMS threshold to reduce noise processing
+    private let silenceDurationRequired: Double = 1.0 // Require 1.0s of silence to end segment (was 0.7s)
     private var silenceStartTime: Double? // When silence started
     private var lastChunkWasSilent = true // Start as true since we haven't received speech yet
     private var segmentNumber = 0 // Track segment number
@@ -217,16 +217,96 @@ class SpeechRecognitionService: @unchecked Sendable {
             // Extract text from all segments
             let text = results.map { $0.text }.joined(separator: " ").trimmingCharacters(in: .whitespaces)
 
-            if !text.isEmpty {
+            if !text.isEmpty && !isLikelyHallucination(text) {
                 NSLog("🌍 Segment #\(segmentNumber) translation: \(text)")
                 NSLog("📝 Sending to ViewModel: segment #\(segmentNumber)")
                 translationCallback?(text, segmentNumber)
             } else {
-                print("⚠️ Empty result for segment #\(segmentNumber)")
+                if isLikelyHallucination(text) {
+                    print("🚫 Filtered hallucination: \(text)")
+                } else {
+                    print("⚠️ Empty result for segment #\(segmentNumber)")
+                }
             }
         } catch {
             print("❌ Translation error: \(error)")
         }
+    }
+
+    /// Filter out common WhisperKit hallucinations
+    private func isLikelyHallucination(_ text: String) -> Bool {
+        let lowercased = text.lowercased().trimmingCharacters(in: .whitespacesAndNewlines)
+
+        // Common hallucination patterns for silence/background noise
+        let hallucinations = [
+            "see you in next video",
+            "see you in the next video",
+            "see you in the next",
+            "subscribe",
+            "don't forget to subscribe",
+            "like and subscribe",
+            "thanks for watching",
+            "thank you for watching",
+            "bye bye",
+            "bye",
+            "goodbye",
+            "see you later",
+            "see you next time",
+            "music",
+            "applause",
+            "laughter",
+            "silence",
+            "translated by",
+            "translation by",
+            "subtitle by",
+            "subtitled by",
+            "i'm sorry, i'm sorry",
+            "the end",
+            "-come on. -come on.",
+            "-turkish. -turkish.",
+            "-i'm sorry. -it's okay.",
+            "-let's go. -let's go.",
+            ".",
+            "?",
+            "!",
+            "...",
+            "subtitle",
+            "subtitles",
+            "captions"
+        ]
+
+        // Check for exact matches or if text starts with common patterns
+        for hallucination in hallucinations {
+            if lowercased == hallucination || lowercased.hasPrefix(hallucination) {
+                return true
+            }
+        }
+
+        // Filter very short outputs (likely hallucinations)
+        if lowercased.count <= 2 {
+            return true
+        }
+
+        // Filter repetitive patterns (e.g., "a a a a")
+        let words = lowercased.components(separatedBy: .whitespacesAndNewlines)
+        if words.count > 1 {
+            let uniqueWords = Set(words)
+            // If most words are the same, likely a hallucination
+            if Double(uniqueWords.count) / Double(words.count) < 0.5 {
+                return true
+            }
+        }
+
+        // Filter bracketed annotations like (music), [laughter], (footsteps), *door closes*, -The End-
+        let trimmed = lowercased.trimmingCharacters(in: .whitespacesAndNewlines)
+        if (trimmed.hasPrefix("(") && trimmed.hasSuffix(")")) ||
+           (trimmed.hasPrefix("[") && trimmed.hasSuffix("]")) ||
+           (trimmed.hasPrefix("*") && trimmed.hasSuffix("*")) ||
+           (trimmed.hasPrefix("-") && trimmed.hasSuffix("-")) {
+            return true
+        }
+
+        return false
     }
 
     func stopListening() {
