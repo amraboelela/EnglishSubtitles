@@ -26,6 +26,11 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		F545613B2EE10D98004BF31D /* images */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = images;
+			sourceTree = "<group>";
+		};
 		F5457ED02EDAA25E00365E93 /* EnglishSubtitles */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = EnglishSubtitles;
@@ -60,6 +65,7 @@
 		F5457EC52EDAA25E00365E93 = {
 			isa = PBXGroup;
 			children = (
+				F545613B2EE10D98004BF31D /* images */,
 				F5457ED02EDAA25E00365E93 /* EnglishSubtitles */,
 				F5457EDE2EDAA26000365E93 /* EnglishSubtitlesTests */,
 				F599EF2D2EDACBD600905C10 /* Frameworks */,

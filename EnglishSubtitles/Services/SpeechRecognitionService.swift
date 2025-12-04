@@ -8,6 +8,7 @@
 import Foundation
 import WhisperKit
 import AVFoundation
+import os.log
 
 /// Service that handles multilingual speech-to-text and translation using WhisperKit
 class SpeechRecognitionService: @unchecked Sendable {
@@ -20,7 +21,7 @@ class SpeechRecognitionService: @unchecked Sendable {
     // Audio buffer accumulation (protected by serial queue)
     private let audioQueue = DispatchQueue(label: "com.englishsubtitles.audioprocessing")
     private var audioBuffer: [Float] = []
-    private let maxSegmentDuration: Double = 15.0 // Process when buffer reaches 15 seconds
+    private let maxSegmentDuration: Double = 5.0 // Process when buffer reaches 5 seconds
     private let sampleRate: Double = 16000.0
     private var isProcessing = false
 
@@ -35,17 +36,22 @@ class SpeechRecognitionService: @unchecked Sendable {
 
     init(onProgress: ((Double) -> Void)? = nil) {
         whisperKitManager = WhisperKitManager(onProgress: onProgress)
-        Task {
-            await loadModel()
-        }
+        // Don't load model automatically - wait for explicit loadModel() call
     }
 
-    private func loadModel() async {
+    func loadModel() async {
+        // Unload any existing model first to ensure clean slate
+        unloadModel()
+
         do {
             try await whisperKitManager?.loadModel()
         } catch {
             print("Failed to load WhisperKit model: \(error)")
         }
+    }
+
+    func unloadModel() {
+        whisperKitManager?.unloadModel()
     }
 
     /// Start translating audio to English
@@ -212,8 +218,8 @@ class SpeechRecognitionService: @unchecked Sendable {
             let text = results.map { $0.text }.joined(separator: " ").trimmingCharacters(in: .whitespaces)
 
             if !text.isEmpty {
-                print("🌍 Segment #\(segmentNumber) translation: \(text)")
-                print("📝 Sending to ViewModel: segment #\(segmentNumber)")
+                NSLog("🌍 Segment #\(segmentNumber) translation: \(text)")
+                NSLog("📝 Sending to ViewModel: segment #\(segmentNumber)")
                 translationCallback?(text, segmentNumber)
             } else {
                 print("⚠️ Empty result for segment #\(segmentNumber)")

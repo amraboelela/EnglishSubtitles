@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import UIKit
 
 struct SubtitleView: View {
     @StateObject private var vm = SubtitlesViewModel()
@@ -43,7 +44,15 @@ struct SubtitleView: View {
             }
         }
         .onAppear {
-            vm.start()
+            UIApplication.shared.isIdleTimerDisabled = true
+            Task {
+                await vm.loadModel()
+                vm.start()
+            }
+        }
+        .onDisappear {
+            UIApplication.shared.isIdleTimerDisabled = false
+            vm.unloadModel()
         }
     }
 

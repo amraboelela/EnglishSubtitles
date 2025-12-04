@@ -21,24 +21,29 @@ class SubtitlesViewModel: ObservableObject {
     private var speechRecognition: SpeechRecognitionService!
 
     init() {
-        // Initialize service with progress callback
+        // Initialize service WITHOUT loading model yet
         speechRecognition = SpeechRecognitionService { [weak self] progress in
             Task { @MainActor in
                 self?.loadingProgress = progress
             }
         }
 
-        // Monitor when the model is ready
-        Task {
-            while !speechRecognition.isReady {
-                try? await Task.sleep(for: .seconds(0.5))
-            }
-            loadingProgress = 1.0
-            isModelLoading = false
-        }
-
         // Handle app lifecycle
         setupLifecycleObservers()
+    }
+
+    /// Load the model - should be called AFTER UI appears
+    func loadModel() async {
+        // Wait for model to load
+        await self.speechRecognition.loadModel()
+
+        // Monitor when the model is ready
+        while !self.speechRecognition.isReady {
+            try? await Task.sleep(for: .seconds(0.5))
+        }
+
+        self.loadingProgress = 1.0
+        self.isModelLoading = false
     }
 
     private func setupLifecycleObservers() {
@@ -47,8 +52,8 @@ class SubtitlesViewModel: ObservableObject {
             object: nil,
             queue: .main
         ) { [weak self] _ in
-            // App going to background - stop recording
-            self?.stop()
+            // App going to background - unload model to free memory
+            self?.unloadModel()
         }
 
         NotificationCenter.default.addObserver(
@@ -56,12 +61,23 @@ class SubtitlesViewModel: ObservableObject {
             object: nil,
             queue: .main
         ) { [weak self] _ in
-            // App returning to foreground - restart recording if model is ready
+            // App returning to foreground - reload and restart
             Task { @MainActor in
-                if self?.speechRecognition.isReady == true && self?.isRecording == false {
-                    self?.start()
+                guard let self else { return }
+                await self.loadModel()
+                if !self.isModelLoading {
+                    self.start()
                 }
             }
+        }
+
+        NotificationCenter.default.addObserver(
+            forName: UIApplication.willTerminateNotification,
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            // App terminating - unload model to clean up
+            self?.unloadModel()
         }
     }
 
@@ -101,5 +117,17 @@ class SubtitlesViewModel: ObservableObject {
         speechRecognition.stopListening()
         isRecording = false
         currentTextSegment = -1
+    }
+
+    /// Unload model to free memory - call when view disappears
+    func unloadModel() {
+        stop()
+        speechRecognition.unloadModel()
+        isModelLoading = true
+        loadingProgress = 0.0
+    }
+
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
 }

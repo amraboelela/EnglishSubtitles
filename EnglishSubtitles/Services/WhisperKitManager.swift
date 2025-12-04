@@ -21,6 +21,9 @@ class WhisperKitManager {
     func loadModel() async throws {
         print("Starting model load...")
 
+        // Clear cache before loading to prevent memory buildup
+        clearCache()
+
         // Step 1: Copy files (10% of progress)
         progressCallback?(0.05)
         let modelPath = try await copyBundledModelToDocuments()
@@ -131,5 +134,45 @@ class WhisperKitManager {
 
         print("✓ Model files ready at: \(modelDestPath.path)")
         return modelDestPath.path
+    }
+
+    /// Unload model to free memory
+    func unloadModel() {
+        if whisperKit != nil {
+            print("Unloading WhisperKit model to free memory...")
+            whisperKit = nil
+            progressCallback?(0.0)
+            print("✓ Model unloaded")
+        }
+    }
+
+    /// Clear WhisperKit cache to prevent memory buildup
+    private func clearCache() {
+        let fileManager = FileManager.default
+        guard let documentsPath = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first else {
+            return
+        }
+
+        // Clear HuggingFace cache (used by WhisperKit for downloads)
+        let hfCachePath = documentsPath.appendingPathComponent("huggingface")
+        if fileManager.fileExists(atPath: hfCachePath.path) {
+            do {
+                try fileManager.removeItem(at: hfCachePath)
+                print("✓ Cleared HuggingFace cache")
+            } catch {
+                print("⚠️ Failed to clear HuggingFace cache: \(error)")
+            }
+        }
+
+        // Clear any temporary WhisperKit files
+        let tmpPath = fileManager.temporaryDirectory.appendingPathComponent("whisperkit")
+        if fileManager.fileExists(atPath: tmpPath.path) {
+            do {
+                try fileManager.removeItem(at: tmpPath)
+                print("✓ Cleared WhisperKit temp files")
+            } catch {
+                print("⚠️ Failed to clear WhisperKit temp: \(error)")
+            }
+        }
     }
 }
