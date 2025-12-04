@@ -21,7 +21,7 @@ class SpeechRecognitionService: @unchecked Sendable {
     // Audio buffer accumulation (protected by serial queue)
     private let audioQueue = DispatchQueue(label: "com.englishsubtitles.audioprocessing")
     private var audioBuffer: [Float] = []
-    private let maxSegmentDuration: Double = 5.0 // Process when buffer reaches 5 seconds
+    private let maxBufferDuration: Double = 30.0 // WhisperKit model limit (30 seconds max)
     private let sampleRate: Double = 16000.0
     private var isProcessing = false
 
@@ -132,10 +132,10 @@ class SpeechRecognitionService: @unchecked Sendable {
 
                 // Check if we should end the segment
                 let silenceHit = silenceDuration >= self.silenceDurationRequired
-                let durationHit = currentDuration >= self.maxSegmentDuration
+                let modelLimitHit = currentDuration >= (self.maxBufferDuration - 1.0) // Process 1 second before WhisperKit 30s limit
 
                 // Process segment ONLY if we have actual speech content
-                if (silenceHit || durationHit) && !self.audioBuffer.isEmpty && !self.isProcessing {
+                if (silenceHit || modelLimitHit) && !self.audioBuffer.isEmpty && !self.isProcessing {
                     if self.hasReceivedSpeech {
                         // We have speech content - prepare it for processing
                         self.isProcessing = true
@@ -145,13 +145,13 @@ class SpeechRecognitionService: @unchecked Sendable {
                         let currentSegment = self.segmentNumber
 
                         if silenceHit {
-                            print("🔇 Silence detected (\(String(format: "%.1f", silenceDuration))s) - processing segment #\(currentSegment) (\(audioToProcess.count) samples)")
+                            print("🔇 Silence detected (\(String(format: "%.1f", silenceDuration))s) - processing segment #\(currentSegment) (\(audioToProcess.count) samples, \(String(format: "%.1f", currentDuration))s)")
                         } else {
-                            print("⏱️ Max duration (\(String(format: "%.1f", currentDuration))s) - processing segment #\(currentSegment) (\(audioToProcess.count) samples)")
+                            print("⏰ WhisperKit limit approaching (\(String(format: "%.1f", currentDuration))s) - processing segment #\(currentSegment) (\(audioToProcess.count) samples)")
                         }
 
-                        // Clear buffer and reset state
-                        self.audioBuffer.removeAll(keepingCapacity: true)
+                        // Clear buffer and reset state - RELEASE MEMORY IMMEDIATELY
+                        self.audioBuffer.removeAll(keepingCapacity: false) // Don't keep capacity
                         self.silenceStartTime = nil
                         self.hasReceivedSpeech = false // Reset for next segment
 
@@ -161,7 +161,7 @@ class SpeechRecognitionService: @unchecked Sendable {
                     } else {
                         // No speech received - just discard the silent buffer
                         print("🗑️ Discarding silent buffer (\(self.audioBuffer.count) samples)")
-                        self.audioBuffer.removeAll(keepingCapacity: true)
+                        self.audioBuffer.removeAll(keepingCapacity: false) // Don't keep capacity
                         self.silenceStartTime = nil
                     }
                 }

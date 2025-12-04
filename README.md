@@ -43,9 +43,51 @@ EnglishSubtitles/
 │   ├── ContentView.swift                 # Root view wrapper
 │   └── SubtitleView.swift                # Main subtitle display UI
 ├── Services/
-│   └── SpeechRecognitionService.swift    # WhisperKit integration
+│   ├── SpeechRecognitionService.swift    # Main translation service with hallucination filtering
+│   ├── WhisperKitManager.swift           # WhisperKit model loading and lifecycle management
+│   └── AudioStreamManager.swift          # Real-time audio capture and processing
 └── EnglishSubtitlesApp.swift             # App entry point
 ```
+
+## Core Services
+
+### SpeechRecognitionService
+
+The main service handling real-time speech translation with advanced filtering:
+
+**Key Features:**
+- **5-Second Segments**: Processes audio in 5-second chunks for optimal performance
+- **Memory Optimized**: Uses async queue operations to prevent iOS memory kills
+- **Smart Filtering**: Comprehensive hallucination detection and blocking
+- **Silence Detection**: Intelligent segment boundaries (1.0s silence threshold)
+
+**Hallucination Filter:**
+Automatically blocks common WhisperKit false positives:
+- YouTube phrases: "Subscribe", "Thanks for watching", "See you in next video"
+- Credits: "Translated by...", "Subtitle by..."
+- Annotations: `(music)`, `[laughter]`, `*sounds*`, `-titles-`
+- Repetitive patterns: "I'm sorry, I'm sorry", "-Come on. -Come on."
+
+**Memory Management:**
+- Non-blocking async queue operations with `withCheckedContinuation`
+- Immediate buffer cleanup with `removeAll(keepingCapacity: false)`
+- Detached WhisperKit processing tasks
+
+### WhisperKitManager
+
+Handles model loading and lifecycle:
+- Copies medium model from bundle to Documents directory
+- Loading progress updates for UI
+- Memory cleanup and cache clearing
+- Background/foreground model management
+
+### AudioStreamManager
+
+Real-time audio processing:
+- AVAudioEngine integration for microphone capture
+- 16kHz mono PCM resampling (WhisperKit requirement)
+- RMS calculation for silence detection
+- Float array conversion for WhisperKit
 
 ## Setup
 
