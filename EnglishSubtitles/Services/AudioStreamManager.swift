@@ -51,10 +51,15 @@ class AudioStreamManager {
     }
 
     func stopRecording() {
+        // Safely remove tap before stopping engine
+        if let inputNode = inputNode, let audioEngine = audioEngine, audioEngine.isRunning {
+            inputNode.removeTap(onBus: 0)
+        }
+
         audioEngine?.stop()
-        inputNode?.removeTap(onBus: 0)
         audioEngine = nil
         inputNode = nil
+        audioCallback = nil
     }
 
     // MARK: - Audio Processing Utilities

@@ -19,8 +19,8 @@ class SpeechRecognitionService: @unchecked Sendable {
     private var translationCallback: ((String, Int) -> Void)?
 
     // Audio buffer management using Swift Concurrency Actor (replaces GCD queue)
-    private let bufferActor = AudioBufferActor()
-    private let maxBufferDuration: Double = 30.0 // WhisperKit model limit (30 seconds max)
+    private let audioBuffer = AudioBufferActor()
+    private let maxSegmentLimit: Double = 10.0
     private let sampleRate: Double = 16000.0
 
     // Silence detection configuration
@@ -106,12 +106,12 @@ class SpeechRecognitionService: @unchecked Sendable {
 
         // Ask the actor to process the audio and determine if we should cut a segment
         // This replaces all the complex GCD queue logic with a simple actor call
-        let segmentToProcess = await bufferActor.appendAudio(
+        let segmentToProcess = await audioBuffer.appendAudio(
             audioData,
             now: now,
             rms: rms,
             sampleRate: sampleRate,
-            maxBufferDuration: maxBufferDuration,
+            maxSegmentLimit: maxSegmentLimit,
             silenceThreshold: silenceThreshold,
             silenceDurationRequired: silenceDurationRequired
         )
@@ -123,7 +123,7 @@ class SpeechRecognitionService: @unchecked Sendable {
                 print("🎯 Starting WhisperKit processing for segment #\(segmentNumber)")
                 await self.processTranslation(audioToProcess, segmentNumber: segmentNumber)
                 print("✅ Completed WhisperKit processing for segment #\(segmentNumber)")
-                await self.bufferActor.markProcessingComplete()
+                //await self.audioBuffer.markProcessingComplete()
                 print("✅ Marked segment #\(segmentNumber) as complete, ready for next segment")
             }
         }
@@ -186,7 +186,7 @@ class SpeechRecognitionService: @unchecked Sendable {
 
         // Reset the actor state
         Task {
-            await bufferActor.reset()
+            await audioBuffer.reset()
         }
     }
 

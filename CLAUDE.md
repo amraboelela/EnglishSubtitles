@@ -131,3 +131,4 @@ INFOPLIST_KEY_NSMicrophoneUsageDescription = "EnglishSubtitles needs access to y
 ```
 
 This setting is added to both Debug and Release build configurations.
+- do not run tests by youself
