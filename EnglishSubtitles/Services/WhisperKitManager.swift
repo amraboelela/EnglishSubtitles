@@ -8,8 +8,8 @@
 import Foundation
 import WhisperKit
 
-/// Manages WhisperKit model loading and initialization
-class WhisperKitManager {
+/// Manages WhisperKit model loading and initialization with thread-safe serialized access
+actor WhisperKitManager {
     private var progressCallback: ((Double) -> Void)?
     private(set) var whisperKit: WhisperKit?
 

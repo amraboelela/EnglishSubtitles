@@ -40,7 +40,7 @@ class SpeechRecognitionService: @unchecked Sendable {
     /// Must be called before starting listening - may take several seconds to complete
     func loadModel() async {
         // Unload any existing model first to ensure clean slate
-        unloadModel()
+        await unloadModel()
 
         do {
             try await whisperKitManager?.loadModel()
@@ -50,8 +50,8 @@ class SpeechRecognitionService: @unchecked Sendable {
     }
 
     /// Unload the WhisperKit model to free memory
-    func unloadModel() {
-        whisperKitManager?.unloadModel()
+    func unloadModel() async {
+        await whisperKitManager?.unloadModel()
     }
 
     /// Start real-time audio listening and translation to English
@@ -60,7 +60,7 @@ class SpeechRecognitionService: @unchecked Sendable {
     func startListening(
         onTranslationUpdate: @escaping (String, Int) -> Void
     ) async -> Bool {
-        guard whisperKitManager?.whisperKit != nil else {
+        guard await whisperKitManager?.whisperKit != nil else {
             print("WhisperKit not initialized")
             return false
         }
@@ -118,7 +118,7 @@ class SpeechRecognitionService: @unchecked Sendable {
 
         // Process segment if the actor determined one is ready
         if let (audioToProcess, segmentNumber) = segmentToProcess {
-            Task.detached { [weak self] in
+            Task { [weak self] in
                 guard let self else { return }
                 print("🎯 Starting WhisperKit processing for segment #\(segmentNumber)")
                 await self.processTranslation(audioToProcess, segmentNumber: segmentNumber)
@@ -136,7 +136,7 @@ class SpeechRecognitionService: @unchecked Sendable {
     /// - Parameter audioData: Float array of audio samples (16kHz mono)
     /// - Parameter segmentNumber: Segment identifier for tracking and logging
     private func processTranslation(_ audioData: [Float], segmentNumber: Int) async {
-        guard let whisperKit = whisperKitManager?.whisperKit else { return }
+        guard let whisperKit = await whisperKitManager?.whisperKit else { return }
 
         // WhisperKit requires at least 1.0 seconds of audio (16000 samples at 16kHz)
         // Pad if necessary to prevent memory access errors
@@ -193,7 +193,9 @@ class SpeechRecognitionService: @unchecked Sendable {
     /// Check if the service is ready for audio processing
     /// Returns true when WhisperKit model is loaded and ready for translation
     var isReady: Bool {
-        return whisperKitManager?.whisperKit != nil
+        get async {
+            return await whisperKitManager?.whisperKit != nil
+        }
     }
 
     // MARK: - Testing Support
@@ -201,7 +203,7 @@ class SpeechRecognitionService: @unchecked Sendable {
     /// Process an audio file for testing - loads entire file and processes through WhisperKit
     /// - Returns: The complete transcribed/translated text from the entire audio file
     func processAudioFile(at audioFileURL: URL, task: DecodingTask, language: String? = nil) async throws -> String {
-        guard let whisperKit = whisperKitManager?.whisperKit else {
+        guard let whisperKit = await whisperKitManager?.whisperKit else {
             throw AudioStreamError.engineSetupFailed
         }
 

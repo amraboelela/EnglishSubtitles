@@ -38,7 +38,7 @@ class SubtitlesViewModel: ObservableObject {
         await self.speechRecognition.loadModel()
 
         // Monitor when the model is ready
-        while !self.speechRecognition.isReady {
+        while !(await self.speechRecognition.isReady) {
             try? await Task.sleep(for: .seconds(0.5))
         }
 
@@ -88,7 +88,7 @@ class SubtitlesViewModel: ObservableObject {
     func start() {
         Task {
             // Wait for model to be ready before starting
-            while !speechRecognition.isReady {
+            while !(await speechRecognition.isReady) {
                 try? await Task.sleep(for: .seconds(0.5))
             }
 
@@ -125,7 +125,9 @@ class SubtitlesViewModel: ObservableObject {
     /// Unload model to free memory - call when view disappears
     func unloadModel() {
         stop()
-        speechRecognition.unloadModel()
+        Task {
+            await speechRecognition.unloadModel()
+        }
         isModelLoading = true
         loadingProgress = 0.0
     }

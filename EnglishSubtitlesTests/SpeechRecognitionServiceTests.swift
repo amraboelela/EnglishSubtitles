@@ -7,6 +7,7 @@
 
 import Testing
 import Foundation
+import WhisperKit
 @testable import EnglishSubtitles
 
 /// Tests for SpeechRecognitionService - WhisperKit integration and actor-based audio processing
@@ -18,7 +19,8 @@ struct SpeechRecognitionServiceTests {
         let service = SpeechRecognitionService()
 
         // Test initial state
-        #expect(!service.isReady, "Service should not be ready before model load")
+        let isReadyInitial = await service.isReady
+        #expect(!isReadyInitial, "Service should not be ready before model load")
 
         // Load model and wait for completion
         await service.loadModel()
@@ -31,19 +33,20 @@ struct SpeechRecognitionServiceTests {
         let service = SpeechRecognitionService()
 
         // Initially not ready
-        #expect(!service.isReady, "Service should not be ready initially")
+        let isReadyInitial = await service.isReady
+        #expect(!isReadyInitial, "Service should not be ready initially")
 
         // Load model
         await service.loadModel()
         let isReady = await TestHelpers.waitForWhisperKit(service)
 
         #expect(isReady, "Service should be ready after model load")
-        #expect(service.isReady, "isReady should return true after model load")
+        #expect(await service.isReady, "isReady should return true after model load")
 
         // Unload model
-        service.unloadModel()
+        await service.unloadModel()
 
-        #expect(!service.isReady, "Service should not be ready after model unload")
+        #expect(!(await service.isReady), "Service should not be ready after model unload")
     }
 
     // MARK: - Audio File Processing Tests
@@ -68,7 +71,7 @@ struct SpeechRecognitionServiceTests {
         let audioURL = URL(fileURLWithPath: audioPath)
 
         // Transcribe the audio file (auto-detect language)
-        let transcribedText = try await service.processAudioFile(at: audioURL, task: .transcribe)
+        let transcribedText = try await service.processAudioFile(at: audioURL, task: DecodingTask.transcribe)
         print("Transcribed (Turkish): \(transcribedText)")
 
         // Verify we got some transcription
@@ -103,7 +106,7 @@ struct SpeechRecognitionServiceTests {
         let audioURL = URL(fileURLWithPath: audioPath)
 
         // Translate the audio file to English (auto-detect source language)
-        let translatedText = try await service.processAudioFile(at: audioURL, task: .translate)
+        let translatedText = try await service.processAudioFile(at: audioURL, task: DecodingTask.translate)
         print("Translated (English): \(translatedText)")
 
         // Verify we got some translation
@@ -140,7 +143,7 @@ struct SpeechRecognitionServiceTests {
         let quranURL = URL(fileURLWithPath: audioPath)
 
         // Transcribe the Quran audio (auto-detect Arabic)
-        let transcribedText = try await service.processAudioFile(at: quranURL, task: .transcribe)
+        let transcribedText = try await service.processAudioFile(at: quranURL, task: DecodingTask.transcribe)
         print("Transcribed (Arabic Quran): \(transcribedText)")
 
         // Verify we got some transcription
@@ -177,7 +180,7 @@ struct SpeechRecognitionServiceTests {
         let quranURL = URL(fileURLWithPath: audioPath)
 
         // Translate the Quran audio to English (auto-detect Arabic)
-        let translatedText = try await service.processAudioFile(at: quranURL, task: .translate)
+        let translatedText = try await service.processAudioFile(at: quranURL, task: DecodingTask.translate)
         print("Translated (English): \(translatedText)")
 
         // Verify we got some translation
@@ -313,7 +316,8 @@ struct SpeechRecognitionServiceTests {
         let service = SpeechRecognitionService()
 
         // Initially not ready
-        #expect(!service.isReady, "Should not be ready initially")
+        let isReadyInitial = await service.isReady
+        #expect(!isReadyInitial, "Should not be ready initially")
 
         // Load model
         await service.loadModel()
@@ -321,8 +325,8 @@ struct SpeechRecognitionServiceTests {
         #expect(isReady, "Should be ready after load")
 
         // Unload model
-        service.unloadModel()
-        #expect(!service.isReady, "Should not be ready after unload")
+        await service.unloadModel()
+        #expect(!(await service.isReady), "Should not be ready after unload")
 
         // Load again
         await service.loadModel()
@@ -346,7 +350,7 @@ struct SpeechRecognitionServiceTests {
         let invalidURL = URL(fileURLWithPath: "/nonexistent/file.wav")
 
         do {
-            let _ = try await service.processAudioFile(at: invalidURL, task: .transcribe)
+            let _ = try await service.processAudioFile(at: invalidURL, task: DecodingTask.transcribe)
             Issue.record("Should have thrown error for invalid file")
         } catch {
             #expect(true, "Should throw error for invalid audio file")
@@ -357,7 +361,8 @@ struct SpeechRecognitionServiceTests {
         let service = SpeechRecognitionService()
 
         // Don't load model
-        #expect(!service.isReady, "Should not be ready without model")
+        let isReadyInitial = await service.isReady
+        #expect(!isReadyInitial, "Should not be ready without model")
 
         guard let audioPath = TestHelpers.bundledAudioPath() else {
             Issue.record("Audio file not found")
@@ -367,7 +372,7 @@ struct SpeechRecognitionServiceTests {
         let audioURL = URL(fileURLWithPath: audioPath)
 
         do {
-            let _ = try await service.processAudioFile(at: audioURL, task: .transcribe)
+            let _ = try await service.processAudioFile(at: audioURL, task: DecodingTask.transcribe)
             Issue.record("Should have thrown error without model")
         } catch {
             #expect(true, "Should throw error when processing without loaded model")
@@ -419,7 +424,7 @@ struct SpeechRecognitionServiceTests {
             // For simplicity in testing, we'll process the entire file
             // In production, the audio is chunked in real-time by the microphone
             // and segmentation happens based on silence detection
-            let translation = try await service.processAudioFile(at: audioURL, task: .translate, language: "ar")
+            let translation = try await service.processAudioFile(at: audioURL, task: DecodingTask.translate, language: "ar")
 
             if !translation.isEmpty {
                 segments.append((segmentNumber: segmentIndex, text: translation))

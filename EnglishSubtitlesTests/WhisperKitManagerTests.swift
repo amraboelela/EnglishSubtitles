@@ -20,7 +20,8 @@ class WhisperKitManagerTests {
     @Test func testWhisperKitManagerInitialization() async throws {
         let manager = WhisperKitManager()
 
-        #expect(manager.whisperKit == nil, "WhisperKit should be nil before loading")
+        let managerWhisperKit = await manager.whisperKit
+        #expect(managerWhisperKit == nil, "WhisperKit should be nil before loading")
     }
 
     @Test func testWhisperKitManagerInitializationWithProgressCallback() async throws {
@@ -30,7 +31,8 @@ class WhisperKitManagerTests {
             progressValues.append(progress)
         }
 
-        #expect(manager.whisperKit == nil, "WhisperKit should be nil before loading")
+        let managerWhisperKit = await manager.whisperKit
+        #expect(managerWhisperKit == nil, "WhisperKit should be nil before loading")
         #expect(progressValues.isEmpty, "No progress should be reported before loading starts")
     }
 
@@ -46,7 +48,8 @@ class WhisperKitManagerTests {
         // Load the model (this can take up to 60+ seconds on first run)
         try? await manager.loadModel()
 
-        #expect(manager.whisperKit != nil, "WhisperKit should be loaded after loadModel()")
+        let managerWhisperKit = await manager.whisperKit
+        #expect(managerWhisperKit != nil, "WhisperKit should be loaded after loadModel()")
         #expect(!progressValues.isEmpty, "Progress updates should have been received")
         #expect(progressValues.first == 0.05, "First progress should be 0.05 (file copy start)")
 
@@ -78,13 +81,13 @@ class WhisperKitManagerTests {
     @Test func testLoadModelIdempotency() async throws {
         // Load model first time
         try? await manager.loadModel()
-        let firstInstance = manager.whisperKit
+        let firstInstance = await manager.whisperKit
 
         #expect(firstInstance != nil, "First load should succeed")
 
         // Load model second time (should work even if already loaded)
         try await manager.loadModel()
-        let secondInstance = manager.whisperKit
+        let secondInstance = await manager.whisperKit
 
         #expect(secondInstance != nil, "Second load should succeed")
 
@@ -96,24 +99,28 @@ class WhisperKitManagerTests {
     @Test func testUnloadModel() async throws {
         // Load model first
         try? await manager.loadModel()
-        #expect(manager.whisperKit != nil, "Model should be loaded")
+        let managerWhisperKit = await manager.whisperKit
+        #expect(managerWhisperKit != nil, "Model should be loaded")
 
         // Unload model
-        manager.unloadModel()
-        #expect(manager.whisperKit == nil, "Model should be nil after unload")
+        await manager.unloadModel()
+        let managerWhisperKitAfterUnload = await manager.whisperKit
+        #expect(managerWhisperKitAfterUnload == nil, "Model should be nil after unload")
     }
 
     @Test func testUnloadModelIdempotency() async throws {
         // Unload when not loaded (should not crash)
-        manager.unloadModel()
-        #expect(manager.whisperKit == nil, "Should handle unload when already nil")
+        await manager.unloadModel()
+        let managerWhisperKit1 = await manager.whisperKit
+        #expect(managerWhisperKit1 == nil, "Should handle unload when already nil")
 
         // Load, then unload multiple times
         try? await manager.loadModel()
-        manager.unloadModel()
-        manager.unloadModel() // Should be safe to call multiple times
+        await manager.unloadModel()
+        await manager.unloadModel() // Should be safe to call multiple times
 
-        #expect(manager.whisperKit == nil, "Should remain nil after multiple unloads")
+        let managerWhisperKit2 = await manager.whisperKit
+        #expect(managerWhisperKit2 == nil, "Should remain nil after multiple unloads")
     }
 
     @Test func testLoadUnloadCycle() async throws {
@@ -122,10 +129,12 @@ class WhisperKitManagerTests {
             print("Load/Unload cycle #\(i)")
 
             try? await manager.loadModel()
-            #expect(manager.whisperKit != nil, "Should load successfully in cycle \(i)")
+            let managerWhisperKitLoaded = await manager.whisperKit
+            #expect(managerWhisperKitLoaded != nil, "Should load successfully in cycle \(i)")
 
-            manager.unloadModel()
-            #expect(manager.whisperKit == nil, "Should unload successfully in cycle \(i)")
+            await manager.unloadModel()
+            let managerWhisperKitUnloaded = await manager.whisperKit
+            #expect(managerWhisperKitUnloaded == nil, "Should unload successfully in cycle \(i)")
         }
     }
 
@@ -203,13 +212,15 @@ class WhisperKitManagerTests {
 
         // Load model
         try? await manager.loadModel()
-        #expect(manager.whisperKit != nil, "Should load initially")
+        let managerWhisperKit1 = await manager.whisperKit
+        #expect(managerWhisperKit1 != nil, "Should load initially")
 
         // Unload and reload (which calls clearCache internally)
-        manager.unloadModel()
+        await manager.unloadModel()
         try? await manager.loadModel()
 
-        #expect(manager.whisperKit != nil, "Should load after cache clearing")
+        let managerWhisperKit2 = await manager.whisperKit
+        #expect(managerWhisperKit2 != nil, "Should load after cache clearing")
     }
 
     // MARK: - Error Handling Tests
@@ -253,7 +264,8 @@ class WhisperKitManagerTests {
 
         // Should not crash with nil callback
         try? await manager.loadModel()
-        #expect(manager.whisperKit != nil, "Should load with nil progress callback")
+        let managerWhisperKit = await manager.whisperKit
+        #expect(managerWhisperKit != nil, "Should load with nil progress callback")
     }
 
     @Test func testProgressCallbackValues() async throws {
@@ -311,8 +323,8 @@ class WhisperKitManagerTests {
             }
         }
 
-        #expect(manager1.whisperKit != nil, "Manager 1 should load successfully")
-        #expect(manager2.whisperKit != nil, "Manager 2 should load successfully")
+        #expect(await manager1.whisperKit != nil, "Manager 1 should load successfully")
+        #expect(await manager2.whisperKit != nil, "Manager 2 should load successfully")
 
         print("Concurrent loading test completed successfully")
     }
@@ -330,7 +342,8 @@ class WhisperKitManagerTests {
         // On subsequent runs (files cached), this should be faster
         #expect(duration < 180.0, "Model should load within 3 minutes (allows for slow download)")
 
-        #expect(manager.whisperKit != nil, "Model should be loaded")
+        let managerWhisperKit = await manager.whisperKit
+        #expect(managerWhisperKit != nil, "Model should be loaded")
     }
 
     @Test func testReloadPerformance() async throws {
@@ -339,7 +352,7 @@ class WhisperKitManagerTests {
         try? await manager.loadModel()
         let firstLoadDuration = Date().timeIntervalSince(startTime1)
 
-        manager.unloadModel()
+        await manager.unloadModel()
 
         // Second load (should be faster due to cached files)
         let startTime2 = Date()
@@ -349,7 +362,8 @@ class WhisperKitManagerTests {
         print("First load: \(String(format: "%.2f", firstLoadDuration))s")
         print("Second load: \(String(format: "%.2f", secondLoadDuration))s")
 
-        #expect(manager.whisperKit != nil, "Should load successfully on reload")
+        let managerWhisperKit = await manager.whisperKit
+        #expect(managerWhisperKit != nil, "Should load successfully on reload")
 
         // Second load might be faster due to cached files, but not guaranteed
         // Just ensure both complete in reasonable time

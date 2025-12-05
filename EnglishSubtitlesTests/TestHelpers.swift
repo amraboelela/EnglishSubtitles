@@ -86,7 +86,7 @@ enum TestHelpers {
     static func waitForWhisperKit(_ service: SpeechRecognitionService, maxWait: Double = 180.0) async -> Bool {
         var waited = 0.0
 
-        while !service.isReady && waited < maxWait {
+        while !(await service.isReady) && waited < maxWait {
             try? await Task.sleep(for: .seconds(1))
             waited += 1.0
             if Int(waited) % 10 == 0 {
@@ -94,6 +94,6 @@ enum TestHelpers {
             }
         }
 
-        return service.isReady
+        return await service.isReady
     }
 }
