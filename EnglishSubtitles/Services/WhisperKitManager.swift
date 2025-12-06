@@ -146,6 +146,57 @@ actor WhisperKitManager {
         }
     }
 
+    /// Process translation of audio data using WhisperKit
+    /// - Parameters:
+    ///   - audioData: Float array of audio samples
+    ///   - segmentNumber: Segment identifier for tracking
+    ///   - sampleRate: Audio sample rate (typically 16000)
+    ///   - translationCallback: Callback for translation results (text, segmentNumber)
+    func processTranslation(
+        _ audioData: [Float],
+        segmentNumber: Int,
+        sampleRate: Double,
+        translationCallback: @escaping (String, Int) -> Void
+    ) async {
+        guard let whisperKit = whisperKit else { return }
+
+        // WhisperKit requires at least 1.0 seconds of audio (16000 samples at 16kHz)
+        // Pad if necessary to prevent memory access errors
+        let minSamples = Int(sampleRate * 1.0)
+        var processedAudio = audioData
+
+        if processedAudio.count < minSamples {
+            print("⚠️ Audio too short: \(processedAudio.count) samples, padding to \(minSamples)")
+            // Pad with silence (zeros) to reach minimum length
+            processedAudio.append(contentsOf: [Float](repeating: 0.0, count: minSamples - processedAudio.count))
+        }
+
+        do {
+            // Translate with .translate task (converts to English)
+            let results = try await whisperKit.transcribe(
+                audioArray: processedAudio,
+                decodeOptions: DecodingOptions(task: .translate, language: "tr")
+            )
+
+            // Extract text from all segments
+            let text = results.map { $0.text }.joined(separator: " ").trimmingCharacters(in: .whitespaces)
+
+            if !text.isEmpty && !text.isLikelyHallucination {
+                NSLog("🌍 Segment #\(segmentNumber) translation: \(text)")
+                NSLog("📝 Sending to ViewModel: segment #\(segmentNumber)")
+                translationCallback(text, segmentNumber)
+            } else {
+                if text.isLikelyHallucination {
+                    print("🚫 Filtered hallucination: \(text)")
+                } else {
+                    print("⚠️ Empty result for segment #\(segmentNumber)")
+                }
+            }
+        } catch {
+            print("❌ Translation error: \(error)")
+        }
+    }
+
     /// Clear WhisperKit cache to prevent memory buildup
     private func clearCache() {
         let fileManager = FileManager.default

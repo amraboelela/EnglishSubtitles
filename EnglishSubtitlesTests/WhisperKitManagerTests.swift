@@ -516,7 +516,7 @@ class WhisperKitManagerTests {
         // This should not crash even if directories don't exist
         try? await manager.loadModel()
 
-        let managerWhisperKit = await manager.whisperKit
+        let _ = await manager.whisperKit
         // Loading might succeed or fail, but shouldn't crash
         print("Cache clearing with nonexistent directories handled gracefully")
     }
@@ -584,8 +584,8 @@ class WhisperKitManagerTests {
         // Test that loading either succeeds or fails with proper error handling
         do {
             try await manager.loadModel()
-            let managerWhisperKit = await manager.whisperKit
-            #expect(managerWhisperKit != nil, "If load succeeds, WhisperKit should be set")
+            let _ = await manager.whisperKit
+            #expect(await manager.whisperKit != nil, "If load succeeds, WhisperKit should be set")
         } catch {
             // Errors are acceptable - what matters is that they don't crash
             print("Load model handled error gracefully: \(error)")
@@ -599,7 +599,7 @@ class WhisperKitManagerTests {
 
         // Should not crash with nil progress callback
         try? await manager.loadModel()
-        let managerWhisperKit = await manager.whisperKit
+        let _ = await manager.whisperKit
         print("Nil progress callback handled without crashes")
     }
 
@@ -616,5 +616,175 @@ class WhisperKitManagerTests {
 
         let managerWhisperKit = await manager.whisperKit
         #expect(managerWhisperKit == nil, "Should remain nil after multiple unloads")
+    }
+
+    // MARK: - Process Translation Tests
+
+    @Test func testProcessTranslationWithoutModel() async throws {
+        let manager = WhisperKitManager()
+        var receivedText: String?
+        var receivedSegment: Int?
+
+        // Test processTranslation when no model is loaded
+        await manager.processTranslation(
+            [Float](repeating: 0.1, count: 32000), // 2 seconds of audio
+            segmentNumber: 1,
+            sampleRate: 16000.0
+        ) { text, segment in
+            receivedText = text
+            receivedSegment = segment
+        }
+
+        // Should not process anything without a loaded model
+        #expect(receivedText == nil, "Should not process translation without loaded model")
+        #expect(receivedSegment == nil, "Should not return segment number without loaded model")
+    }
+
+    @Test func testProcessTranslationAudioPadding() async throws {
+        let manager = WhisperKitManager()
+        var receivedText: String?
+        var receivedSegment: Int?
+
+        // Load model first (required for processing)
+        try? await manager.loadModel()
+
+        // Test with audio shorter than minimum (1 second = 16000 samples)
+        let shortAudio = [Float](repeating: 0.1, count: 8000) // 0.5 seconds
+
+        await manager.processTranslation(
+            shortAudio,
+            segmentNumber: 42,
+            sampleRate: 16000.0
+        ) { text, segment in
+            receivedText = text
+            receivedSegment = segment
+        }
+
+        // Method should handle short audio by padding internally
+        // We can't easily test the WhisperKit output without a real model,
+        // but we can verify the method doesn't crash with short audio
+        print("Process translation with short audio completed")
+    }
+
+    @Test func testProcessTranslationCallbackParameters() async throws {
+        let manager = WhisperKitManager()
+        var receivedTexts: [String] = []
+        var receivedSegments: [Int] = []
+
+        // Load model first (required for processing)
+        try? await manager.loadModel()
+
+        let testAudio = [Float](repeating: 0.1, count: 32000) // 2 seconds of audio
+
+        // Process multiple segments with different numbers
+        for segmentNum in [1, 5, 10] {
+            await manager.processTranslation(
+                testAudio,
+                segmentNumber: segmentNum,
+                sampleRate: 16000.0
+            ) { text, segment in
+                receivedTexts.append(text)
+                receivedSegments.append(segment)
+            }
+        }
+
+        print("Processed \(receivedTexts.count) translation callbacks")
+        print("Received segments: \(receivedSegments)")
+    }
+
+    @Test func testProcessTranslationSampleRateParameter() async throws {
+        let manager = WhisperKitManager()
+        var callbackCalled = false
+
+        // Load model first (required for processing)
+        try? await manager.loadModel()
+
+        // Test with different sample rates
+        let sampleRates: [Double] = [16000.0, 44100.0, 48000.0]
+
+        for sampleRate in sampleRates {
+            let samplesNeeded = Int(sampleRate * 1.0) // 1 second minimum
+            let testAudio = [Float](repeating: 0.1, count: samplesNeeded)
+
+            await manager.processTranslation(
+                testAudio,
+                segmentNumber: 1,
+                sampleRate: sampleRate
+            ) { text, segment in
+                callbackCalled = true
+            }
+        }
+
+        print("Tested process translation with multiple sample rates")
+    }
+
+    @Test func testProcessTranslationEmptyAudio() async throws {
+        let manager = WhisperKitManager()
+        var receivedText: String?
+        var receivedSegment: Int?
+
+        // Load model first (required for processing)
+        try? await manager.loadModel()
+
+        // Test with empty audio array
+        await manager.processTranslation(
+            [], // Empty audio
+            segmentNumber: 1,
+            sampleRate: 16000.0
+        ) { text, segment in
+            receivedText = text
+            receivedSegment = segment
+        }
+
+        // Method should handle empty audio gracefully by padding to minimum length
+        print("Process translation with empty audio completed")
+    }
+
+    @Test func testProcessTranslationConcurrentCalls() async throws {
+        let manager = WhisperKitManager()
+        var callbackCount = 0
+
+        // Load model first (required for processing)
+        try? await manager.loadModel()
+
+        let testAudio = [Float](repeating: 0.1, count: 32000) // 2 seconds
+
+        // Test concurrent calls to processTranslation
+        await withTaskGroup(of: Void.self) { group in
+            for i in 1...3 {
+                group.addTask {
+                    await manager.processTranslation(
+                        testAudio,
+                        segmentNumber: i,
+                        sampleRate: 16000.0
+                    ) { text, segment in
+                        callbackCount += 1
+                    }
+                }
+            }
+        }
+
+        print("Concurrent process translation calls completed with \(callbackCount) callbacks")
+    }
+
+    @Test func testProcessTranslationWithUnloadedModel() async throws {
+        let manager = WhisperKitManager()
+        var receivedCallback = false
+
+        // Load and then unload model
+        try? await manager.loadModel()
+        await manager.unloadModel()
+
+        let testAudio = [Float](repeating: 0.1, count: 32000)
+
+        await manager.processTranslation(
+            testAudio,
+            segmentNumber: 1,
+            sampleRate: 16000.0
+        ) { text, segment in
+            receivedCallback = true
+        }
+
+        #expect(!receivedCallback, "Should not call callback when model is unloaded")
     }
 }

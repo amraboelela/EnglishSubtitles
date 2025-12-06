@@ -18,14 +18,14 @@ class SpeechRecognitionService: @unchecked Sendable {
     // Callbacks for updates
     private var translationCallback: ((String, Int) -> Void)?
 
-    // Audio buffer management using Swift Concurrency Actor (replaces GCD queue)
+    // Audio buffer management using Swift Concurrency Actor
     private let audioBuffer = AudioBufferActor()
-    private let maxSegmentLimit: Double = 10.0 // 10 seconds max per segment
+    private let maxSegmentLimit: Double = 10.0
     private let sampleRate: Double = 16000.0
 
     // Silence detection configuration
-    private let silenceThreshold: Float = 0.025 // Slightly higher RMS threshold to reduce noise processing
-    private let silenceDurationRequired: Double = 0.5 // Require 0.5s of silence to end segment
+    private let silenceThreshold: Float = 0.025
+    private let silenceDurationRequired: Double = 0.7
     private var lastChunkWasSilent = true // Start as true since we haven't received speech yet
     private var lastAudioTime: Double = 0 // Last time we received audio
 
@@ -118,59 +118,18 @@ class SpeechRecognitionService: @unchecked Sendable {
         // Process segment if the actor determined one is ready
         if let (audioToProcess, segmentNumber) = segmentToProcess {
             Task.detached { [weak self] in
-                guard let self else { return }
+                guard let self, let whisperKitManager = self.whisperKitManager else { return }
                 print("🎯 Starting WhisperKit processing for segment #\(segmentNumber)")
-                await self.processTranslation(audioToProcess, segmentNumber: segmentNumber)
+                await whisperKitManager.processTranslation(
+                    audioToProcess,
+                    segmentNumber: segmentNumber,
+                    sampleRate: self.sampleRate,
+                    translationCallback: self.translationCallback ?? { _, _ in }
+                )
                 print("✅ Completed WhisperKit processing for segment #\(segmentNumber)")
                 //await self.audioBuffer.markProcessingComplete()
                 print("✅ Marked segment #\(segmentNumber) as complete, ready for next segment")
             }
-        }
-    }
-
-    /// Process audio data through WhisperKit for translation to English
-    /// Handles audio padding (WhisperKit requires minimum 1.0 second of audio),
-    /// performs translation using the .translate task, and filters out hallucinations.
-    ///
-    /// - Parameter audioData: Float array of audio samples (16kHz mono)
-    /// - Parameter segmentNumber: Segment identifier for tracking and logging
-    private func processTranslation(_ audioData: [Float], segmentNumber: Int) async {
-        guard let whisperKit = await whisperKitManager?.whisperKit else { return }
-
-        // WhisperKit requires at least 1.0 seconds of audio (16000 samples at 16kHz)
-        // Pad if necessary to prevent memory access errors
-        let minSamples = Int(sampleRate * 1.0)
-        var processedAudio = audioData
-
-        if processedAudio.count < minSamples {
-            print("⚠️ Audio too short: \(processedAudio.count) samples, padding to \(minSamples)")
-            // Pad with silence (zeros) to reach minimum length
-            processedAudio.append(contentsOf: [Float](repeating: 0.0, count: minSamples - processedAudio.count))
-        }
-
-        do {
-            // Translate with .translate task (converts to English)
-            let results = try await whisperKit.transcribe(
-                audioArray: processedAudio,
-                decodeOptions: DecodingOptions(task: .translate, language: "tr")
-            )
-
-            // Extract text from all segments
-            let text = results.map { $0.text }.joined(separator: " ").trimmingCharacters(in: .whitespaces)
-
-            if !text.isEmpty && !text.isLikelyHallucination {
-                NSLog("🌍 Segment #\(segmentNumber) translation: \(text)")
-                NSLog("📝 Sending to ViewModel: segment #\(segmentNumber)")
-                translationCallback?(text, segmentNumber)
-            } else {
-                if text.isLikelyHallucination {
-                    print("🚫 Filtered hallucination: \(text)")
-                } else {
-                    print("⚠️ Empty result for segment #\(segmentNumber)")
-                }
-            }
-        } catch {
-            print("❌ Translation error: \(error)")
         }
     }
 
