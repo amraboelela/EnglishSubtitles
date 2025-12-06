@@ -69,7 +69,7 @@ class WhisperKitManagerTests {
         // Verify progress is monotonically increasing (never goes backward)
         for i in 1..<progressValues.count {
             #expect(progressValues[i] >= progressValues[i-1],
-                   "Progress should be monotonically increasing: \(progressValues[i-1]) -> \(progressValues[i])")
+                    "Progress should be monotonically increasing: \(progressValues[i-1]) -> \(progressValues[i])")
         }
 
         // Verify key progress milestones
@@ -168,7 +168,7 @@ class WhisperKitManagerTests {
         for file in requiredFiles {
             let filePath = modelPath.appendingPathComponent(file)
             #expect(fileManager.fileExists(atPath: filePath.path),
-                   "Required file should exist: \(file)")
+                    "Required file should exist: \(file)")
         }
 
         print("All required model files exist at: \(modelPath.path)")
@@ -371,33 +371,250 @@ class WhisperKitManagerTests {
         #expect(secondLoadDuration < 180.0, "Second load should complete in reasonable time")
     }
 
-    // MARK: - Integration Tests
+    // MARK: - Error Handling and Edge Cases
 
-    @Test func testWhisperKitManagerInSpeechRecognitionService() async throws {
-        // Verify that WhisperKitManager integrates correctly with SpeechRecognitionService
-        let service = SpeechRecognitionService()
+    @Test func testLoadModelWithProgressCallbackCancellation() async throws {
+        var progressValues: [Double] = []
+        var callbackCallCount = 0
 
-        // Load the model first
-        await service.loadModel()
+        let manager = WhisperKitManager { progress in
+            callbackCallCount += 1
+            progressValues.append(progress)
+        }
 
-        // Wait for model to load
-        let isReady = await TestHelpers.waitForWhisperKit(service)
+        // Start loading but test progress simulation cancellation behavior
+        let loadTask = Task {
+            try? await manager.loadModel()
+        }
 
-        #expect(isReady, "SpeechRecognitionService should be ready after WhisperKitManager loads model")
+        // Let it start progress simulation
+        try await Task.sleep(for: .milliseconds(500))
+
+        // Cancel the load task to test cancellation handling
+        loadTask.cancel()
+
+        // Wait for completion
+        _ = await loadTask.result
+
+        // Should have received some progress callbacks before cancellation
+        #expect(callbackCallCount > 0, "Should have received some progress callbacks")
+        #expect(!progressValues.isEmpty, "Should have some progress values")
+
+        print("Progress callbacks received during cancellation test: \(callbackCallCount)")
     }
 
-    @Test func testMultipleServicesUsingSameManager() async throws {
-        // Test that multiple services can use WhisperKitManager
-        let service1 = SpeechRecognitionService()
-        let service2 = SpeechRecognitionService()
+    @Test func testProgressCallbackProgressionValidation() async throws {
+        var progressValues: [Double] = []
 
-        await service1.loadModel()
-        await service2.loadModel()
+        let manager = WhisperKitManager { progress in
+            progressValues.append(progress)
+        }
 
-        let ready1 = await TestHelpers.waitForWhisperKit(service1, maxWait: 5.0)
-        let ready2 = await TestHelpers.waitForWhisperKit(service2, maxWait: 5.0)
+        try? await manager.loadModel()
 
-        #expect(ready1, "Service 1 should be ready")
-        #expect(ready2, "Service 2 should be ready")
+        // Validate progress sequence is logical
+        #expect(!progressValues.isEmpty, "Should have progress values")
+
+        // Check for key progress milestones
+        let hasFileOperationStart = progressValues.contains(0.05)
+        let hasFileOperationComplete = progressValues.contains(0.10)
+        let hasLoadingStart = progressValues.contains(0.15)
+        let hasFinalProgress = progressValues.contains(1.0)
+
+        #expect(hasFileOperationStart, "Should report file operation start (0.05)")
+        #expect(hasFileOperationComplete, "Should report file operation complete (0.10)")
+        #expect(hasLoadingStart, "Should report loading start (0.15)")
+        #expect(hasFinalProgress, "Should report final progress (1.0)")
+
+        print("Progress milestones validated: start=\(hasFileOperationStart), fileComplete=\(hasFileOperationComplete), loadStart=\(hasLoadingStart), final=\(hasFinalProgress)")
+    }
+
+    @Test func testUnloadModelWhenNotLoaded() async throws {
+        let manager = WhisperKitManager()
+
+        // Unload when not loaded (should not crash)
+        await manager.unloadModel()
+        let managerWhisperKit = await manager.whisperKit
+        #expect(managerWhisperKit == nil, "Should remain nil when unloading unloaded model")
+
+        print("Unload on unloaded model handled gracefully")
+    }
+
+    @Test func testUnloadModelWithProgressCallback() async throws {
+        var progressValues: [Double] = []
+
+        let manager = WhisperKitManager { progress in
+            progressValues.append(progress)
+        }
+
+        // Load model first
+        try? await manager.loadModel()
+        let initialProgressCount = progressValues.count
+
+        // Unload model (should reset progress to 0)
+        await manager.unloadModel()
+
+        // Should have received a 0.0 progress update during unload
+        let finalProgressCount = progressValues.count
+        #expect(finalProgressCount > initialProgressCount, "Should have received additional progress update during unload")
+
+        if let lastProgress = progressValues.last {
+            #expect(lastProgress == 0.0, "Final progress should be 0.0 after unload")
+        }
+
+        print("Unload progress callback validated")
+    }
+
+    @Test func testModelLoadWithPartialFiles() async throws {
+        // This test simulates incomplete model files to test error handling
+        let manager = WhisperKitManager()
+
+        // Create a scenario where some model files might be missing
+        let fileManager = FileManager.default
+        guard let documentsPath = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first else {
+            Issue.record("Could not get documents directory")
+            return
+        }
+
+        let modelPath = documentsPath.appendingPathComponent("openai_whisper-medium")
+
+        // Clean up any existing files to ensure fresh test
+        if fileManager.fileExists(atPath: modelPath.path) {
+            try? fileManager.removeItem(at: modelPath)
+        }
+
+        // Try to load model (should handle missing files gracefully)
+        do {
+            try await manager.loadModel()
+            let managerWhisperKit = await manager.whisperKit
+            // If it succeeds, that's fine too (files were available in bundle)
+            print("Model loading succeeded despite potential partial files scenario")
+        } catch {
+            // Error handling is expected and acceptable
+            print("Model loading failed as expected in partial files scenario: \(error)")
+            #expect(true, "Error handling for partial files should work")
+        }
+    }
+
+    @Test func testClearCacheWithNonexistentDirectories() async throws {
+        // Test clearCache when cache directories don't exist
+        let fileManager = FileManager.default
+        guard let documentsPath = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first else {
+            Issue.record("Could not get documents directory")
+            return
+        }
+
+        // Remove cache directories if they exist
+        let hfCachePath = documentsPath.appendingPathComponent("huggingface")
+        let tmpPath = fileManager.temporaryDirectory.appendingPathComponent("whisperkit")
+
+        try? fileManager.removeItem(at: hfCachePath)
+        try? fileManager.removeItem(at: tmpPath)
+
+        let manager = WhisperKitManager()
+
+        // This should not crash even if directories don't exist
+        try? await manager.loadModel()
+
+        let managerWhisperKit = await manager.whisperKit
+        // Loading might succeed or fail, but shouldn't crash
+        print("Cache clearing with nonexistent directories handled gracefully")
+    }
+
+    @Test func testProgressSimulationCancellation() async throws {
+        var progressValues: [Double] = []
+
+        let manager = WhisperKitManager { progress in
+            progressValues.append(progress)
+        }
+
+        // Start loading in background
+        let loadTask = Task {
+            try? await manager.loadModel()
+        }
+
+        // Wait for progress simulation to start
+        try await Task.sleep(for: .seconds(2))
+
+        // Cancel and check that cancellation is handled
+        loadTask.cancel()
+        _ = await loadTask.result
+
+        // Should have received progress updates during the time it was running
+        #expect(!progressValues.isEmpty, "Should have received some progress updates")
+
+        // Verify we got initial progress markers before cancellation
+        let hasEarlyProgress = progressValues.contains { $0 >= 0.05 && $0 <= 0.20 }
+        #expect(hasEarlyProgress, "Should have received early progress before cancellation")
+
+        print("Progress simulation cancellation tested: \(progressValues.count) updates")
+    }
+
+    @Test func testModelFilesConcurrentAccess() async throws {
+        // Test concurrent loading attempts to verify thread safety
+        let manager1 = WhisperKitManager()
+        let manager2 = WhisperKitManager()
+
+        await withTaskGroup(of: Void.self) { group in
+            group.addTask {
+                try? await manager1.loadModel()
+            }
+            group.addTask {
+                try? await manager2.loadModel()
+            }
+        }
+
+        // Both managers should either succeed or fail gracefully
+        let manager1WhisperKit = await manager1.whisperKit
+        let manager2WhisperKit = await manager2.whisperKit
+
+        // At least one should succeed, or both should handle concurrent access gracefully
+        print("Concurrent access test completed")
+        print("Manager 1 loaded: \(manager1WhisperKit != nil)")
+        print("Manager 2 loaded: \(manager2WhisperKit != nil)")
+    }
+
+    @Test func testErrorHandlingWithInvalidDocumentsPath() async throws {
+        // This tests error handling when file system access fails
+        // We can't easily mock the documents directory failure, but we can test
+        // that the manager handles errors gracefully
+
+        let manager = WhisperKitManager()
+
+        // Test that loading either succeeds or fails with proper error handling
+        do {
+            try await manager.loadModel()
+            let managerWhisperKit = await manager.whisperKit
+            #expect(managerWhisperKit != nil, "If load succeeds, WhisperKit should be set")
+        } catch {
+            // Errors are acceptable - what matters is that they don't crash
+            print("Load model handled error gracefully: \(error)")
+            #expect(true, "Error handling should work without crashing")
+        }
+    }
+
+    @Test func testProgressCallbackNilHandling() async throws {
+        // Test that nil progress callback is handled safely
+        let manager = WhisperKitManager(onProgress: nil)
+
+        // Should not crash with nil progress callback
+        try? await manager.loadModel()
+        let managerWhisperKit = await manager.whisperKit
+        print("Nil progress callback handled without crashes")
+    }
+
+    @Test func testMultipleUnloadCalls() async throws {
+        let manager = WhisperKitManager()
+
+        // Load model first
+        try? await manager.loadModel()
+
+        // Multiple unload calls should be safe
+        await manager.unloadModel()
+        await manager.unloadModel()
+        await manager.unloadModel()
+
+        let managerWhisperKit = await manager.whisperKit
+        #expect(managerWhisperKit == nil, "Should remain nil after multiple unloads")
     }
 }

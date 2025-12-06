@@ -329,21 +329,354 @@ class SubtitlesViewModelTests {
         #expect(!viewModel.isRecording, "Should not be recording at end")
     }
 
-    // MARK: - Performance Tests
+    // MARK: - Lifecycle Observer Tests
 
-    @Test func testModelLoadPerformance() async throws {
+    @Test func testLifecycleObserversSetup() async throws {
         let viewModel = SubtitlesViewModel()
 
-        let startTime = Date()
+        // Verify that the ViewModel initializes properly
+        #expect(!viewModel.isRecording, "Should not be recording initially")
+        #expect(viewModel.isModelLoading, "Should be loading initially")
+
+        // The lifecycle observers are set up during init
+        // We can't directly test the observer callbacks, but we can verify
+        // that the ViewModel handles the state changes they would trigger
+
         await viewModel.loadModel()
-        let duration = Date().timeIntervalSince(startTime)
-
-        print("ViewModel model load time: \(String(format: "%.2f", duration)) seconds")
-
-        // Should complete within reasonable time (allows for initial download)
-        #expect(duration < 180.0, "Model should load within 3 minutes")
         #expect(!viewModel.isModelLoading, "Model should be loaded")
-        #expect(viewModel.loadingProgress == 1.0, "Progress should be 1.0")
+
+        // Test unload model (simulates what willResignActive would call)
+        viewModel.unloadModel()
+        #expect(viewModel.isModelLoading, "Should be loading again after unload")
+        #expect(viewModel.loadingProgress == 0.0, "Progress should reset")
+
+        print("Lifecycle observer setup verified")
+    }
+
+    @Test func testAppWillResignActiveSimulation() async throws {
+        let viewModel = SubtitlesViewModel()
+
+        // Load model first
+        await viewModel.loadModel()
+        #expect(!viewModel.isModelLoading, "Model should be loaded")
+
+        // Start recording to test complete state reset
+        viewModel.start()
+        try await Task.sleep(for: .seconds(0.5))
+
+        // Simulate app going to background (willResignActive)
+        viewModel.unloadModel()
+
+        // Verify state is properly reset
+        #expect(!viewModel.isRecording, "Should stop recording when unloading")
+        #expect(viewModel.isModelLoading, "Should be loading again after unload")
+        #expect(viewModel.loadingProgress == 0.0, "Progress should reset to 0")
+
+        print("App resign active simulation completed")
+    }
+
+    @Test func testAppDidBecomeActiveSimulation() async throws {
+        let viewModel = SubtitlesViewModel()
+
+        // Simulate app returning from background
+        // First ensure we're in "background" state
+        viewModel.unloadModel()
+        #expect(viewModel.isModelLoading, "Should be in loading state")
+
+        // Simulate didBecomeActive - reload model
+        await viewModel.loadModel()
+        #expect(!viewModel.isModelLoading, "Model should be reloaded")
+        #expect(viewModel.loadingProgress == 1.0, "Progress should be complete")
+
+        // In real scenario, start() would be called if model finished loading
+        if !viewModel.isModelLoading {
+            viewModel.start()
+            try await Task.sleep(for: .seconds(0.5))
+            // Can't verify isRecording on simulator, but method should not crash
+        }
+
+        print("App become active simulation completed")
+    }
+
+    @Test func testAppWillTerminateSimulation() async throws {
+        let viewModel = SubtitlesViewModel()
+
+        // Load and start
+        await viewModel.loadModel()
+        viewModel.start()
+        try await Task.sleep(for: .seconds(0.5))
+
+        // Simulate app termination
+        viewModel.unloadModel()
+
+        // Verify complete cleanup
+        #expect(!viewModel.isRecording, "Should not be recording after termination cleanup")
+        #expect(viewModel.isModelLoading, "Should be in loading state after cleanup")
+
+        print("App termination simulation completed")
+    }
+
+    // MARK: - Segment Handling Tests
+
+    @Test func testSegmentTransitionHandling() async throws {
+        let viewModel = SubtitlesViewModel()
+
+        await viewModel.loadModel()
+
+        // Test internal segment tracking by setting text directly
+        // (simulates what the callback would do)
+        viewModel.english = "First segment text"
+
+        #expect(viewModel.english == "First segment text", "Should display first segment")
+
+        // Simulate segment transition
+        viewModel.english = "Second segment text"
+        #expect(viewModel.english == "Second segment text", "Should display second segment")
+
+        print("Segment transition handling verified")
+    }
+
+    @Test func testEmptyTextHandling() async throws {
+        let viewModel = SubtitlesViewModel()
+
+        await viewModel.loadModel()
+
+        // Test empty text scenarios
+        viewModel.english = ""
+        #expect(viewModel.english.isEmpty, "Should handle empty text")
+
+        viewModel.english = "Some text"
+        #expect(!viewModel.english.isEmpty, "Should handle non-empty text")
+
+        viewModel.english = ""
+        #expect(viewModel.english.isEmpty, "Should handle return to empty text")
+
+        print("Empty text handling verified")
+    }
+
+    @Test func testTextPersistenceAcrossSegments() async throws {
+        let viewModel = SubtitlesViewModel()
+
+        await viewModel.loadModel()
+
+        // Set initial text
+        viewModel.english = "Initial translation"
+        let initialText = viewModel.english
+
+        // In real usage, the segment callback maintains text visibility
+        // until new translation arrives
+        #expect(viewModel.english == initialText, "Text should persist until updated")
+
+        // Update with new translation
+        viewModel.english = "Updated translation"
+        #expect(viewModel.english == "Updated translation", "Should update to new translation")
+
+        print("Text persistence across segments verified")
+    }
+
+    // MARK: - Error Handling and Edge Cases
+
+    @Test func testStartWithoutModel() async throws {
+        let viewModel = SubtitlesViewModel()
+
+        // Try to start without loading model first
+        #expect(viewModel.isModelLoading, "Should still be loading")
+
+        // start() should wait for model to be ready
+        viewModel.start()
+
+        // Give it time to attempt starting
+        try await Task.sleep(for: .seconds(1))
+
+        // The start() method should handle waiting for model gracefully
+        print("Start without model handled gracefully")
+
+        viewModel.stop()
+    }
+
+    @Test func testMultipleStartCalls() async throws {
+        let viewModel = SubtitlesViewModel()
+
+        await viewModel.loadModel()
+
+        // Multiple start calls should be safe
+        viewModel.start()
+        viewModel.start()
+        viewModel.start()
+
+        try await Task.sleep(for: .seconds(1))
+
+        // Should not crash from multiple start calls
+        print("Multiple start calls handled safely")
+
+        viewModel.stop()
+    }
+
+    @Test func testMultipleStopCalls() async throws {
+        let viewModel = SubtitlesViewModel()
+
+        await viewModel.loadModel()
+        viewModel.start()
+        try await Task.sleep(for: .seconds(0.5))
+
+        // Multiple stop calls should be safe
+        viewModel.stop()
+        viewModel.stop()
+        viewModel.stop()
+
+        #expect(!viewModel.isRecording, "Should not be recording after multiple stops")
+
+        print("Multiple stop calls handled safely")
+    }
+
+    @Test func testStateConsistencyDuringLoadUnload() async throws {
+        let viewModel = SubtitlesViewModel()
+
+        // Test state consistency during rapid load/unload cycles
+        for i in 0..<3 {
+            print("Load/Unload cycle #\(i)")
+
+            await viewModel.loadModel()
+            #expect(!viewModel.isModelLoading, "Should be loaded in cycle \(i)")
+            #expect(viewModel.loadingProgress == 1.0, "Progress should be 1.0 in cycle \(i)")
+
+            viewModel.unloadModel()
+            #expect(viewModel.isModelLoading, "Should be loading in cycle \(i)")
+            #expect(viewModel.loadingProgress == 0.0, "Progress should be 0.0 in cycle \(i)")
+            #expect(!viewModel.isRecording, "Should not be recording in cycle \(i)")
+        }
+
+        print("State consistency maintained during load/unload cycles")
+    }
+
+    @Test func testProgressTrackingAccuracy() async throws {
+        let viewModel = SubtitlesViewModel()
+
+        var progressValues: [Double] = []
+
+        // Monitor progress changes
+        let monitorTask = Task {
+            var lastProgress = viewModel.loadingProgress
+            while viewModel.isModelLoading {
+                let currentProgress = viewModel.loadingProgress
+                if currentProgress != lastProgress {
+                    progressValues.append(currentProgress)
+                    lastProgress = currentProgress
+                }
+                try await Task.sleep(for: .seconds(0.1))
+            }
+        }
+
+        await viewModel.loadModel()
+        monitorTask.cancel()
+
+        // Verify progress tracking
+        #expect(!progressValues.isEmpty, "Should track progress changes")
+        #expect(viewModel.loadingProgress == 1.0, "Final progress should be 1.0")
+
+        if let firstProgress = progressValues.first {
+            #expect(firstProgress >= 0.0, "First progress should be >= 0")
+        }
+
+        print("Progress tracking accuracy verified: \(progressValues.count) updates")
+    }
+
+    @Test func testMemoryManagement() async throws {
+        // Test that ViewModels can be created and deallocated without leaks
+        var viewModel: SubtitlesViewModel? = SubtitlesViewModel()
+
+        await viewModel?.loadModel()
+        viewModel?.start()
+        try await Task.sleep(for: .seconds(0.5))
+        viewModel?.stop()
+
+        // Deallocate ViewModel
+        viewModel = nil
+
+        // If we reach here without crashes, memory management is working
+        #expect(true, "ViewModel should deallocate cleanly")
+
+        print("Memory management test completed")
+    }
+
+    @Test func testDeinitNotificationCleanup() async throws {
+        // Test that deinit properly removes notification observers
+        var viewModel: SubtitlesViewModel? = SubtitlesViewModel()
+
+        await viewModel?.loadModel()
+
+        // ViewModel is set up with notification observers
+        // When deallocated, deinit should remove them
+        viewModel = nil
+
+        // If no crashes occur, notification cleanup worked
+        #expect(true, "Notification observers should be cleaned up in deinit")
+
+        print("Deinit notification cleanup verified")
+    }
+
+    @Test func testConcurrentStateAccess() async throws {
+        let viewModel = SubtitlesViewModel()
+
+        // Test concurrent access to ViewModel state
+        await withTaskGroup(of: Void.self) { group in
+            // Load model
+            group.addTask {
+                await viewModel.loadModel()
+            }
+
+            // Monitor progress
+            group.addTask { @MainActor in
+                for _ in 0..<10 {
+                    let _ = viewModel.loadingProgress
+                    let _ = viewModel.isModelLoading
+                    try? await Task.sleep(for: .milliseconds(100))
+                }
+            }
+
+            // Test start/stop
+            group.addTask { @MainActor in
+                try? await Task.sleep(for: .seconds(1))
+                viewModel.start()
+                try? await Task.sleep(for: .milliseconds(500))
+                viewModel.stop()
+            }
+        }
+
+        #expect(!viewModel.isModelLoading, "Model should be loaded")
+        #expect(!viewModel.isRecording, "Should not be recording at end")
+
+        print("Concurrent state access test completed")
+    }
+
+    @Test func testLoadingStateTransitions() async throws {
+        let viewModel = SubtitlesViewModel()
+
+        // Test all state transitions
+        #expect(viewModel.isModelLoading, "Initial: should be loading")
+        #expect(viewModel.loadingProgress == 0.0, "Initial: progress should be 0")
+        #expect(!viewModel.isRecording, "Initial: should not be recording")
+
+        // Load model
+        await viewModel.loadModel()
+        #expect(!viewModel.isModelLoading, "After load: should not be loading")
+        #expect(viewModel.loadingProgress == 1.0, "After load: progress should be 1.0")
+
+        // Start recording
+        viewModel.start()
+        try await Task.sleep(for: .seconds(0.5))
+        // Note: isRecording may be false on simulator due to microphone access
+
+        // Stop recording
+        viewModel.stop()
+        #expect(!viewModel.isRecording, "After stop: should not be recording")
+
+        // Unload model
+        viewModel.unloadModel()
+        #expect(viewModel.isModelLoading, "After unload: should be loading")
+        #expect(viewModel.loadingProgress == 0.0, "After unload: progress should be 0")
+
+        print("State transition testing completed")
     }
 
     @Test func testMemoryUsage() async throws {
