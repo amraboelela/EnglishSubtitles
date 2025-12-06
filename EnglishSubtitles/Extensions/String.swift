@@ -15,13 +15,13 @@ extension String {
 
         // Common hallucination patterns for silence/background noise
         let hallucinations = [
-            "see you in next video", // Keep original for compatibility
+            "see you in next video",
             "see you in the next",
             "subscribe",
             "don't forget to subscribe",
             "like and subscribe",
             "thanks for watching",
-            "thank you for watching",
+            "thank you",
             "bye bye",
             "- bye.",
             "bye.",
