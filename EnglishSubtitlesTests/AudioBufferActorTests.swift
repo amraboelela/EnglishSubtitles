@@ -242,7 +242,7 @@ struct AudioBufferActorTests {
 
         // Now try to add more audio after segment processing
         let newAudioChunk: [Float] = Array(repeating: 0.3, count: 8000)
-        let result2 = await actor.appendAudio(
+        let _ = await actor.appendAudio(
             newAudioChunk,
             now: 2.0,
             rms: 0.3,

@@ -71,7 +71,6 @@ class SpeechRecognitionService: @unchecked Sendable {
         if audioStreamManager == nil {
             audioStreamManager = AudioStreamManager()
         }
-
         do {
             try await audioStreamManager?.startRecording { [weak self] buffer in
                 guard let self = self else { return }
