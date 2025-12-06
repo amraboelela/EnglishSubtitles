@@ -27,7 +27,7 @@ actor WhisperKitManager {
         // Step 1: Copy files (10% of progress)
         progressCallback?(0.05)
         let modelPath = try await copyBundledModelToDocuments()
-        print("Model path: \(modelPath)")
+        //print("Model path: \(modelPath)")
         progressCallback?(0.10)
 
         // Step 2: Load WhisperKit (90% of progress)

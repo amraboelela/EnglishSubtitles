@@ -23,6 +23,8 @@ extension String {
             "thanks for watching",
             "thank you for watching",
             "bye bye",
+            "- bye.",
+            "wow.",
             "see you later",
             "see you next time",
             "music",

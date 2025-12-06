@@ -20,12 +20,12 @@ class SpeechRecognitionService: @unchecked Sendable {
 
     // Audio buffer management using Swift Concurrency Actor (replaces GCD queue)
     private let audioBuffer = AudioBufferActor()
-    private let maxSegmentLimit: Double = 10.0
+    private let maxSegmentLimit: Double = 10.0 // 10 seconds max per segment
     private let sampleRate: Double = 16000.0
 
     // Silence detection configuration
     private let silenceThreshold: Float = 0.025 // Slightly higher RMS threshold to reduce noise processing
-    private let silenceDurationRequired: Double = 1.0 // Require 1.0s of silence to end segment (was 0.7s)
+    private let silenceDurationRequired: Double = 0.5 // Require 0.5s of silence to end segment
     private var lastChunkWasSilent = true // Start as true since we haven't received speech yet
     private var lastAudioTime: Double = 0 // Last time we received audio
 
@@ -117,7 +117,7 @@ class SpeechRecognitionService: @unchecked Sendable {
 
         // Process segment if the actor determined one is ready
         if let (audioToProcess, segmentNumber) = segmentToProcess {
-            Task { [weak self] in
+            Task.detached { [weak self] in
                 guard let self else { return }
                 print("🎯 Starting WhisperKit processing for segment #\(segmentNumber)")
                 await self.processTranslation(audioToProcess, segmentNumber: segmentNumber)

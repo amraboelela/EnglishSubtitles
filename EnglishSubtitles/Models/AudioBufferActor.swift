@@ -27,12 +27,10 @@ actor AudioBufferActor {
         silenceThreshold: Float,
         silenceDurationRequired: Double
     ) -> ([Float], Int)? {
-
-        // Only accumulate audio if it is not silence
         if rms >= silenceThreshold {
-            audioBuffer.append(contentsOf: audioData)
             hasReceivedSpeech = true
         }
+        audioBuffer.append(contentsOf: audioData)
 
         let currentDuration = Double(audioBuffer.count) / sampleRate
         let minSamples = Int(sampleRate * 0.1) // 0.1 second minimum
