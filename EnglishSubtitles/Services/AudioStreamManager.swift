@@ -42,6 +42,10 @@ class AudioStreamManager {
 
         // Install tap with nil format to use the hardware's native format
         // This is the safest approach - let the system choose the format
+
+        // Remove any existing tap before installing a new one
+        inputNode.removeTap(onBus: 0)
+
         inputNode.installTap(onBus: 0, bufferSize: 4096, format: nil) { [weak self] buffer, time in
             self?.audioCallback?(buffer)
         }

@@ -146,7 +146,62 @@ actor WhisperKitManager {
         }
     }
 
-    /// Process translation of audio data using WhisperKit
+    /// Process audio segment for transcription or translation
+    /// - Parameters: audioData, segmentNumber, sampleRate, transcribeOnly, callback
+    /// - Returns: Transcribed/translated text via callback
+    func processSegment(
+        _ audioData: [Float],
+        segmentNumber: Int,
+        sampleRate: Double,
+        transcribeOnly: Bool,
+        callback: @escaping (String, Int) -> Void
+    ) async {
+        guard let whisperKit = whisperKit else { return }
+
+        // WhisperKit requires at least 1.0 seconds of audio (16000 samples at 16kHz)
+        // Pad if necessary to prevent memory access errors
+        let minSamples = Int(sampleRate * 1.0)
+        var processedAudio = audioData
+
+        if processedAudio.count < minSamples {
+            print("⚠️ Audio too short: \(processedAudio.count) samples, padding to \(minSamples)")
+            // Pad with silence (zeros) to reach minimum length
+            processedAudio.append(contentsOf: [Float](repeating: 0.0, count: minSamples - processedAudio.count))
+        }
+
+        do {
+            // Use the appropriate task based on transcribeOnly flag
+            let results = try await whisperKit.transcribe(
+                audioArray: processedAudio,
+                decodeOptions: DecodingOptions(
+                    task: transcribeOnly ? .transcribe : .translate,
+                    language: "tr"
+                )
+            )
+
+            // Extract text from all segments
+            let text = results.map { $0.text }.joined(separator: " ").trimmingCharacters(in: CharacterSet.whitespaces)
+
+            let taskName = transcribeOnly ? "transcription" : "translation"
+            let emoji = transcribeOnly ? "🎤" : "🌍"
+
+            if !text.isEmpty && !text.isLikelyHallucination {
+                NSLog("\(emoji) Segment #\(segmentNumber) \(taskName): \(text)")
+                callback(text, segmentNumber)
+            } else {
+                if text.isLikelyHallucination {
+                    print("🚫 Filtered \(taskName) hallucination: \(text)")
+                } else {
+                    print("⚠️ Empty \(taskName) result for segment #\(segmentNumber)")
+                }
+            }
+        } catch {
+            let taskName = transcribeOnly ? "transcription" : "translation"
+            print("❌ \(taskName.capitalized) error: \(error)")
+        }
+    }
+
+    /// Process translation of audio data using WhisperKit (legacy method for compatibility)
     /// - Parameters:
     ///   - audioData: Float array of audio samples
     ///   - segmentNumber: Segment identifier for tracking
@@ -179,7 +234,7 @@ actor WhisperKitManager {
             )
 
             // Extract text from all segments
-            let text = results.map { $0.text }.joined(separator: " ").trimmingCharacters(in: .whitespaces)
+            let text = results.map { $0.text }.joined(separator: " ").trimmingCharacters(in: CharacterSet.whitespaces)
 
             if !text.isEmpty && !text.isLikelyHallucination {
                 NSLog("🌍 Segment #\(segmentNumber) translation: \(text)")

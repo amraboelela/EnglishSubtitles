@@ -9,6 +9,10 @@ import SwiftUI
 
 @main
 struct EnglishSubtitlesApp: App {
+    init() {
+        TranslationPurchaseManager.shared.startTrialIfNeeded()
+    }
+
     var body: some Scene {
         WindowGroup {
             ContentView()
