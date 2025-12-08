@@ -464,4 +464,287 @@ struct AudioBufferActorTests {
         // If we get here without hanging or crashing, the actor handles concurrency correctly
         #expect(true, "Actor should handle concurrent access safely")
     }
+
+    // MARK: - Silent Buffer Discard Logic Tests
+
+    @Test func testSilentBufferDiscard_SilenceHitNoSpeech() async {
+        let actor = AudioBufferActor()
+
+        let sampleRate = 16000.0
+        let silenceThreshold: Float = 0.025
+        let silenceDurationRequired = 1.0
+        let maxSegmentLimit = 10.0
+        let minSamples = Int(sampleRate * 0.1) // 0.1 second minimum
+
+        // Accumulate enough silent audio to meet minimum samples requirement
+        let silentChunk: [Float] = Array(repeating: 0.01, count: minSamples) // Below threshold, enough samples
+
+        // First append - establishes silence but not long enough yet
+        let result1 = await actor.appendAudio(
+            silentChunk,
+            now: 0.0,
+            rms: 0.01, // Below silenceThreshold
+            sampleRate: sampleRate,
+            maxSegmentLimit: maxSegmentLimit,
+            silenceThreshold: silenceThreshold,
+            silenceDurationRequired: silenceDurationRequired
+        )
+
+        #expect(result1 == nil, "Should not process segment on first silent chunk")
+
+        // Second append after silence duration has elapsed - should trigger discard
+        let result2 = await actor.appendAudio(
+            silentChunk,
+            now: silenceDurationRequired + 0.1, // Silence duration exceeded
+            rms: 0.01, // Still below threshold
+            sampleRate: sampleRate,
+            maxSegmentLimit: maxSegmentLimit,
+            silenceThreshold: silenceThreshold,
+            silenceDurationRequired: silenceDurationRequired
+        )
+
+        #expect(result2 == nil, "Should discard silent buffer, not process segment")
+
+        // Verify buffer was discarded by checking if subsequent speech creates a segment from start
+        let speechChunk: [Float] = Array(repeating: 0.1, count: minSamples)
+        let result3 = await actor.appendAudio(
+            speechChunk,
+            now: silenceDurationRequired + 0.2,
+            rms: 0.1, // Above threshold
+            sampleRate: sampleRate,
+            maxSegmentLimit: maxSegmentLimit,
+            silenceThreshold: silenceThreshold,
+            silenceDurationRequired: silenceDurationRequired
+        )
+
+        #expect(result3 == nil, "Should start fresh accumulation after discard")
+        print("✅ Silent buffer discard - silence hit, no speech tested")
+    }
+
+    @Test func testSilentBufferDiscard_SegmentLimitHitNoSpeech() async {
+        let actor = AudioBufferActor()
+
+        let sampleRate = 16000.0
+        let silenceThreshold: Float = 0.025
+        let silenceDurationRequired = 1.0
+        let maxSegmentLimit = 1.0 // Short limit for testing
+        let minSamples = Int(sampleRate * 0.1)
+
+        // Accumulate silent audio that exceeds segment limit
+        let silentChunk: [Float] = Array(repeating: 0.01, count: Int(sampleRate * maxSegmentLimit * 1.1)) // Exceeds limit
+
+        let result = await actor.appendAudio(
+            silentChunk,
+            now: 0.0,
+            rms: 0.01, // Below silenceThreshold
+            sampleRate: sampleRate,
+            maxSegmentLimit: maxSegmentLimit,
+            silenceThreshold: silenceThreshold,
+            silenceDurationRequired: silenceDurationRequired
+        )
+
+        #expect(result == nil, "Should discard silent buffer when segment limit hit without speech")
+
+        print("✅ Silent buffer discard - segment limit hit, no speech tested")
+    }
+
+    @Test func testSilentBufferDiscard_BothConditionsNoSpeech() async {
+        let actor = AudioBufferActor()
+
+        let sampleRate = 16000.0
+        let silenceThreshold: Float = 0.025
+        let silenceDurationRequired = 0.5 // Short duration
+        let maxSegmentLimit = 1.0 // Short limit
+        let minSamples = Int(sampleRate * 0.1)
+
+        // Accumulate silent audio that triggers both conditions
+        let silentChunk: [Float] = Array(repeating: 0.01, count: Int(sampleRate * maxSegmentLimit * 1.1))
+
+        let result = await actor.appendAudio(
+            silentChunk,
+            now: silenceDurationRequired + 0.1, // Both silence and segment limit hit
+            rms: 0.01, // Below threshold
+            sampleRate: sampleRate,
+            maxSegmentLimit: maxSegmentLimit,
+            silenceThreshold: silenceThreshold,
+            silenceDurationRequired: silenceDurationRequired
+        )
+
+        #expect(result == nil, "Should discard when both silence and segment limit conditions met")
+
+        print("✅ Silent buffer discard - both conditions, no speech tested")
+    }
+
+    @Test func testSilentBufferDiscard_NotTriggeredWithSpeech() async {
+        let actor = AudioBufferActor()
+
+        let sampleRate = 16000.0
+        let silenceThreshold: Float = 0.025
+        let silenceDurationRequired = 1.0
+        let maxSegmentLimit = 10.0
+        let minSamples = Int(sampleRate * 0.1)
+
+        // First establish speech
+        let speechChunk: [Float] = Array(repeating: 0.1, count: minSamples)
+        let speechResult = await actor.appendAudio(
+            speechChunk,
+            now: 0.0,
+            rms: 0.1, // Above threshold - establishes hasReceivedSpeech = true
+            sampleRate: sampleRate,
+            maxSegmentLimit: maxSegmentLimit,
+            silenceThreshold: silenceThreshold,
+            silenceDurationRequired: silenceDurationRequired
+        )
+
+        #expect(speechResult == nil, "Speech chunk alone should not trigger segment")
+
+        // Then add silence that would normally trigger discard
+        let silentChunk: [Float] = Array(repeating: 0.01, count: minSamples)
+
+        // First silence chunk - establishes silenceStartTime
+        let silenceResult1 = await actor.appendAudio(
+            silentChunk,
+            now: 0.5, // Start silence at 0.5s
+            rms: 0.01, // Below threshold
+            sampleRate: sampleRate,
+            maxSegmentLimit: maxSegmentLimit,
+            silenceThreshold: silenceThreshold,
+            silenceDurationRequired: silenceDurationRequired
+        )
+
+        #expect(silenceResult1 == nil, "First silence chunk should not trigger segment yet")
+
+        // Second silence chunk - after silence duration requirement is met
+        let silenceResult = await actor.appendAudio(
+            silentChunk,
+            now: 0.5 + silenceDurationRequired + 0.1, // 1.6s = silence duration of 1.1s
+            rms: 0.01, // Below threshold
+            sampleRate: sampleRate,
+            maxSegmentLimit: maxSegmentLimit,
+            silenceThreshold: silenceThreshold,
+            silenceDurationRequired: silenceDurationRequired
+        )
+
+        // Should create segment, not discard, because hasReceivedSpeech = true
+        #expect(silenceResult != nil, "Should create segment when speech was received, not discard")
+
+        if let (audioData, segmentNum) = silenceResult {
+            let expectedSamples = minSamples * 3 // speech + silence1 + silence2 chunks
+            #expect(audioData.count == expectedSamples, "Segment should contain all three audio chunks")
+            #expect(segmentNum == 0, "Should be first segment")
+        }
+
+        print("✅ Silent buffer discard - not triggered with prior speech tested")
+    }
+
+    @Test func testSilentBufferDiscard_InsufficientSamples() async {
+        let actor = AudioBufferActor()
+
+        let sampleRate = 16000.0
+        let silenceThreshold: Float = 0.025
+        let silenceDurationRequired = 1.0
+        let maxSegmentLimit = 10.0
+        let minSamples = Int(sampleRate * 0.1)
+
+        // Use fewer samples than minimum required
+        let tinyChunk: [Float] = Array(repeating: 0.01, count: minSamples - 1) // Just under minimum
+
+        let result = await actor.appendAudio(
+            tinyChunk,
+            now: silenceDurationRequired + 0.1, // Conditions would trigger discard
+            rms: 0.01, // Below threshold
+            sampleRate: sampleRate,
+            maxSegmentLimit: maxSegmentLimit,
+            silenceThreshold: silenceThreshold,
+            silenceDurationRequired: silenceDurationRequired
+        )
+
+        #expect(result == nil, "Should not discard if insufficient samples")
+
+        print("✅ Silent buffer discard - insufficient samples tested")
+    }
+
+    @Test func testSilentBufferDiscard_StateResetAfterDiscard() async {
+        let actor = AudioBufferActor()
+
+        let sampleRate = 16000.0
+        let silenceThreshold: Float = 0.025
+        let silenceDurationRequired = 1.0
+        let maxSegmentLimit = 10.0
+        let minSamples = Int(sampleRate * 0.1)
+
+        // Trigger a discard
+        let silentChunk: [Float] = Array(repeating: 0.01, count: minSamples)
+        let discardResult = await actor.appendAudio(
+            silentChunk,
+            now: silenceDurationRequired + 0.1,
+            rms: 0.01,
+            sampleRate: sampleRate,
+            maxSegmentLimit: maxSegmentLimit,
+            silenceThreshold: silenceThreshold,
+            silenceDurationRequired: silenceDurationRequired
+        )
+
+        #expect(discardResult == nil, "Should discard silent buffer")
+
+        // Verify state is reset by adding new speech - should start fresh accumulation
+        let speechChunk: [Float] = Array(repeating: 0.1, count: minSamples)
+        let speechResult = await actor.appendAudio(
+            speechChunk,
+            now: silenceDurationRequired + 0.2,
+            rms: 0.1, // Above threshold
+            sampleRate: sampleRate,
+            maxSegmentLimit: maxSegmentLimit,
+            silenceThreshold: silenceThreshold,
+            silenceDurationRequired: silenceDurationRequired
+        )
+
+        #expect(speechResult == nil, "Should start fresh accumulation after discard")
+
+        // Add more to confirm we're building a new segment from scratch
+        let moreAudio: [Float] = Array(repeating: 0.05, count: minSamples)
+        let finalResult = await actor.appendAudio(
+            moreAudio,
+            now: silenceDurationRequired + 1.2, // Trigger silence break
+            rms: 0.01,
+            sampleRate: sampleRate,
+            maxSegmentLimit: maxSegmentLimit,
+            silenceThreshold: silenceThreshold,
+            silenceDurationRequired: silenceDurationRequired
+        )
+
+        if let (audioData, segmentNum) = finalResult {
+            let expectedSamples = minSamples * 2 // Only the new speech + more audio
+            #expect(audioData.count == expectedSamples, "New segment should only contain post-discard audio")
+            #expect(segmentNum == 0, "Should be first segment after reset")
+        }
+
+        print("✅ Silent buffer discard - state reset after discard tested")
+    }
+
+    @Test func testSilentBufferDiscard_EdgeCaseExactThreshold() async {
+        let actor = AudioBufferActor()
+
+        let sampleRate = 16000.0
+        let silenceThreshold: Float = 0.025
+        let silenceDurationRequired = 1.0
+        let maxSegmentLimit = 10.0
+        let minSamples = Int(sampleRate * 0.1)
+
+        // Use RMS exactly at threshold (should NOT be considered silent)
+        let thresholdChunk: [Float] = Array(repeating: 0.1, count: minSamples)
+        let result = await actor.appendAudio(
+            thresholdChunk,
+            now: silenceDurationRequired + 0.1,
+            rms: silenceThreshold, // Exactly at threshold
+            sampleRate: sampleRate,
+            maxSegmentLimit: maxSegmentLimit,
+            silenceThreshold: silenceThreshold,
+            silenceDurationRequired: silenceDurationRequired
+        )
+
+        #expect(result == nil, "Should not discard when RMS is at threshold (not below)")
+
+        print("✅ Silent buffer discard - exact threshold edge case tested")
+    }
 }

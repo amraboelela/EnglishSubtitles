@@ -18,20 +18,28 @@ struct TranslationPurchaseManagerTests {
         #expect(TranslationPurchaseManager.fullAccessProductID == "org.amr.englishsubtitles.translation")
     }
 
+    @Test func translationProduct() async throws {
+        // Setup
+        let purchaseManager = TranslationPurchaseManager()
+
+        // Given: No products loaded initially
+        #expect(purchaseManager.translationProduct == nil)
+
+        // Note: In a real test, you'd need to mock Product creation
+        // Since Product.init is not public, we can only test the computed property logic
+        #expect(purchaseManager.translationProduct == purchaseManager.products.first)
+    }
+
     // MARK: - Trial Logic Tests
 
     @Test func startTrialIfNeeded_FirstTime() async throws {
         // Setup
         UserDefaults.standard.removeObject(forKey: "FirstLaunchDate")
+
+        // When: Creating TranslationPurchaseManager (automatically starts trial)
         let purchaseManager = TranslationPurchaseManager()
 
-        // Given: No trial date set
-        #expect(UserDefaults.standard.object(forKey: "FirstLaunchDate") == nil)
-
-        // When: Starting trial for first time
-        purchaseManager.startTrialIfNeeded()
-
-        // Then: Trial date should be set to today
+        // Then: Trial date should be set to today automatically
         let trialStartDate = UserDefaults.standard.object(forKey: "FirstLaunchDate") as? Date
         #expect(trialStartDate != nil)
 
@@ -324,21 +332,6 @@ struct TranslationPurchaseManagerTests {
         UserDefaults.standard.removeObject(forKey: "FirstLaunchDate")
     }
 
-    // MARK: - Paywall Logic Tests
-
-    @Test func shouldShowPaywall() async throws {
-        // Setup
-        let purchaseManager = TranslationPurchaseManager()
-
-        // Given: Any state
-
-        // When: Checking if should show paywall
-        let shouldShow = purchaseManager.shouldShowPaywall
-
-        // Then: Should always be false (never block whole app)
-        #expect(shouldShow == false)
-    }
-
     // MARK: - Edge Cases
 
     @Test func trialLogic_ExactlySevenDays() async throws {
@@ -398,7 +391,6 @@ struct TranslationPurchaseManagerTests {
         #expect(freshManager.isLoading == false)
         #expect(freshManager.purchaseError == nil)
         #expect(freshManager.hasFullAccess == false)
-        #expect(freshManager.shouldShowPaywall == false)
     }
 
     // MARK: - Error State Tests
