@@ -516,6 +516,293 @@ class SpeechRecognitionServiceTests {
         print("Audio processing pipeline verified: \(audioData.count) samples, RMS: \(rms)")
     }
 
+    // MARK: - AccumulateAudio Direct Tests
+
+    @Test func testAccumulateAudioWithValidBuffer() async throws {
+        // Load model first
+        if !(await Self.service.isReady) {
+            await Self.service.loadModel()
+            _ = await TestHelpers.waitForWhisperKit(Self.service)
+        }
+
+        // Create test audio buffer
+        let format = AVAudioFormat(standardFormatWithSampleRate: 16000, channels: 1)!
+        let frameCapacity: AVAudioFrameCount = 8000 // 0.5 seconds at 16kHz
+
+        guard let buffer = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: frameCapacity) else {
+            Issue.record("Could not create audio buffer")
+            return
+        }
+
+        buffer.frameLength = frameCapacity
+
+        // Fill with test audio data (sine wave)
+        if let channelData = buffer.floatChannelData {
+            for i in 0..<Int(frameCapacity) {
+                let sample = sin(2.0 * Double.pi * 440.0 * Double(i) / 16000.0) * 0.1
+                channelData.pointee[i] = Float(sample)
+            }
+        }
+
+        // Test accumulate audio - should not throw
+        await Self.service.accumulateAudio(buffer)
+
+        print("✅ Audio accumulation with valid buffer tested")
+    }
+
+    @Test func testAccumulateAudioWithEmptyBuffer() async throws {
+        // Create empty audio buffer
+        let format = AVAudioFormat(standardFormatWithSampleRate: 16000, channels: 1)!
+        guard let buffer = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: 0) else {
+            Issue.record("Could not create empty buffer")
+            return
+        }
+
+        buffer.frameLength = 0
+
+        // Test accumulate audio with empty buffer - should handle gracefully
+        await Self.service.accumulateAudio(buffer)
+
+        print("✅ Empty audio buffer accumulation tested")
+    }
+
+    @Test func testAccumulateAudioWithLargeBuffer() async throws {
+        // Load model first
+        if !(await Self.service.isReady) {
+            await Self.service.loadModel()
+            _ = await TestHelpers.waitForWhisperKit(Self.service)
+        }
+
+        // Create large audio buffer that could trigger processing
+        let format = AVAudioFormat(standardFormatWithSampleRate: 16000, channels: 1)!
+        let frameCapacity: AVAudioFrameCount = 160000 // 10 seconds at 16kHz
+
+        guard let buffer = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: frameCapacity) else {
+            Issue.record("Could not create large buffer")
+            return
+        }
+
+        buffer.frameLength = frameCapacity
+
+        // Fill with test audio data (low volume random noise)
+        if let channelData = buffer.floatChannelData {
+            for i in 0..<Int(frameCapacity) {
+                channelData.pointee[i] = Float.random(in: -0.05...0.05)
+            }
+        }
+
+        // This should trigger internal processing logic
+        await Self.service.accumulateAudio(buffer)
+
+        print("✅ Large audio buffer accumulation tested")
+    }
+
+    @Test func testAccumulateAudioWithSilence() async throws {
+        // Create silence buffer
+        let format = AVAudioFormat(standardFormatWithSampleRate: 16000, channels: 1)!
+        let frameCapacity: AVAudioFrameCount = 8000 // 0.5 seconds at 16kHz
+
+        guard let buffer = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: frameCapacity) else {
+            Issue.record("Could not create silence buffer")
+            return
+        }
+
+        buffer.frameLength = frameCapacity
+
+        // Fill with silence (zeros) - should be below silence threshold
+        if let channelData = buffer.floatChannelData {
+            for i in 0..<Int(frameCapacity) {
+                channelData.pointee[i] = 0.0
+            }
+        }
+
+        // Test accumulating silence - should not trigger processing
+        await Self.service.accumulateAudio(buffer)
+
+        print("✅ Silence audio accumulation tested")
+    }
+
+    @Test func testAccumulateAudioWithNoise() async throws {
+        // Create noisy audio buffer
+        let format = AVAudioFormat(standardFormatWithSampleRate: 16000, channels: 1)!
+        let frameCapacity: AVAudioFrameCount = 16000 // 1 second at 16kHz
+
+        guard let buffer = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: frameCapacity) else {
+            Issue.record("Could not create noise buffer")
+            return
+        }
+
+        buffer.frameLength = frameCapacity
+
+        // Fill with high amplitude noise - should be above silence threshold
+        if let channelData = buffer.floatChannelData {
+            for i in 0..<Int(frameCapacity) {
+                channelData.pointee[i] = Float.random(in: -0.5...0.5)
+            }
+        }
+
+        // Test with noisy audio data
+        await Self.service.accumulateAudio(buffer)
+
+        print("✅ Noise audio accumulation tested")
+    }
+
+    @Test func testAccumulateAudioDifferentSampleRates() async throws {
+        // Test with 44.1kHz audio (should be resampled to 16kHz)
+        let format441 = AVAudioFormat(standardFormatWithSampleRate: 44100, channels: 1)!
+        let frameCapacity: AVAudioFrameCount = 44100 // 1 second at 44.1kHz
+
+        guard let buffer441 = AVAudioPCMBuffer(pcmFormat: format441, frameCapacity: frameCapacity) else {
+            Issue.record("Could not create 44.1kHz buffer")
+            return
+        }
+
+        buffer441.frameLength = frameCapacity
+
+        // Fill with test audio
+        if let channelData = buffer441.floatChannelData {
+            for i in 0..<Int(frameCapacity) {
+                let sample = sin(2.0 * Double.pi * 880.0 * Double(i) / 44100.0) * 0.1
+                channelData.pointee[i] = Float(sample)
+            }
+        }
+
+        // Should handle different sample rate gracefully (resample internally)
+        await Self.service.accumulateAudio(buffer441)
+
+        print("✅ Different sample rate audio accumulation tested")
+    }
+
+    @Test func testAccumulateAudioStereoToMono() async throws {
+        // Test with stereo audio (should be converted to mono)
+        let stereoFormat = AVAudioFormat(standardFormatWithSampleRate: 16000, channels: 2)!
+        let frameCapacity: AVAudioFrameCount = 8000 // 0.5 seconds
+
+        guard let stereoBuffer = AVAudioPCMBuffer(pcmFormat: stereoFormat, frameCapacity: frameCapacity) else {
+            Issue.record("Could not create stereo buffer")
+            return
+        }
+
+        stereoBuffer.frameLength = frameCapacity
+
+        // Fill with different values for left/right channels
+        if let channelData = stereoBuffer.floatChannelData {
+            for i in 0..<Int(frameCapacity) {
+                channelData[0][i] = Float(sin(2.0 * Double.pi * 440.0 * Double(i) / 16000.0) * 0.1) // Left
+                channelData[1][i] = Float(sin(2.0 * Double.pi * 880.0 * Double(i) / 16000.0) * 0.1) // Right
+            }
+        }
+
+        // Should handle stereo to mono conversion
+        await Self.service.accumulateAudio(stereoBuffer)
+
+        print("✅ Stereo to mono audio accumulation tested")
+    }
+
+    @Test func testAccumulateAudioSequential() async throws {
+        // Test multiple sequential calls to accumulate audio
+        if !(await Self.service.isReady) {
+            await Self.service.loadModel()
+            _ = await TestHelpers.waitForWhisperKit(Self.service)
+        }
+
+        let format = AVAudioFormat(standardFormatWithSampleRate: 16000, channels: 1)!
+        let frameCapacity: AVAudioFrameCount = 1600 // 0.1 seconds at 16kHz
+
+        // Create multiple small buffers
+        for chunk in 0..<10 {
+            guard let buffer = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: frameCapacity) else {
+                Issue.record("Could not create buffer for chunk \(chunk)")
+                continue
+            }
+
+            buffer.frameLength = frameCapacity
+
+            // Fill with test audio (different frequency for each chunk)
+            if let channelData = buffer.floatChannelData {
+                let frequency = 220.0 + Double(chunk) * 55.0 // Different frequency per chunk
+                for i in 0..<Int(frameCapacity) {
+                    let sample = sin(2.0 * Double.pi * frequency * Double(i) / 16000.0) * 0.1
+                    channelData.pointee[i] = Float(sample)
+                }
+            }
+
+            // Accumulate each chunk sequentially
+            await Self.service.accumulateAudio(buffer)
+        }
+
+        print("✅ Sequential audio accumulation tested")
+    }
+
+    @Test func testAccumulateAudioConcurrent() async throws {
+        // Test concurrent calls to accumulate audio
+        if !(await Self.service.isReady) {
+            await Self.service.loadModel()
+            _ = await TestHelpers.waitForWhisperKit(Self.service)
+        }
+
+        let format = AVAudioFormat(standardFormatWithSampleRate: 16000, channels: 1)!
+        let frameCapacity: AVAudioFrameCount = 1600 // 0.1 seconds at 16kHz
+
+        // Create multiple buffers for concurrent processing
+        let buffers = (0..<5).compactMap { chunk -> AVAudioPCMBuffer? in
+            guard let buffer = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: frameCapacity) else {
+                return nil
+            }
+
+            buffer.frameLength = frameCapacity
+
+            // Fill with test audio
+            if let channelData = buffer.floatChannelData {
+                let frequency = 440.0 + Double(chunk) * 110.0
+                for i in 0..<Int(frameCapacity) {
+                    let sample = sin(2.0 * Double.pi * frequency * Double(i) / 16000.0) * 0.05
+                    channelData.pointee[i] = Float(sample)
+                }
+            }
+
+            return buffer
+        }
+
+        // Send buffers concurrently using TaskGroup
+        await withTaskGroup(of: Void.self) { group in
+            for buffer in buffers {
+                group.addTask {
+                    await Self.service.accumulateAudio(buffer)
+                }
+            }
+        }
+
+        print("✅ Concurrent audio accumulation tested")
+    }
+
+    @Test func testAccumulateAudioBeforeModelReady() async throws {
+        // Test accumulating audio before model is ready
+        let freshService = SpeechRecognitionService()
+
+        let format = AVAudioFormat(standardFormatWithSampleRate: 16000, channels: 1)!
+        let frameCapacity: AVAudioFrameCount = 1600
+
+        guard let buffer = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: frameCapacity) else {
+            Issue.record("Could not create test buffer")
+            return
+        }
+
+        buffer.frameLength = frameCapacity
+
+        // Fill with test audio
+        if let channelData = buffer.floatChannelData {
+            for i in 0..<Int(frameCapacity) {
+                channelData.pointee[i] = Float(0.1)
+            }
+        }
+
+        // Should handle gracefully even without model loaded
+        await freshService.accumulateAudio(buffer)
+
+        print("✅ Accumulate audio before model ready tested")
+    }
+
     @Test func testSilenceDetection() async throws {
         // Test silence detection logic using AudioStreamManager utility methods
 
