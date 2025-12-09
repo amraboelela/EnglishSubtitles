@@ -48,6 +48,9 @@ struct SubtitleView: View {
                         // Always show transcription (free)
                         if !vm.originalText.isEmpty {
                             VStack(spacing: 8) {
+                                Text("Original")
+                                    .font(.caption)
+                                    .foregroundColor(.gray)
                                 Text(vm.originalText)
                                     .font(.system(size: originalTextFontSize, weight: .medium))
                                     .foregroundColor(.white.opacity(0.8))
@@ -61,6 +64,9 @@ struct SubtitleView: View {
                         // Conditionally show translation (premium feature)
                         if purchaseManager.canUseTranslation && !vm.englishText.isEmpty {
                             VStack(spacing: 8) {
+                                Text("English Translation")
+                                    .font(.caption)
+                                    .foregroundColor(.blue)
                                 Text(vm.englishText)
                                     .font(.system(size: englishTextFontSize, weight: .bold))
                                     .foregroundColor(.white)
