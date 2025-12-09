@@ -101,7 +101,7 @@ class SpeechRecognitionService: @unchecked Sendable {
     /// This function uses the AudioBufferActor to safely manage state and determine when to process segments.
     /// Much cleaner than the previous GCD-based approach - no more withCheckedContinuation needed!
     /// - Parameter buffer: Audio buffer from microphone input
-    func accumulateAudio(_ buffer: AVAudioPCMBuffer) async {
+    private func accumulateAudio(_ buffer: AVAudioPCMBuffer) async {
         // Resample to 16kHz if needed
         let resampledBuffer = AudioStreamManager.resampleIfNeeded(buffer)
 
