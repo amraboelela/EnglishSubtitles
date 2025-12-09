@@ -528,7 +528,7 @@ struct AudioBufferActorTests {
         let silenceThreshold: Float = 0.025
         let silenceDurationRequired = 1.0
         let maxSegmentLimit = 1.0 // Short limit for testing
-        let minSamples = Int(sampleRate * 0.1)
+        let _ = Int(sampleRate * 0.1) // Minimum samples calculation (unused in this test)
 
         // Accumulate silent audio that exceeds segment limit
         let silentChunk: [Float] = Array(repeating: 0.01, count: Int(sampleRate * maxSegmentLimit * 1.1)) // Exceeds limit
@@ -555,7 +555,7 @@ struct AudioBufferActorTests {
         let silenceThreshold: Float = 0.025
         let silenceDurationRequired = 0.5 // Short duration
         let maxSegmentLimit = 1.0 // Short limit
-        let minSamples = Int(sampleRate * 0.1)
+        let _ = Int(sampleRate * 0.1) // Minimum sample calculation (unused in this test)
 
         // Accumulate silent audio that triggers both conditions
         let silentChunk: [Float] = Array(repeating: 0.01, count: Int(sampleRate * maxSegmentLimit * 1.1))

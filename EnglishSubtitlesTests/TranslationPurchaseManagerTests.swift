@@ -37,7 +37,7 @@ struct TranslationPurchaseManagerTests {
         UserDefaults.standard.removeObject(forKey: "FirstLaunchDate")
 
         // When: Creating TranslationPurchaseManager (automatically starts trial)
-        let purchaseManager = TranslationPurchaseManager()
+        let _ = TranslationPurchaseManager()
 
         // Then: Trial date should be set to today automatically
         let trialStartDate = UserDefaults.standard.object(forKey: "FirstLaunchDate") as? Date

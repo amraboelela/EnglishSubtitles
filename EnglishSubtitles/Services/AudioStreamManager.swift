@@ -14,7 +14,16 @@ class AudioStreamManager {
     private var inputNode: AVAudioInputNode?
     private var audioCallback: ((AVAudioPCMBuffer) -> Void)?
 
+    /// Current recording state
+    private(set) var isRecording = false
+
     func startRecording(onAudioBuffer: @escaping (AVAudioPCMBuffer) -> Void) async throws {
+        // Guard against starting if already recording
+        guard !isRecording else {
+            print("⚠️ Audio stream already recording")
+            return
+        }
+
         audioCallback = onAudioBuffer
 
         // Request microphone permission
@@ -26,32 +35,43 @@ class AudioStreamManager {
 
         print("✓ Microphone permission granted")
 
-        // Setup audio engine
-        audioEngine = AVAudioEngine()
-        guard let audioEngine = audioEngine else {
-            throw AudioStreamError.engineSetupFailed
+        do {
+            // Setup audio engine
+            audioEngine = AVAudioEngine()
+            guard let audioEngine = audioEngine else {
+                throw AudioStreamError.engineSetupFailed
+            }
+
+            inputNode = audioEngine.inputNode
+            guard let inputNode = inputNode else {
+                throw AudioStreamError.inputNodeNotAvailable
+            }
+
+            let inputFormat = inputNode.outputFormat(forBus: 0)
+            print("🎤 Microphone format: \(inputFormat.sampleRate) Hz, \(inputFormat.channelCount) channels")
+
+            // Install tap with nil format to use the hardware's native format
+            // This is the safest approach - let the system choose the format
+
+            // Remove any existing tap before installing a new one
+            inputNode.removeTap(onBus: 0)
+
+            inputNode.installTap(onBus: 0, bufferSize: 4096, format: nil) { [weak self] buffer, time in
+                self?.audioCallback?(buffer)
+            }
+
+            try audioEngine.start()
+            isRecording = true
+            print("✓ Audio engine started")
+        } catch {
+            // Ensure isRecording is false if setup fails
+            isRecording = false
+            audioEngine?.stop()
+            audioEngine = nil
+            inputNode = nil
+            audioCallback = nil
+            throw error
         }
-
-        inputNode = audioEngine.inputNode
-        guard let inputNode = inputNode else {
-            throw AudioStreamError.inputNodeNotAvailable
-        }
-
-        let inputFormat = inputNode.outputFormat(forBus: 0)
-        print("🎤 Microphone format: \(inputFormat.sampleRate) Hz, \(inputFormat.channelCount) channels")
-
-        // Install tap with nil format to use the hardware's native format
-        // This is the safest approach - let the system choose the format
-
-        // Remove any existing tap before installing a new one
-        inputNode.removeTap(onBus: 0)
-
-        inputNode.installTap(onBus: 0, bufferSize: 4096, format: nil) { [weak self] buffer, time in
-            self?.audioCallback?(buffer)
-        }
-
-        try audioEngine.start()
-        print("✓ Audio engine started")
     }
 
     func stopRecording() {
@@ -64,6 +84,7 @@ class AudioStreamManager {
         audioEngine = nil
         inputNode = nil
         audioCallback = nil
+        isRecording = false
     }
 
     // MARK: - Audio Processing Utilities
