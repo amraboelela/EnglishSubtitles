@@ -11,9 +11,7 @@ import AVFoundation
 import os.log
 
 /// Service that handles multilingual speech-to-text and translation using WhisperKit
-final class SpeechRecognitionService: @unchecked Sendable {
-    static let shared = SpeechRecognitionService()
-
+class SpeechRecognitionService: @unchecked Sendable {
     private var audioStreamManager: AudioStreamManager?
     private var whisperKitManager: WhisperKitManager?
 
@@ -29,24 +27,14 @@ final class SpeechRecognitionService: @unchecked Sendable {
     // Silence detection configuration
     private let silenceThreshold: Float = 0.025
     private let silenceDurationRequired: Double = 0.7
+    private var lastChunkWasSilent = true // Start as true since we haven't received speech yet
+    private var lastAudioTime: Double = 0 // Last time we received audio
 
-    // Serialization for concurrent loadModel() calls
-    private var loadingTask: Task<Void, Error>? = nil
-
-    /// Initialize the speech recognition service as singleton
-    private init() {
-        print("🎤 SpeechRecognitionService singleton initialized: \(Unmanaged.passUnretained(self).toOpaque())")
-        whisperKitManager = WhisperKitManager()
-        // Don't load model automatically - wait for explicit loadModel() call
-    }
-
-    /// Set progress callback for model loading
+    /// Initialize the speech recognition service
     /// - Parameter onProgress: Optional callback for model loading progress (0.0 to 1.0)
-    func setProgressCallback(_ onProgress: ((Double) -> Void)?) {
-        print("📞 SpeechRecognitionService.setProgressCallback called")
-        Task {
-            await whisperKitManager?.setProgressCallback(onProgress)
-        }
+    init(onProgress: ((Double) -> Void)? = nil) {
+        whisperKitManager = WhisperKitManager(onProgress: onProgress)
+        // Don't load model automatically - wait for explicit loadModel() call
     }
 
     /// Load the WhisperKit model for speech recognition and translation
@@ -124,6 +112,9 @@ final class SpeechRecognitionService: @unchecked Sendable {
         let rms = AudioStreamManager.calculateRMS(audioData)
         let now = CFAbsoluteTimeGetCurrent()
 
+        // Update last audio time
+        lastAudioTime = now
+
         // Ask the actor to process the audio and determine if we should cut a segment
         // This replaces all the complex GCD queue logic with a simple actor call
         let segmentToProcess = await audioBuffer.appendAudio(
@@ -173,10 +164,8 @@ final class SpeechRecognitionService: @unchecked Sendable {
     func stopListening() {
         audioStreamManager?.stopRecording()
         audioStreamManager = nil
-
-        // Clear callbacks to prevent ghost callbacks
-        transcriptionCallback = nil
-        translationCallback = nil
+        lastChunkWasSilent = true // Reset to true (no speech state)
+        lastAudioTime = 0
 
         // Reset the actor state
         Task {

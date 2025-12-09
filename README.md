@@ -35,9 +35,8 @@ An iOS application that displays English subtitles in real-time while watching f
 
 ### After Trial Expires
 - ❌ Translation features disabled
-- ✅ Transcription remains free forever
-- ✅ App remains fully functional for transcription
-- 💰 One-time purchase required for translation access
+- ✅ App remains functional for other uses
+- 💰 One-time purchase required for continued translation access
 
 ### Purchase Benefits
 - 🔓 **Unlimited translation access**
@@ -71,16 +70,15 @@ WhisperKit supports two tasks that the app uses strategically:
 
 **After Trial:**
 - Translation requires purchase
-- Transcription remains available (free forever)
-- Graceful degradation with clear upgrade prompts
+- Transcription may remain available (app-dependent)
+- Graceful degradation of features
 
 ## Project Structure
 
 ```
 EnglishSubtitles/
 ├── Models/
-│   ├── Subtitle.swift                           # Subtitle data model with timestamp
-│   └── AudioBufferActor.swift                   # Actor for thread-safe audio buffer management
+│   └── Subtitle.swift                           # Subtitle data model with timestamp
 ├── ViewModels/
 │   └── SubtitlesViewModel.swift                 # Main ViewModel with lifecycle management
 ├── Views/
@@ -96,7 +94,6 @@ EnglishSubtitles/
 │   ├── TranslationPurchaseManagerTests.swift    # Trial logic and purchase flow tests
 │   ├── WhisperKitManagerTests.swift             # Model management and audio processing tests
 │   ├── SubtitlesViewModelTests.swift            # UI state and lifecycle tests
-│   ├── AudioBufferActorTests.swift              # Audio buffer management and segmentation tests
 │   ├── EnglishSubtitlesAppTests.swift           # App initialization and integration tests
 │   └── Mocks/                                   # Mock StoreKit classes for testing
 │       ├── MockStoreKit.swift                   # Mock purchase and transaction classes
@@ -130,9 +127,9 @@ Manages the trial and purchase system:
 The main service handling real-time speech translation with advanced filtering:
 
 **Key Features:**
-- **Natural Segments**: Processes audio until natural silence breaks (0.7s silence threshold)
-- **WhisperKit Limit**: Only forces processing at 7 seconds (respects model's segment limit)
-- **Memory Optimized**: Uses actor-based audio processing to prevent iOS memory kills
+- **Natural Segments**: Processes audio until natural silence breaks (1.0s silence threshold)
+- **WhisperKit Limit**: Only forces processing at 29 seconds (respects model's 30s limit)
+- **Memory Optimized**: Uses async queue operations to prevent iOS memory kills
 - **Smart Filtering**: Comprehensive hallucination detection and blocking
 - **Purchase Integration**: Respects trial/purchase state for translation access
 
@@ -142,12 +139,11 @@ Automatically blocks common WhisperKit false positives:
 - Credits: "Translated by...", "Subtitle by..."
 - Annotations: `(music)`, `[laughter]`, `*sounds*`, `-titles-`
 - Repetitive patterns: "I'm sorry, I'm sorry", "-Come on. -Come on."
-- Short repeated phrases (<1s) to reduce subtitle noise
 
 **Memory Management:**
-- Non-blocking actor-based audio processing with `AudioBufferActor`
+- Non-blocking async queue operations with `withCheckedContinuation`
 - Immediate buffer cleanup with `removeAll(keepingCapacity: false)`
-- Detached WhisperKit processing tasks with actor serialization for thread safety
+- Detached WhisperKit processing tasks
 
 ### WhisperKitManager
 
@@ -222,7 +218,7 @@ Real-time audio processing with enhanced reliability:
    open EnglishSubtitles.xcodeproj
    ```
 
-3. **Dependencies** - Dependencies resolve automatically via Swift Package Manager (WhisperKit)
+3. **Dependencies** - WhisperKit should resolve automatically via Swift Package Manager
 
 4. **Build and run** on your device (Simulator won't have microphone access)
 
@@ -290,8 +286,8 @@ The app uses WhisperKit's **medium model** (~769MB) for optimal accuracy:
 ## Performance Characteristics
 
 ### Model Loading
-- **First launch**: 30-60 seconds on modern iPhones (iPhone 12+) - copies from bundle
-- **Subsequent launches**: 15-30 seconds on modern iPhones (iPhone 12+) - loads from Documents
+- **First launch**: 30-60 seconds (copies from bundle)
+- **Subsequent launches**: 15-30 seconds (loads from Documents)
 - **Background handling**: Unloads model to save memory
 - **Foreground restore**: Reloads model automatically
 

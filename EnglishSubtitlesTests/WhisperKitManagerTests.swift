@@ -235,7 +235,7 @@ class WhisperKitManagerTests {
     // MARK: - Progress Callback Tests
 
     @Test func testProgressCallbackNil() async throws {
-        let manager = WhisperKitManager()
+        let manager = WhisperKitManager(onProgress: nil)
 
         // Should not crash with nil callback
         try? await manager.loadModel()

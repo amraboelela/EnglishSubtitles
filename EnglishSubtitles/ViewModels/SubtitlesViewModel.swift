@@ -16,16 +16,15 @@ class SubtitlesViewModel: ObservableObject {
     @Published var isRecording: Bool = false
     @Published var isModelLoading: Bool = true
     @Published var loadingProgress: Double = 0.0
-    private var isCurrentlyLoading = false  // Guard against concurrent loading
 
     private var currentTextSegment = -1 // Track which segment is currently displayed on screen
     private let purchaseManager = TranslationPurchaseManager.shared
 
-    private var speechRecognition = SpeechRecognitionService.shared
+    private var speechRecognition: SpeechRecognitionService!
 
     init() {
-        // Set up progress callback for the singleton service
-        speechRecognition.setProgressCallback { [weak self] progress in
+        // Initialize service WITHOUT loading model yet
+        speechRecognition = SpeechRecognitionService { [weak self] progress in
             Task { @MainActor in
                 self?.loadingProgress = progress
             }
@@ -37,15 +36,6 @@ class SubtitlesViewModel: ObservableObject {
 
     /// Load the model - should be called AFTER UI appears
     func loadModel() async {
-        // Prevent concurrent loading
-        guard !isCurrentlyLoading else {
-            print("⚠️ Model is already loading, skipping duplicate loadModel() call")
-            return
-        }
-
-        isCurrentlyLoading = true
-        defer { isCurrentlyLoading = false }
-
         // Wait for model to load
         await self.speechRecognition.loadModel()
 
@@ -78,12 +68,9 @@ class SubtitlesViewModel: ObservableObject {
             // App returning to foreground - reload and restart
             Task { @MainActor in
                 guard let self else { return }
-                // Only reload if model is actually unloaded
-                if self.isModelLoading {
-                    await self.loadModel()
-                    if !self.isModelLoading {
-                        self.start()
-                    }
+                await self.loadModel()
+                if !self.isModelLoading {
+                    self.start()
                 }
             }
         }
@@ -155,7 +142,6 @@ class SubtitlesViewModel: ObservableObject {
         }
         isModelLoading = true
         loadingProgress = 0.0
-        isCurrentlyLoading = false  // Reset loading guard
     }
 
     deinit {

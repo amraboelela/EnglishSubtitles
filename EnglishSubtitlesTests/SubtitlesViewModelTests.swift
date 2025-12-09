@@ -32,12 +32,7 @@ class SubtitlesViewModelTests {
         // Note: We can't directly test the progress callback in ViewModel init
         // since it creates its own SpeechRecognitionService internally.
         // This test verifies the callback mechanism works in general.
-        let service = SpeechRecognitionService.shared
-
-        // Ensure we start with a clean state to test progress callback
-        await service.unloadModel()
-
-        service.setProgressCallback { progress in
+        let service = SpeechRecognitionService { progress in
             progressUpdates.append(progress)
         }
 
@@ -46,7 +41,7 @@ class SubtitlesViewModelTests {
 
         #expect(isReady, "Service should be ready")
         #expect(!progressUpdates.isEmpty, "Should have received progress updates")
-        #expect(progressUpdates.contains(0.15), "Should reach at least 15% progress")
+        #expect(progressUpdates.contains(1.0), "Should reach 100% progress")
     }
 
     // MARK: - Model Loading Tests
@@ -173,7 +168,7 @@ class SubtitlesViewModelTests {
 
     @Test func testSubtitlesViewModelWithActualAudioFile() async throws {
         // This test uses the actual audio file instead of waiting for microphone input
-        let service = SpeechRecognitionService.shared
+        let service = SpeechRecognitionService()
 
         // Load model first
         await service.loadModel()
@@ -861,7 +856,7 @@ class SubtitlesViewModelTests {
         // Verify that setupLifecycleObservers is automatically called during init
         // We can test this by checking that the observers respond to notifications
 
-        let _ = SubtitlesViewModel()
+        let viewModel = SubtitlesViewModel()
 
         // Wait for init to complete
         try await Task.sleep(for: .seconds(0.5))

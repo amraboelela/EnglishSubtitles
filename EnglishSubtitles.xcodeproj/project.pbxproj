@@ -23,7 +23,6 @@
 /* Begin PBXFileReference section */
 		F5457ECE2EDAA25E00365E93 /* EnglishSubtitles.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EnglishSubtitles.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F5457EDB2EDAA26000365E93 /* EnglishSubtitlesTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EnglishSubtitlesTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		F595B4AC2EE7E61000D82303 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -66,7 +65,6 @@
 		F5457EC52EDAA25E00365E93 = {
 			isa = PBXGroup;
 			children = (
-				F595B4AC2EE7E61000D82303 /* README.md */,
 				F545613B2EE10D98004BF31D /* images */,
 				F5457ED02EDAA25E00365E93 /* EnglishSubtitles */,
 				F5457EDE2EDAA26000365E93 /* EnglishSubtitlesTests */,

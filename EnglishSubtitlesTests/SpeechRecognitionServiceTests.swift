@@ -15,8 +15,7 @@ import AVFoundation
 @Suite(.serialized)
 class SpeechRecognitionServiceTests {
 
-    // Use shared singleton instance for all tests
-    static let service = SpeechRecognitionService.shared
+    static let service = SpeechRecognitionService()
 
     // MARK: - Initialization Tests
 
@@ -35,14 +34,17 @@ class SpeechRecognitionServiceTests {
     }
 
     @Test func testServiceReadyState() async throws {
-        // Ensure clean state
-        await Self.service.unloadModel()
+        if await Self.service.isReady {
+            await Self.service.unloadModel()
+        }
 
-        // Initially not ready after unload
+        // Initially not ready
         let isReadyInitial = await Self.service.isReady
-        #expect(!isReadyInitial, "Service should not be ready after unload")
+        #expect(!isReadyInitial, "Service should not be ready initially")
 
-        await Self.service.loadModel()
+        if !(await Self.service.isReady) {
+            await Self.service.loadModel()
+        }
         let isReady = await TestHelpers.waitForWhisperKit(Self.service)
 
         #expect(isReady, "Service should be ready after model load")
@@ -396,9 +398,9 @@ class SpeechRecognitionServiceTests {
 
     @Test func testSegmentationWith001Audio() async throws {
 
-        // Ensure model is properly loaded
-        await Self.service.unloadModel()
-        await Self.service.loadModel()
+        if !(await Self.service.isReady) {
+            await Self.service.loadModel()
+        }
         let isReady = await TestHelpers.waitForWhisperKit(Self.service)
 
         guard isReady else {
@@ -414,27 +416,58 @@ class SpeechRecognitionServiceTests {
 
         let audioURL = URL(fileURLWithPath: audioPath)
 
-        // Process the audio file once to verify segmentation capability
-        // In production, audio is chunked in real-time by the microphone
-        // and segmentation happens based on silence detection
-        print("Processing 001.mp3 for translation test...")
+        // Track segments as they would appear in real-time
+        var segments: [(segmentNumber: Int, text: String)] = []
 
-        let translation = try await Self.service.processAudioFile(at: audioURL, task: DecodingTask.translate, language: "ar")
+        // For testing, let's process the audio in ~11 second chunks (54.8 / 5 ≈ 11s per segment)
+        // This simulates the natural verse breaks in Al-Fatiha
+        let totalDuration = 54.8
+        let approximateSegmentDuration = 11.0 // seconds per verse
+        let numberOfSegments = Int(totalDuration / approximateSegmentDuration)
 
-        #expect(!translation.isEmpty, "Should detect audio content")
+        print("Testing segmentation with 001.mp3 (\(totalDuration)s)")
+        print("Expected segments: ~\(numberOfSegments)")
+        print("Processing audio in ~\(approximateSegmentDuration)s chunks...\n")
+
+        // Process each segment
+        for segmentIndex in 0..<numberOfSegments {
+            let startTime = Double(segmentIndex) * approximateSegmentDuration
+            let endTime = min(startTime + approximateSegmentDuration, totalDuration)
+
+            print("Processing segment #\(segmentIndex) (\(String(format: "%.1f", startTime))s - \(String(format: "%.1f", endTime))s)...")
+
+            // For simplicity in testing, we'll process the entire file
+            // In production, the audio is chunked in real-time by the microphone
+            // and segmentation happens based on silence detection
+            let translation = try await Self.service.processAudioFile(at: audioURL, task: DecodingTask.translate, language: "ar")
+
+            if !translation.isEmpty {
+                segments.append((segmentNumber: segmentIndex, text: translation))
+                print("Segment #\(segmentIndex): \(translation)\n")
+                break // Only process once for this test
+            }
+        }
+
+        #expect(!segments.isEmpty, "Should detect at least one segment")
 
         // Verify we got a translation
-        print("Translation result: \(translation)")
+        if let firstSegment = segments.first {
+            print("Full translation: \(firstSegment.text)")
 
-        let hasExpectedWords = translation.lowercased().contains("allah") ||
-                               translation.lowercased().contains("god") ||
-                               translation.lowercased().contains("merciful") ||
-                               translation.lowercased().contains("lord") ||
-                               translation.lowercased().contains("praise")
+            let hasExpectedWords = firstSegment.text.lowercased().contains("allah") ||
+                                   firstSegment.text.lowercased().contains("god") ||
+                                   firstSegment.text.lowercased().contains("merciful") ||
+                                   firstSegment.text.lowercased().contains("lord") ||
+                                   firstSegment.text.lowercased().contains("praise")
 
-        #expect(hasExpectedWords, "Translation should contain expected words from Al-Fatiha")
+            #expect(hasExpectedWords, "Translation should contain expected words from Al-Fatiha")
+        }
 
-        print("✅ Segmentation test completed - translation contains expected content")
+        print("\n=== Segmentation Test Summary ===")
+        print("Total segments detected: \(segments.count)")
+        print("Expected: ~5 segments (one per verse)")
+        print("Note: Full segmentation with silence detection requires real-time audio processing")
+        print("      This test validates the audio can be translated")
     }
 
     // MARK: - Progress Callback Tests
@@ -745,7 +778,7 @@ class SpeechRecognitionServiceTests {
 
     @Test func testAccumulateAudioBeforeModelReady() async throws {
         // Test accumulating audio before model is ready
-        let freshService = SpeechRecognitionService.shared
+        let freshService = SpeechRecognitionService()
 
         let format = AVAudioFormat(standardFormatWithSampleRate: 16000, channels: 1)!
         let frameCapacity: AVAudioFrameCount = 1600
@@ -833,14 +866,11 @@ class SpeechRecognitionServiceTests {
     // MARK: - Service State Management Tests
 
     @Test func testServiceInitializationStates() async throws {
-        let service = SpeechRecognitionService.shared
-
-        // Ensure clean state for this test
-        await service.unloadModel()
+        let service = SpeechRecognitionService()
 
         // Test initial state
         let initialReady = await service.isReady
-        #expect(!initialReady, "Service should not be ready after unload")
+        #expect(!initialReady, "New service should not be ready initially")
 
         // Load model
         await service.loadModel()
@@ -853,12 +883,7 @@ class SpeechRecognitionServiceTests {
     @Test func testServiceWithProgressCallback() async throws {
         var progressUpdates: [Double] = []
 
-        let service = SpeechRecognitionService.shared
-
-        // Ensure we start with model unloaded to test progress callbacks
-        await service.unloadModel()
-
-        service.setProgressCallback { progress in
+        let service = SpeechRecognitionService { progress in
             progressUpdates.append(progress)
         }
 
@@ -963,9 +988,9 @@ class SpeechRecognitionServiceTests {
     // MARK: - Language and Task Parameter Tests
 
     @Test func testProcessAudioFileWithLanguageParameter() async throws {
-        // Ensure model is properly loaded
-        await Self.service.unloadModel()
-        await Self.service.loadModel()
+        if !(await Self.service.isReady) {
+            await Self.service.loadModel()
+        }
         let isReady = await TestHelpers.waitForWhisperKit(Self.service)
 
         guard isReady else {
@@ -989,14 +1014,6 @@ class SpeechRecognitionServiceTests {
 
         #expect(!transcriptionWithLang.isEmpty, "Should transcribe with explicit language")
         print("Transcription with language parameter: \(transcriptionWithLang)")
-
-        // Verify model is still ready before second call
-        let stillReady = await Self.service.isReady
-        if !stillReady {
-            print("⚠️ Model became not ready between calls, reloading...")
-            await Self.service.loadModel()
-            let _ = await TestHelpers.waitForWhisperKit(Self.service)
-        }
 
         // Test without language parameter (auto-detect)
         let transcriptionAutoDetect = try await Self.service.processAudioFile(
@@ -1041,13 +1058,10 @@ class SpeechRecognitionServiceTests {
     // MARK: - Integration and Performance Tests
 
     @Test func testServiceIntegrationFlow() async throws {
-        let service = SpeechRecognitionService.shared
-
-        // Ensure clean state for integration test
-        await service.unloadModel()
+        let service = SpeechRecognitionService()
 
         // Full integration flow
-        #expect(!(await service.isReady), "Should start not ready after unload")
+        #expect(!(await service.isReady), "Should start not ready")
 
         await service.loadModel()
         let isReady = await TestHelpers.waitForWhisperKit(service)
@@ -1080,36 +1094,41 @@ class SpeechRecognitionServiceTests {
     }
 
     @Test func testConcurrentServiceOperations() async throws {
-        let service = SpeechRecognitionService.shared
+        let service1 = SpeechRecognitionService()
+        let service2 = SpeechRecognitionService()
 
-        // Test concurrent access to the singleton
+        // Test concurrent loading
         await withTaskGroup(of: Void.self) { group in
             group.addTask {
-                await service.loadModel()
+                await service1.loadModel()
             }
             group.addTask {
-                await service.loadModel()  // Same service, should handle concurrent calls
+                await service2.loadModel()
             }
         }
 
-        let ready = await service.isReady
+        let ready1 = await service1.isReady
+        let ready2 = await service2.isReady
 
-        print("Concurrent operations: service ready=\(ready)")
+        print("Concurrent operations: service1=\(ready1), service2=\(ready2)")
 
-        // Singleton should handle concurrent access gracefully
+        // Both should handle concurrent access gracefully
         #expect(true, "Concurrent operations should complete without crashes")
     }
 
     @Test func testServiceMemoryManagement() async throws {
-        // Test service lifecycle and memory management with singleton
-        let service = SpeechRecognitionService.shared
-
+        // Test service lifecycle and memory management
         for i in 0..<3 {
-            await service.loadModel()
-            let _ = await service.isReady
+            var service: SpeechRecognitionService? = SpeechRecognitionService()
 
-            service.stopListening()
-            await service.unloadModel()
+            await service?.loadModel()
+            let _ = await service?.isReady
+
+            service?.stopListening()
+            await service?.unloadModel()
+
+            // Release service
+            service = nil
 
             print("Memory management cycle \(i) completed")
         }

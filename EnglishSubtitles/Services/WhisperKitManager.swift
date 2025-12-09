@@ -15,13 +15,6 @@ actor WhisperKitManager {
 
     init(onProgress: ((Double) -> Void)? = nil) {
         progressCallback = onProgress
-        print("🧠 WhisperKitManager created: \(Unmanaged.passUnretained(self).toOpaque())")
-    }
-
-    /// Update progress callback without recreating the manager
-    func setProgressCallback(_ onProgress: ((Double) -> Void)?) {
-        print("🔄 WhisperKitManager updating progress callback (manager: \(Unmanaged.passUnretained(self).toOpaque()))")
-        progressCallback = onProgress
     }
 
     /// Load WhisperKit model with progress updates
@@ -69,13 +62,7 @@ actor WhisperKitManager {
 
         // Now safe to send final 1.0
         progressCallback?(1.0)
-
-        #if DEBUG
-        let memUsage = ProcessInfo.processInfo.physicalMemory / (1024 * 1024)
-        print("✅ Model loaded successfully! Memory usage: ~\(memUsage)MB")
-        #else
         print("Model loaded successfully!")
-        #endif
     }
 
     func copyBundledModelToDocuments() async throws -> String {
@@ -156,9 +143,6 @@ actor WhisperKitManager {
             whisperKit = nil
             progressCallback?(0.0)
             print("✓ Model unloaded")
-
-            // Clear any cached data to free additional memory
-            clearCache()
         }
     }
 
@@ -186,12 +170,6 @@ actor WhisperKitManager {
         }
 
         do {
-            // Check if we should cancel before heavy inference
-            if Task.isCancelled {
-                print("🛑 processSegment cancelled before inference")
-                return
-            }
-
             // Use the appropriate task based on transcribeOnly flag
             let results = try await whisperKit.transcribe(
                 audioArray: processedAudio,
@@ -249,12 +227,6 @@ actor WhisperKitManager {
         }
 
         do {
-            // Check if we should cancel before heavy inference
-            if Task.isCancelled {
-                print("🛑 processTranslation cancelled before inference")
-                return
-            }
-
             // Translate with .translate task (converts to English)
             let results = try await whisperKit.transcribe(
                 audioArray: processedAudio,

@@ -14,7 +14,6 @@ actor AudioBufferActor {
     private var silenceStartTime: Double?
     private var hasReceivedSpeech = false
     private var segmentNumber = 0
-    private var lastAudioTime: Double = 0 // Last time we received audio
 
     /// Append audio data and determine if a segment should be processed
     /// Handles audio accumulation logic with silence detection and segment limits
@@ -28,9 +27,6 @@ actor AudioBufferActor {
         silenceThreshold: Float,
         silenceDurationRequired: Double
     ) -> ([Float], Int)? {
-        // Update last audio time
-        lastAudioTime = now
-
         if rms >= silenceThreshold {
             hasReceivedSpeech = true
         }
@@ -90,6 +86,5 @@ actor AudioBufferActor {
         silenceStartTime = nil
         hasReceivedSpeech = false
         segmentNumber = 0
-        lastAudioTime = 0
     }
 }
