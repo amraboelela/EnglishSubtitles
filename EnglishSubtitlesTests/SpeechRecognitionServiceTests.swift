@@ -614,17 +614,17 @@ class SpeechRecognitionServiceTests {
     }
 
     @Test func testUnloadModelBehavior() async throws {
-        //let service = SpeechRecognitionService()
+        let service = SpeechRecognitionService()
 
         // Unload when not loaded (should be safe)
-        await Self.service.unloadModel()
-        let unloadedReady = await Self.service.isReady
+        await service.unloadModel()
+        let unloadedReady = await service.isReady
         #expect(!unloadedReady, "Should not be ready after unload")
 
         // Load then unload
-        await Self.service.loadModel()
-        await Self.service.unloadModel()
-        let reUnloadedReady = await Self.service.isReady
+        await service.loadModel()
+        await service.unloadModel()
+        let reUnloadedReady = await service.isReady
         #expect(!reUnloadedReady, "Should not be ready after second unload")
 
         print("Unload behavior verified")
@@ -633,23 +633,21 @@ class SpeechRecognitionServiceTests {
     // MARK: - Real-time Processing Simulation Tests
 
     @Test func testStopListeningCleanup() async throws {
-        //let service = SpeechRecognitionService()
+        let service = SpeechRecognitionService()
 
-        if !(await Self.service.isReady) {
-            await Self.service.loadModel()
-        }
-        let isReady = await TestHelpers.waitForWhisperKit(Self.service)
+        await service.loadModel()
+        let isReady = await TestHelpers.waitForWhisperKit(service)
 
         if isReady {
             // Start listening (may fail on simulator)
-            let _ = await Self.service.startListening(
+            let _ = await service.startListening(
                 transcribeOnly: false,
                 onUpdate: { _, _ in }
             )
 
             // Stop should always be safe to call
-            Self.service.stopListening()
-            Self.service.stopListening() // Multiple calls should be safe
+            service.stopListening()
+            service.stopListening() // Multiple calls should be safe
 
             #expect(true, "Multiple stopListening calls should not crash")
         }

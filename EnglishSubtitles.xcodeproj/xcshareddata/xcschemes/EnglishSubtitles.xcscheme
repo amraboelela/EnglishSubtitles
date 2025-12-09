@@ -31,12 +31,24 @@
       shouldAutocreateTestPlan = "YES">
       <Testables>
          <TestableReference
-            skipped = "NO">
+            skipped = "NO"
+            parallelizable = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "F5457EDA2EDAA26000365E93"
                BuildableName = "EnglishSubtitlesTests.xctest"
                BlueprintName = "EnglishSubtitlesTests"
+               ReferencedContainer = "container:EnglishSubtitles.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "F5457EE42EDAA26000365E93"
+               BuildableName = "EnglishSubtitlesUITests.xctest"
+               BlueprintName = "EnglishSubtitlesUITests"
                ReferencedContainer = "container:EnglishSubtitles.xcodeproj">
             </BuildableReference>
          </TestableReference>

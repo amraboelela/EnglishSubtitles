@@ -688,7 +688,7 @@ class SubtitlesViewModelTests {
         try await Task.sleep(for: .seconds(1.0))
 
         // Perform a smaller number of operations to avoid test timeouts
-        for _ in 0..<3 {
+        for i in 0..<3 {
             // Only test start/stop without aggressive model reloading
             viewModel.start()
             try await Task.sleep(for: .seconds(0.2))

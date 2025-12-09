@@ -539,7 +539,7 @@ class WhisperKitManagerTests {
         // Try to load model (should handle missing files gracefully)
         do {
             try await manager.loadModel()
-            let _ = await manager.whisperKit
+            let managerWhisperKit = await manager.whisperKit
             // If it succeeds, that's fine too (files were available in bundle)
             print("Model loading succeeded despite potential partial files scenario")
         } catch {
@@ -838,6 +838,32 @@ class WhisperKitManagerTests {
 
     // MARK: - Concurrent Processing Tests
 
+    @Test func testWhisperKitManagerHighConcurrency() async throws {
+
+        if await manager.whisperKit == nil {
+            try? await manager.loadModel()
+        }
+
+        // Test high concurrency with many simultaneous calls
+        await withTaskGroup(of: Void.self) { group in
+            for i in 0..<20 {
+                group.addTask {
+                    let testAudio = [Float](repeating: 0.1, count: 1600) // 0.1 seconds
+                    await self.manager.processTranslation(
+                        testAudio,
+                        segmentNumber: i,
+                        sampleRate: 16000.0
+                    ) { text, segment in
+                        // Handle callback
+                        let _ = "\(text) \(segment)"
+                    }
+                }
+            }
+        }
+
+        #expect(true, "High concurrency should be handled gracefully")
+    }
+
     @Test func testWhisperKitManagerSequentialVsConcurrent() async throws {
 
         if await manager.whisperKit == nil {
@@ -1063,9 +1089,8 @@ class WhisperKitManagerTests {
         // Test state transitions
         let initialState = "unloaded"
         print("State: \(initialState)")
-        if await manager.whisperKit == nil {
-            try? await manager.loadModel()
-        }
+
+        try? await manager.loadModel()
         let loadedState = "loaded"
         print("State: \(loadedState)")
 
