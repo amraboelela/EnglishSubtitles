@@ -159,49 +159,49 @@ class TranslationPurchaseManager: ObservableObject {
 // MARK: - Trial Logic
 
 extension TranslationPurchaseManager {
-
-    private static let trialDays = 7
-
-    var isTrialActive: Bool {
-        if hasFullAccess {
-            return false // Trial doesn't matter if they already purchased
-        }
-
-        let firstLaunch = UserDefaults.standard.object(forKey: Keys.firstLaunch) as? Date ?? Date()
-        let daysSinceLaunch = Calendar.current.dateComponents([.day], from: firstLaunch, to: Date()).day ?? 0
-
-        return daysSinceLaunch < Self.trialDays
+  
+  private static let trialDays = 7
+  
+  var isTrialActive: Bool {
+    if hasFullAccess {
+      return false // Trial doesn't matter if they already purchased
     }
-
-    var trialDaysRemaining: Int {
-        if hasFullAccess {
-            return 0
-        }
-
-        let firstLaunch = UserDefaults.standard.object(forKey: Keys.firstLaunch) as? Date ?? Date()
-        let daysSinceLaunch = Calendar.current.dateComponents([.day], from: firstLaunch, to: Date()).day ?? 0
-        let remaining = max(0, Self.trialDays - daysSinceLaunch)
-
-        print("Trial days remaining: \(remaining)")
-        return remaining
+    
+    let firstLaunch = UserDefaults.standard.object(forKey: Keys.firstLaunch) as? Date ?? Date()
+    let daysSinceLaunch = Calendar.current.dateComponents([.day], from: firstLaunch, to: Date()).day ?? 0
+    
+    return daysSinceLaunch < Self.trialDays
+  }
+  
+  var trialDaysRemaining: Int {
+    if hasFullAccess {
+      return 0
     }
-
-    func startTrialIfNeeded() {
-        if UserDefaults.standard.object(forKey: Keys.firstLaunch) == nil {
-            UserDefaults.standard.set(Date(), forKey: Keys.firstLaunch)
-            print("✅ Trial started: \(Self.trialDays) days remaining")
-        } else {
-            print("ℹ️ Trial already started. Days remaining: \(trialDaysRemaining)")
-        }
+    
+    let firstLaunch = UserDefaults.standard.object(forKey: Keys.firstLaunch) as? Date ?? Date()
+    let daysSinceLaunch = Calendar.current.dateComponents([.day], from: firstLaunch, to: Date()).day ?? 0
+    let remaining = max(0, Self.trialDays - daysSinceLaunch)
+    
+    print("Trial days remaining: \(remaining)")
+    return remaining
+  }
+  
+  func startTrialIfNeeded() {
+    if UserDefaults.standard.object(forKey: Keys.firstLaunch) == nil {
+      UserDefaults.standard.set(Date(), forKey: Keys.firstLaunch)
+      print("✅ Trial started: \(Self.trialDays) days remaining")
+    } else {
+      print("ℹ️ Trial already started. Days remaining: \(trialDaysRemaining)")
     }
-
-    // MARK: - Translation Feature Logic
-
-    var canUseTranslation: Bool {
-        hasFullAccess || isTrialActive
-    }
-
-    var shouldShowTranslationUpgrade: Bool {
-        !canUseTranslation
-    }
+  }
+  
+  // MARK: - Translation Feature Logic
+  
+  var canUseTranslation: Bool {
+    hasFullAccess || isTrialActive
+  }
+  
+  var shouldShowTranslationUpgrade: Bool {
+    !canUseTranslation
+  }
 }

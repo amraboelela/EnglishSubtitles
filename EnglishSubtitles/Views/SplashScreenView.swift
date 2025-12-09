@@ -8,71 +8,71 @@
 import SwiftUI
 
 struct SplashScreenView: View {
-    @State private var isActive = false
-    @State private var scale = 0.8
-    @State private var opacity = 0.0
+  @State private var isActive = false
+  @State private var scale = 0.8
+  @State private var opacity = 0.0
 
-    var body: some View {
-        Group {
-            if isActive {
-                ContentView()
-            } else {
-                VStack(spacing: 30) {
-                    // App logo image with animation
-                    Image("SplashLogo")
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: 120, height: 120)
-                        .clipShape(RoundedRectangle(cornerRadius: 28))
-                        .shadow(color: .black.opacity(0.3), radius: 20, x: 0, y: 10)
-                        .scaleEffect(scale)
-                        .opacity(opacity)
+  var body: some View {
+    Group {
+      if isActive {
+        ContentView()
+      } else {
+        VStack(spacing: 30) {
+          // App logo image with animation
+          Image("SplashLogo")
+            .resizable()
+            .aspectRatio(contentMode: .fit)
+            .frame(width: 120, height: 120)
+            .clipShape(RoundedRectangle(cornerRadius: 28))
+            .shadow(color: .black.opacity(0.3), radius: 20, x: 0, y: 10)
+            .scaleEffect(scale)
+            .opacity(opacity)
 
-                    // App name with animation
-                    VStack(spacing: 8) {
-                        Text("English Subtitles")
-                            .font(.largeTitle)
-                            .fontWeight(.bold)
-                            .foregroundColor(.white)
+          // App name with animation
+          VStack(spacing: 8) {
+            Text("English Subtitles")
+              .font(.largeTitle)
+              .fontWeight(.bold)
+              .foregroundColor(.white)
 
-                        Text("Real-time Translation")
-                            .font(.headline)
-                            .foregroundColor(.white.opacity(0.9))
-                    }
-                    .opacity(opacity)
-                }
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .background(
-                    // Beautiful gradient background matching your app icon
-                    LinearGradient(
-                        gradient: Gradient(colors: [
-                            Color(red: 0.15, green: 0.35, blue: 0.75),  // Deep blue
-                            Color(red: 0.35, green: 0.65, blue: 0.95)   // Light blue
-                        ]),
-                        startPoint: .topLeading,
-                        endPoint: .bottomTrailing
-                    )
-                )
-                .ignoresSafeArea()
-            }
+            Text("Real-time Translation")
+              .font(.headline)
+              .foregroundColor(.white.opacity(0.9))
+          }
+          .opacity(opacity)
         }
-        .onAppear {
-            // Animate the splash elements
-            withAnimation(.easeOut(duration: 0.8)) {
-                scale = 1.0
-                opacity = 1.0
-            }
-
-            // Transition to main app after splash
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                withAnimation(.easeInOut(duration: 0.8)) {
-                    isActive = true
-                }
-            }
-        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(
+          // Beautiful gradient background matching your app icon
+          LinearGradient(
+            gradient: Gradient(colors: [
+              Color(red: 0.15, green: 0.35, blue: 0.75),  // Deep blue
+              Color(red: 0.35, green: 0.65, blue: 0.95)   // Light blue
+            ]),
+            startPoint: .topLeading,
+            endPoint: .bottomTrailing
+          )
+        )
+        .ignoresSafeArea()
+      }
     }
+    .onAppear {
+      // Animate the splash elements
+      withAnimation(.easeOut(duration: 0.8)) {
+        scale = 1.0
+        opacity = 1.0
+      }
+
+      // Transition to main app after splash
+      DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+        withAnimation(.easeInOut(duration: 0.8)) {
+          isActive = true
+        }
+      }
+    }
+  }
 }
 
 #Preview {
-    SplashScreenView()
+  SplashScreenView()
 }

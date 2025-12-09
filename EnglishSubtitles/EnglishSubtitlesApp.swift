@@ -9,13 +9,13 @@ import SwiftUI
 
 @main
 struct EnglishSubtitlesApp: App {
-    init() {
-        TranslationPurchaseManager.shared.startTrialIfNeeded()
+  init() {
+    TranslationPurchaseManager.shared.startTrialIfNeeded()
+  }
+  
+  var body: some Scene {
+    WindowGroup {
+      SplashScreenView()
     }
-
-    var body: some Scene {
-        WindowGroup {
-            SplashScreenView()
-        }
-    }
+  }
 }

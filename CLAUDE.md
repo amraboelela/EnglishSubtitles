@@ -134,3 +134,4 @@ This setting is added to both Debug and Release build configurations.
 - do not run tests by youself
 - do not call xcodebuild test without asking me
 - Do not change the AI model to base
+- Use 2 spaces for indentation instead of 4
