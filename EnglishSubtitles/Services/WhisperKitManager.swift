@@ -65,7 +65,7 @@ actor WhisperKitManager {
         print("Model loaded successfully!")
     }
 
-    func copyBundledModelToDocuments() async throws -> String {
+    private func copyBundledModelToDocuments() async throws -> String {
         let fileManager = FileManager.default
         guard let documentsPath = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first else {
             throw AudioStreamError.engineSetupFailed
@@ -253,7 +253,7 @@ actor WhisperKitManager {
     }
 
     /// Clear WhisperKit cache to prevent memory buildup
-    func clearCache() {
+    private func clearCache() {
         let fileManager = FileManager.default
         guard let documentsPath = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first else {
             return

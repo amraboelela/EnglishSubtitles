@@ -48,7 +48,7 @@ class SubtitlesViewModel: ObservableObject {
         self.isModelLoading = false
     }
 
-    func setupLifecycleObservers() {
+    private func setupLifecycleObservers() {
         NotificationCenter.default.addObserver(
             forName: UIApplication.willResignActiveNotification,
             object: nil,

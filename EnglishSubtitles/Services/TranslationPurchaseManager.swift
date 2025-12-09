@@ -15,11 +15,6 @@ class TranslationPurchaseManager: ObservableObject {
     // Product ID - this must match exactly what you create in App Store Connect
     static let fullAccessProductID = "org.amr.englishsubtitles.translation"
 
-    // UserDefaults keys to prevent typos
-    private enum Keys {
-        static let firstLaunch = "FirstLaunchDate"
-    }
-
     @Published var products: [Product] = []
     @Published var purchasedProducts: Set<String> = []
     @Published var isLoading = false
@@ -28,9 +23,6 @@ class TranslationPurchaseManager: ObservableObject {
     private var updateListenerTask: Task<Void, Error>? = nil
 
     init() {
-        // Start the trial immediately if needed
-        startTrialIfNeeded()
-
         // Start listening for transaction updates
         updateListenerTask = listenForTransactions()
 
@@ -138,14 +130,10 @@ class TranslationPurchaseManager: ObservableObject {
         purchasedProducts.contains(Self.fullAccessProductID)
     }
 
-    var translationProduct: Product? {
-        products.first
-    }
-
     // MARK: - Transaction Listener
 
     private func listenForTransactions() -> Task<Void, Error> {
-        return Task {
+        return Task.detached {
             for await result in Transaction.updates {
                 if case .verified(let transaction) = result {
                     await self.updatePurchasedProducts()
@@ -160,6 +148,7 @@ class TranslationPurchaseManager: ObservableObject {
 
 extension TranslationPurchaseManager {
 
+    private static let firstLaunchKey = "FirstLaunchDate"
     private static let trialDays = 7
 
     var isTrialActive: Bool {
@@ -167,7 +156,7 @@ extension TranslationPurchaseManager {
             return false // Trial doesn't matter if they already purchased
         }
 
-        let firstLaunch = UserDefaults.standard.object(forKey: Keys.firstLaunch) as? Date ?? Date()
+        let firstLaunch = UserDefaults.standard.object(forKey: Self.firstLaunchKey) as? Date ?? Date()
         let daysSinceLaunch = Calendar.current.dateComponents([.day], from: firstLaunch, to: Date()).day ?? 0
 
         return daysSinceLaunch < Self.trialDays
@@ -178,21 +167,21 @@ extension TranslationPurchaseManager {
             return 0
         }
 
-        let firstLaunch = UserDefaults.standard.object(forKey: Keys.firstLaunch) as? Date ?? Date()
+        let firstLaunch = UserDefaults.standard.object(forKey: Self.firstLaunchKey) as? Date ?? Date()
         let daysSinceLaunch = Calendar.current.dateComponents([.day], from: firstLaunch, to: Date()).day ?? 0
-        let remaining = max(0, Self.trialDays - daysSinceLaunch)
 
-        print("Trial days remaining: \(remaining)")
-        return remaining
+        return max(0, Self.trialDays - daysSinceLaunch)
     }
 
     func startTrialIfNeeded() {
-        if UserDefaults.standard.object(forKey: Keys.firstLaunch) == nil {
-            UserDefaults.standard.set(Date(), forKey: Keys.firstLaunch)
-            print("✅ Trial started: \(Self.trialDays) days remaining")
-        } else {
-            print("ℹ️ Trial already started. Days remaining: \(trialDaysRemaining)")
+        if UserDefaults.standard.object(forKey: Self.firstLaunchKey) == nil {
+            UserDefaults.standard.set(Date(), forKey: Self.firstLaunchKey)
+            print("✅ Trial started: 7 days remaining")
         }
+    }
+
+    var shouldShowPaywall: Bool {
+        false // Never block the whole app - only individual features
     }
 
     // MARK: - Translation Feature Logic
