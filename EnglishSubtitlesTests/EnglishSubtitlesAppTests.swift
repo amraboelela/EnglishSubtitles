@@ -95,8 +95,8 @@ struct EnglishSubtitlesAppTests {
         // When: Getting app body
         let scene = app.body
 
-        // Then: Should return WindowGroup with SplashScreenView (which transitions to ContentView)
-        #expect(scene is WindowGroup<SplashScreenView>, "App body should return WindowGroup containing SplashScreenView")
+        // Then: Should return WindowGroup with ContentView
+        #expect(scene is WindowGroup<ContentView>, "App body should return WindowGroup containing ContentView")
 
         // Cleanup
         UserDefaults.standard.removeObject(forKey: "FirstLaunchDate")
