@@ -11,14 +11,12 @@ import SwiftUI
 /// Main ViewModel that uses WhisperKit for both transcription and translation
 @MainActor
 class SubtitlesViewModel: ObservableObject {
-    @Published var originalText: String = "" // Free transcription in original language
-    @Published var englishText: String = "" // Paid translation to English
+    @Published var english: String = ""
     @Published var isRecording: Bool = false
     @Published var isModelLoading: Bool = true
     @Published var loadingProgress: Double = 0.0
 
     private var currentTextSegment = -1 // Track which segment is currently displayed on screen
-    private let purchaseManager = TranslationPurchaseManager.shared
 
     private var speechRecognition: SpeechRecognitionService!
 
@@ -94,33 +92,23 @@ class SubtitlesViewModel: ObservableObject {
                 try? await Task.sleep(for: .seconds(0.5))
             }
 
-            // Choose transcription or translation based on IAP status
-            let useTranslation = purchaseManager.canUseTranslation
-            let success = await speechRecognition.startListening(
-                transcribeOnly: !useTranslation,
-                onUpdate: { [weak self] text, segmentNumber in
-                    Task { @MainActor in
-                        guard let self = self else { return }
+            // Start listening - translates audio to English
+            let success = await speechRecognition.startListening { [weak self] englishText, segmentNumber in
+                Task { @MainActor in
+                    guard let self = self else { return }
 
-                        if self.currentTextSegment != segmentNumber {
-                            print("🔄 Switching from segment #\(self.currentTextSegment) to #\(segmentNumber)")
-                            self.currentTextSegment = segmentNumber
-                        }
-
-                        if useTranslation {
-                            // User has translation access, use English text
-                            print("📝 Translation: \(text)")
-                            self.englishText = text
-                            self.originalText = "" // Clear transcription when using translation
-                        } else {
-                            // User only has transcription access, use original language
-                            print("📝 Transcription: \(text)")
-                            self.originalText = text
-                            self.englishText = "" // Clear translation when using transcription
-                        }
+                    // If this is a different segment than what's currently displayed, update segment number
+                    // but DON'T clear the text - keep previous translation visible until new one arrives
+                    if self.currentTextSegment != segmentNumber {
+                        print("🔄 Switching from segment #\(self.currentTextSegment) to #\(segmentNumber)")
+                        self.currentTextSegment = segmentNumber
+                        // Don't clear english text - keep previous translation visible
                     }
+
+                    print("📝 Displaying: \(englishText)")
+                    self.english = englishText
                 }
-            )
+            }
 
             if success {
                 isRecording = true

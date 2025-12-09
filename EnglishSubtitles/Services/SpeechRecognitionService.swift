@@ -16,12 +16,11 @@ class SpeechRecognitionService: @unchecked Sendable {
     private var whisperKitManager: WhisperKitManager?
 
     // Callbacks for updates
-    private var transcriptionCallback: ((String, Int) -> Void)?
     private var translationCallback: ((String, Int) -> Void)?
 
     // Audio buffer management using Swift Concurrency Actor
     private let audioBuffer = AudioBufferActor()
-    private let maxSegmentLimit: Double = 7.0
+    private let maxSegmentLimit: Double = 10.0
     private let sampleRate: Double = 16000.0
 
     // Silence detection configuration
@@ -55,31 +54,20 @@ class SpeechRecognitionService: @unchecked Sendable {
         await whisperKitManager?.unloadModel()
     }
 
-    /// Start listening for speech recognition with either transcription or translation
+    /// Start real-time audio listening and translation to English
     /// Processes microphone input in segments based on silence detection or 30-second limit
-    /// - Parameters:
-    ///   - transcribeOnly: If true, transcribes to original language. If false, translates to English
-    ///   - onUpdate: Callback for receiving text updates (text, segmentNumber)
     /// - Returns: True if listening started successfully, false if model not ready
     func startListening(
-        transcribeOnly: Bool = false,
-        onUpdate: @escaping (String, Int) -> Void
+        onTranslationUpdate: @escaping (String, Int) -> Void
     ) async -> Bool {
         guard await whisperKitManager?.whisperKit != nil else {
             print("WhisperKit not initialized")
             return false
         }
 
-        // Store the single callback based on the transcribeOnly flag
-        if transcribeOnly {
-            transcriptionCallback = onUpdate
-            translationCallback = nil
-        } else {
-            transcriptionCallback = nil
-            translationCallback = onUpdate
-        }
+        translationCallback = onTranslationUpdate
 
-        // Start audio streaming - single stream for chosen task
+        // Start audio streaming - single stream for both tasks
         if audioStreamManager == nil {
             audioStreamManager = AudioStreamManager()
         }
@@ -132,27 +120,14 @@ class SpeechRecognitionService: @unchecked Sendable {
             Task.detached { [weak self] in
                 guard let self, let whisperKitManager = self.whisperKitManager else { return }
                 print("🎯 Starting WhisperKit processing for segment #\(segmentNumber)")
-
-                // Process either transcription OR translation based on what callback is set
-                if let transcriptionCallback = self.transcriptionCallback {
-                    await whisperKitManager.processSegment(
-                        audioToProcess,
-                        segmentNumber: segmentNumber,
-                        sampleRate: self.sampleRate,
-                        transcribeOnly: true,
-                        callback: transcriptionCallback
-                    )
-                } else if let translationCallback = self.translationCallback {
-                    await whisperKitManager.processSegment(
-                        audioToProcess,
-                        segmentNumber: segmentNumber,
-                        sampleRate: self.sampleRate,
-                        transcribeOnly: false,
-                        callback: translationCallback
-                    )
-                }
-
+                await whisperKitManager.processTranslation(
+                    audioToProcess,
+                    segmentNumber: segmentNumber,
+                    sampleRate: self.sampleRate,
+                    translationCallback: self.translationCallback ?? { _, _ in }
+                )
                 print("✅ Completed WhisperKit processing for segment #\(segmentNumber)")
+                //await self.audioBuffer.markProcessingComplete()
                 print("✅ Marked segment #\(segmentNumber) as complete, ready for next segment")
             }
         }

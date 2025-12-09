@@ -237,12 +237,9 @@ class SpeechRecognitionServiceTests {
             await Self.service.unloadModel()
         }
         // Try to start listening without loading model first
-        let success = await Self.service.startListening(
-            transcribeOnly: false,
-            onUpdate: { text, segment in
-                // Should not be called
-            }
-        )
+        let success = await Self.service.startListening { text, segment in
+            // Should not be called
+        }
         #expect(!success, "Should fail to start listening without loaded model")
     }
 
@@ -269,12 +266,9 @@ class SpeechRecognitionServiceTests {
         #else
         // On real device, test actual listening functionality
         var receivedTranslations: [(text: String, segment: Int)] = []
-        let success = await Self.service.startListening(
-            transcribeOnly: false,
-            onUpdate: { text, segment in
-                receivedTranslations.append((text: text, segment: segment))
-            }
-        )
+        let success = await Self.service.startListening { text, segment in
+            receivedTranslations.append((text: text, segment: segment))
+        }
 
         #expect(success, "Should successfully start listening with loaded model")
 
@@ -308,10 +302,7 @@ class SpeechRecognitionServiceTests {
         #expect(true, "stopListening should not crash on simulator")
         #else
         // On real device, test actual start/stop cycle
-        let success = await Self.service.startListening(
-            transcribeOnly: false,
-            onUpdate: { _, _ in }
-        )
+        let success = await Self.service.startListening { _, _ in }
         #expect(success, "Should start listening")
 
         // Stop listening should be safe to call
@@ -640,10 +631,7 @@ class SpeechRecognitionServiceTests {
 
         if isReady {
             // Start listening (may fail on simulator)
-            let _ = await service.startListening(
-                transcribeOnly: false,
-                onUpdate: { _, _ in }
-            )
+            let _ = await service.startListening { _, _ in }
 
             // Stop should always be safe to call
             service.stopListening()
@@ -781,13 +769,10 @@ class SpeechRecognitionServiceTests {
             #expect(await service.isReady, "Should be ready after load")
 
             var receivedCallbacks = 0
-            let success = await service.startListening(
-                transcribeOnly: false,
-                onUpdate: { text, segment in
-                    receivedCallbacks += 1
-                    print("Integration test translation callback: \(text) (segment \(segment))")
-                }
-            )
+            let success = await service.startListening { text, segment in
+                receivedCallbacks += 1
+                print("Integration test callback: \(text) (segment \(segment))")
+            }
 
             #if targetEnvironment(simulator)
             #expect(!success, "Should fail on simulator")
