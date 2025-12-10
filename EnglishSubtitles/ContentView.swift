@@ -8,11 +8,11 @@
 import SwiftUI
 
 struct ContentView: View {
-    var body: some View {
-        SubtitleView()
-    }
+  var body: some View {
+    SubtitleView()
+  }
 }
 
 #Preview {
-    ContentView()
+  ContentView()
 }
