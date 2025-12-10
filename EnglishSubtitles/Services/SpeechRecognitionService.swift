@@ -102,7 +102,7 @@ class SpeechRecognitionService: @unchecked Sendable {
     
     // Update last audio time
     lastAudioTime = now
-    
+
     // Ask the actor to process the audio and determine if we should cut a segment
     // This replaces all the complex GCD queue logic with a simple actor call
     let segmentToProcess = await audioBuffer.appendAudio(
@@ -117,6 +117,12 @@ class SpeechRecognitionService: @unchecked Sendable {
     
     // Process segment if the actor determined one is ready
     if let (audioToProcess, segmentNumber) = segmentToProcess {
+      // Check if model is currently processing - if so, drop this segment to stay real-time
+      if let whisperKitManager, await whisperKitManager.isProcessing {
+        print("🚫 Model busy, dropping segment #\(segmentNumber) to maintain real-time performance")
+        return
+      }
+
       Task.detached { [weak self] in
         guard let self, let whisperKitManager = self.whisperKitManager else { return }
         print("🎯 Starting WhisperKit processing for segment #\(segmentNumber)")

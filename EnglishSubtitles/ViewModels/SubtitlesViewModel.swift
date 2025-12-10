@@ -234,5 +234,4 @@ class SubtitlesViewModel: ObservableObject {
     displayTimer?.invalidate()
     NotificationCenter.default.removeObserver(self)
   }
-
 }

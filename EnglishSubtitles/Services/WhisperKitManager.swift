@@ -12,7 +12,8 @@ import WhisperKit
 actor WhisperKitManager {
   private var progressCallback: ((Double) -> Void)?
   private(set) var whisperKit: WhisperKit?
-  
+  private(set) var isProcessing: Bool = false  // Track if model is currently processing
+
   init(onProgress: ((Double) -> Void)? = nil) {
     progressCallback = onProgress
   }
@@ -159,28 +160,34 @@ actor WhisperKitManager {
     translationCallback: @escaping (String, Int) -> Void
   ) async {
     guard let whisperKit = whisperKit else { return }
-    
+
+    // Mark as processing to prevent new segments from being queued
+    isProcessing = true
+    defer { isProcessing = false }  // Always reset when done
+
+    print("🔄 Starting inference for segment #\(segmentNumber) (\(audioData.count) samples)")
+
     // WhisperKit requires at least 1.0 seconds of audio (16000 samples at 16kHz)
     // Pad if necessary to prevent memory access errors
     let minSamples = Int(sampleRate * 1.0)
     var processedAudio = audioData
-    
+
     if processedAudio.count < minSamples {
       print("⚠️ Audio too short: \(processedAudio.count) samples, padding to \(minSamples)")
       // Pad with silence (zeros) to reach minimum length
       processedAudio.append(contentsOf: [Float](repeating: 0.0, count: minSamples - processedAudio.count))
     }
-    
+
     do {
       // Translate with .translate task (converts to English)
       let results = try await whisperKit.transcribe(
         audioArray: processedAudio,
         decodeOptions: DecodingOptions(task: .translate, language: "tr")
       )
-      
+
       // Extract text from all segments
       let text = results.map { $0.text }.joined(separator: " ").trimmingCharacters(in: .whitespaces)
-      
+
       if !text.isEmpty && !text.isLikelyHallucination {
         NSLog("🌍 Segment #\(segmentNumber) translation: \(text)")
         NSLog("📝 Sending to ViewModel: segment #\(segmentNumber)")
@@ -192,8 +199,10 @@ actor WhisperKitManager {
           print("⚠️ Empty result for segment #\(segmentNumber)")
         }
       }
+
+      print("✅ Completed inference for segment #\(segmentNumber)")
     } catch {
-      print("❌ Translation error: \(error)")
+      print("❌ Translation error for segment #\(segmentNumber): \(error)")
     }
   }
   
