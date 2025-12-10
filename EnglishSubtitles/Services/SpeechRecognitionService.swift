@@ -20,7 +20,7 @@ class SpeechRecognitionService: @unchecked Sendable {
   
   // Audio buffer management using Swift Concurrency Actor
   private let audioBuffer = AudioBufferActor()
-  private let maxSegmentLimit: Double = 10.0
+  private let maxSegmentLimit: Double = 29.0
   private let sampleRate: Double = 16000.0
   
   // Silence detection configuration
