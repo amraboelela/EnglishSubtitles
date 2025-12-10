@@ -14,7 +14,7 @@ struct Subtitle: Identifiable, Equatable {
     let translatedText: String
     let timestamp: Date
     let language: String
-
+    
     init(originalText: String, translatedText: String = "", language: String = "tr") {
         self.originalText = originalText
         self.translatedText = translatedText

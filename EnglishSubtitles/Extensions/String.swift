@@ -12,7 +12,7 @@ extension String {
     /// - Returns: True if text should be filtered out, false if likely real speech
     var isLikelyHallucination: Bool {
         let lowercased = self.lowercased().trimmingCharacters(in: .whitespacesAndNewlines)
-
+        
         // Common hallucination patterns for silence/background noise
         let hallucinations = [
             "see you in next video",
@@ -21,7 +21,7 @@ extension String {
             "don't forget to subscribe",
             "like and subscribe",
             "thanks for watching",
-            "thank you",
+            "thank you for watching",
             "bye bye",
             "- bye.",
             "bye.",
@@ -57,33 +57,34 @@ extension String {
             "subtitles",
             "captions"
         ]
-
+        
         // Exact matches only for potentially ambiguous words
         let exactMatches = [
             "bye",
             "goodbye",
+            "thank you",
             "the end"
         ]
-
+        
         // Check for exact matches or if text starts with common patterns
         for hallucination in hallucinations {
             if lowercased == hallucination || lowercased.hasPrefix(hallucination) {
                 return true
             }
         }
-
+        
         // Check for exact matches only (not prefix)
         for exactMatch in exactMatches {
             if lowercased == exactMatch {
                 return true
             }
         }
-
+        
         // Filter very short outputs (likely hallucinations)
         if lowercased.count <= 2 {
             return true
         }
-
+        
         // Filter repetitive patterns (e.g., "a a a a")
         let words = lowercased.components(separatedBy: .whitespacesAndNewlines)
         if words.count > 1 {
@@ -93,16 +94,16 @@ extension String {
                 return true
             }
         }
-
+        
         // Filter bracketed annotations like (music), [laughter], (footsteps), *door closes*, -The End-
         let trimmed = lowercased.trimmingCharacters(in: .whitespacesAndNewlines)
         if (trimmed.hasPrefix("(") && trimmed.hasSuffix(")")) ||
-           (trimmed.hasPrefix("[") && trimmed.hasSuffix("]")) ||
-           (trimmed.hasPrefix("*") && trimmed.hasSuffix("*")) ||
-           (trimmed.hasPrefix("-") && trimmed.hasSuffix("-")) {
+            (trimmed.hasPrefix("[") && trimmed.hasSuffix("]")) ||
+            (trimmed.hasPrefix("*") && trimmed.hasSuffix("*")) ||
+            (trimmed.hasPrefix("-") && trimmed.hasSuffix("-")) {
             return true
         }
-
+        
         return false
     }
 }

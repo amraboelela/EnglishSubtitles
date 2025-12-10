@@ -11,9 +11,9 @@ import Foundation
 
 /// Tests for String extensions
 struct StringTests {
-
+    
     // MARK: - YouTube-style Hallucinations
-
+    
     @Test func testYouTubeStyleHallucinations() {
         let youtubeHallucinations = [
             "Subscribe",
@@ -25,14 +25,14 @@ struct StringTests {
             "See you in the next episode", // Should be caught by "see you in the next"
             "See you in the next"
         ]
-
+        
         for hallucination in youtubeHallucinations {
             #expect(hallucination.isLikelyHallucination, "'\(hallucination)' should be detected as hallucination")
             #expect(hallucination.uppercased().isLikelyHallucination, "'\(hallucination.uppercased())' should be detected as hallucination")
             #expect(hallucination.lowercased().isLikelyHallucination, "'\(hallucination.lowercased())' should be detected as hallucination")
         }
     }
-
+    
     @Test func testEndingPhraseHallucinations() {
         let endingPhrases = [
             "Bye",
@@ -42,14 +42,14 @@ struct StringTests {
             "See you next time",
             "The end"
         ]
-
+        
         for phrase in endingPhrases {
             #expect(phrase.isLikelyHallucination, "'\(phrase)' should be detected as hallucination")
         }
     }
-
+    
     // MARK: - Credit Text Hallucinations
-
+    
     @Test func testCreditTextHallucinations() {
         let creditTexts = [
             "Translated by XYZ Company",
@@ -57,14 +57,14 @@ struct StringTests {
             "Subtitle by Professional Team",
             "Subtitled by Expert Translators"
         ]
-
+        
         for credit in creditTexts {
             #expect(credit.isLikelyHallucination, "'\(credit)' should be detected as hallucination")
         }
     }
-
+    
     // MARK: - Bracketed Annotations
-
+    
     @Test func testParenthesesAnnotations() {
         let parenthesesAnnotations = [
             "(music)",
@@ -75,12 +75,12 @@ struct StringTests {
             "(coughs)",
             "(silence)"
         ]
-
+        
         for annotation in parenthesesAnnotations {
             #expect(annotation.isLikelyHallucination, "'\(annotation)' should be detected as hallucination")
         }
     }
-
+    
     @Test func testSquareBracketAnnotations() {
         let squareBracketAnnotations = [
             "[music]",
@@ -89,12 +89,12 @@ struct StringTests {
             "[phone rings]",
             "[door closes]"
         ]
-
+        
         for annotation in squareBracketAnnotations {
             #expect(annotation.isLikelyHallucination, "'\(annotation)' should be detected as hallucination")
         }
     }
-
+    
     @Test func testAsteriskAnnotations() {
         let asteriskAnnotations = [
             "*music playing*",
@@ -103,12 +103,12 @@ struct StringTests {
             "*applause*",
             "*phone rings*"
         ]
-
+        
         for annotation in asteriskAnnotations {
             #expect(annotation.isLikelyHallucination, "'\(annotation)' should be detected as hallucination")
         }
     }
-
+    
     @Test func testDashAnnotations() {
         let dashAnnotations = [
             "-The End-",
@@ -116,14 +116,14 @@ struct StringTests {
             "-Coming Soon-",
             "-To Be Continued-"
         ]
-
+        
         for annotation in dashAnnotations {
             #expect(annotation.isLikelyHallucination, "'\(annotation)' should be detected as hallucination")
         }
     }
-
+    
     // MARK: - Repetitive Patterns
-
+    
     @Test func testRepetitiveDialoguePatterns() {
         let repetitivePatterns = [
             "I'm sorry, I'm sorry",
@@ -132,12 +132,12 @@ struct StringTests {
             "-I'm sorry. -It's okay.",
             "-Let's go. -Let's go."
         ]
-
+        
         for pattern in repetitivePatterns {
             #expect(pattern.isLikelyHallucination, "'\(pattern)' should be detected as hallucination")
         }
     }
-
+    
     @Test func testRepetitiveWordPatterns() {
         let repetitiveWords = [
             "a a a a",
@@ -145,14 +145,14 @@ struct StringTests {
             "hello hello hello hello",
             "yes yes yes yes yes"
         ]
-
+        
         for pattern in repetitiveWords {
             #expect(pattern.isLikelyHallucination, "'\(pattern)' should be detected as hallucination")
         }
     }
-
+    
     // MARK: - Short Text Filter
-
+    
     @Test func testVeryShortTextFilter() {
         let shortTexts = [
             ".",
@@ -164,14 +164,14 @@ struct StringTests {
             "??",
             "!!"
         ]
-
+        
         for text in shortTexts {
             #expect(text.isLikelyHallucination, "'\(text)' should be detected as hallucination")
         }
     }
-
+    
     // MARK: - Valid Speech (Should NOT be filtered)
-
+    
     @Test func testValidSpeechNotFiltered() {
         let validSpeech = [
             "Hello, how are you?",
@@ -185,12 +185,12 @@ struct StringTests {
             "Let's have dinner at six.",
             "Thank you for your help with the assignment."
         ]
-
+        
         for speech in validSpeech {
             #expect(!speech.isLikelyHallucination, "'\(speech)' should NOT be detected as hallucination")
         }
     }
-
+    
     @Test func testValidSpeechWithCommonWords() {
         // Test phrases that contain some filter words but in valid context
         let validPhrases = [
@@ -199,14 +199,14 @@ struct StringTests {
             "He said goodbye to his friends", // Contains "goodbye" but in sentence
             "The end of the movie was surprising" // Contains "the end" but in sentence
         ]
-
+        
         for phrase in validPhrases {
             #expect(!phrase.isLikelyHallucination, "'\(phrase)' should NOT be detected as hallucination")
         }
     }
-
+    
     // MARK: - Edge Cases
-
+    
     @Test func testWhitespaceHandling() {
         let whitespaceTests = [
             "  (music)  ", // Should still be detected with whitespace
@@ -214,18 +214,18 @@ struct StringTests {
             "   bye   ", // Should handle whitespace around short hallucinations
             "  \n  "  // Only whitespace should not crash
         ]
-
+        
         #expect(whitespaceTests[0].isLikelyHallucination, "Bracketed text with whitespace should be detected")
         #expect(whitespaceTests[1].isLikelyHallucination, "Bracketed text with tabs/newlines should be detected")
         #expect(whitespaceTests[2].isLikelyHallucination, "Short hallucination with whitespace should be detected")
         #expect(whitespaceTests[3].isLikelyHallucination, "Only whitespace should be detected as hallucination")
     }
-
+    
     @Test func testEmptyAndNilHandling() {
         let emptyText = ""
         #expect(emptyText.isLikelyHallucination, "Empty string should be detected as hallucination")
     }
-
+    
     @Test func testCaseInsensitivity() {
         // Test that detection works regardless of case
         let testCases = [
@@ -238,7 +238,7 @@ struct StringTests {
             ("*DOOR CLOSES*", true),
             ("VALID SPEECH HERE", false)
         ]
-
+        
         for (text, shouldBeHallucination) in testCases {
             if shouldBeHallucination {
                 #expect(text.isLikelyHallucination, "'\(text)' should be detected as hallucination")
@@ -247,7 +247,7 @@ struct StringTests {
             }
         }
     }
-
+    
     @Test func testPrefixMatching() {
         // Test that prefix matching works correctly
         let prefixTests = [
@@ -256,7 +256,7 @@ struct StringTests {
             ("The subscription service", false), // Contains but doesn't start with "subscribe"
             ("I was translated by friends", false) // Contains but doesn't start with "translated by"
         ]
-
+        
         for (text, shouldBeHallucination) in prefixTests {
             if shouldBeHallucination {
                 #expect(text.isLikelyHallucination, "'\(text)' should be detected as hallucination")
@@ -265,9 +265,9 @@ struct StringTests {
             }
         }
     }
-
+    
     // MARK: - Additional String Extension Tests
-
+    
     @Test func testSubtitleSpecificHallucinations() {
         let subtitleHallucinations = [
             "subtitle",
@@ -276,12 +276,12 @@ struct StringTests {
             "Subtitle by Professional Team",
             "Subtitles provided by AI"
         ]
-
+        
         for hallucination in subtitleHallucinations {
             #expect(hallucination.isLikelyHallucination, "'\(hallucination)' should be detected as hallucination")
         }
     }
-
+    
     @Test func testPunctuationOnlyFilter() {
         let punctuationOnly = [
             ".",
@@ -291,12 +291,12 @@ struct StringTests {
             "???",
             "!!!"
         ]
-
+        
         for punctuation in punctuationOnly {
             #expect(punctuation.isLikelyHallucination, "'\(punctuation)' should be detected as hallucination")
         }
     }
-
+    
     @Test func testMixedValidAndInvalidContent() {
         // Test strings that mix valid content with potential hallucination markers
         let mixedContent = [
@@ -306,13 +306,13 @@ struct StringTests {
             "Goodbye my friend", // Contains "goodbye" but in valid sentence
             "At the end of the day" // Contains "the end" but in valid phrase
         ]
-
+        
         for content in mixedContent {
             // These should NOT be filtered as they contain substantial valid content
             #expect(!content.isLikelyHallucination, "'\(content)' should NOT be detected as hallucination")
         }
     }
-
+    
     @Test func testRepeatedWordsThreshold() {
         let repeatedWords = [
             "hello hello", // 50% unique (1/2) - should not be filtered
@@ -321,7 +321,7 @@ struct StringTests {
             "yes yes yes yes", // 25% unique (1/4) - should be filtered
             "a a a a a" // 20% unique (1/5) - should be filtered
         ]
-
+        
         #expect(!repeatedWords[0].isLikelyHallucination, "50% unique words should not be filtered")
         #expect(repeatedWords[1].isLikelyHallucination, "33% unique words should be filtered")
         #expect(!repeatedWords[2].isLikelyHallucination, "50% unique words should not be filtered")
