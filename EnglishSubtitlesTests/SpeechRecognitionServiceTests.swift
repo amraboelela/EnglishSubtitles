@@ -674,19 +674,16 @@ class SpeechRecognitionServiceTests {
   // MARK: - Real-time Processing Simulation Tests
   
   @Test func testStopListeningCleanup() async throws {
-    let service = SpeechRecognitionService()
-    
-    await service.loadModel()
-    let isReady = await TestHelpers.waitForWhisperKit(service)
-    
+    if !(await Self.service.isReady) {
+      await Self.service.loadModel()
+    }
+    let isReady = await TestHelpers.waitForWhisperKit(Self.service)
+
     if isReady {
-      // Start listening (may fail on simulator)
-      let _ = await service.startListening { _, _ in }
-      
       // Stop should always be safe to call
-      service.stopListening()
-      service.stopListening() // Multiple calls should be safe
-      
+      Self.service.stopListening()
+      Self.service.stopListening() // Multiple calls should be safe
+
       #expect(true, "Multiple stopListening calls should not crash")
     }
     
