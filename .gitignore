@@ -65,3 +65,5 @@ fastlane/test_output
 .DS_Store
 
 *.mlmodelc
+*.bin
+*.pth

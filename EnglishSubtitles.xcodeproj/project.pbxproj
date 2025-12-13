@@ -23,8 +23,26 @@
 /* Begin PBXFileReference section */
 		F5457ECE2EDAA25E00365E93 /* EnglishSubtitles.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EnglishSubtitles.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F5457EDB2EDAA26000365E93 /* EnglishSubtitlesTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EnglishSubtitlesTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		F5D4D2842EE9276400574086 /* cleanup_simulator_cache.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = cleanup_simulator_cache.sh; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		F580E6002EEBF40F00443BD4 /* Exceptions for "EnglishSubtitles" folder in "EnglishSubtitles" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				"Models/openai_whisper-medium_original/AudioEncoder.mlcomputeplan.json",
+				"Models/openai_whisper-medium_original/AudioEncoder.mlmodelc",
+				"Models/openai_whisper-medium_original/config.json",
+				"Models/openai_whisper-medium_original/generation_config.json",
+				"Models/openai_whisper-medium_original/MelSpectrogram.mlcomputeplan.json",
+				"Models/openai_whisper-medium_original/MelSpectrogram.mlmodelc",
+				"Models/openai_whisper-medium_original/TextDecoder.mlcomputeplan.json",
+				"Models/openai_whisper-medium_original/TextDecoder.mlmodelc",
+				"Models/openai_whisper-medium_original/tokenizer_config.json",
+				"Models/openai_whisper-medium_original/tokenizer.json",
+			);
+			target = F5457ECD2EDAA25E00365E93 /* EnglishSubtitles */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		F545613B2EE10D98004BF31D /* images */ = {
@@ -34,12 +52,25 @@
 		};
 		F5457ED02EDAA25E00365E93 /* EnglishSubtitles */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				F580E6002EEBF40F00443BD4 /* Exceptions for "EnglishSubtitles" folder in "EnglishSubtitles" target */,
+			);
 			path = EnglishSubtitles;
 			sourceTree = "<group>";
 		};
 		F5457EDE2EDAA26000365E93 /* EnglishSubtitlesTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = EnglishSubtitlesTests;
+			sourceTree = "<group>";
+		};
+		F5A000AA2EEBE0650065EEBF /* python */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = python;
+			sourceTree = "<group>";
+		};
+		F5A000AF2EEBE1900065EEBF /* tools */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = tools;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -66,7 +97,8 @@
 		F5457EC52EDAA25E00365E93 = {
 			isa = PBXGroup;
 			children = (
-				F5D4D2842EE9276400574086 /* cleanup_simulator_cache.sh */,
+				F5A000AF2EEBE1900065EEBF /* tools */,
+				F5A000AA2EEBE0650065EEBF /* python */,
 				F545613B2EE10D98004BF31D /* images */,
 				F5457ED02EDAA25E00365E93 /* EnglishSubtitles */,
 				F5457EDE2EDAA26000365E93 /* EnglishSubtitlesTests */,
