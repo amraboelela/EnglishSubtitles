@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		F599EF2F2EDACBD600905C10 /* WhisperKit in Frameworks */ = {isa = PBXBuildFile; productRef = F599EF2E2EDACBD600905C10 /* WhisperKit */; };
+		F59C72A42F20306E00D81F20 /* SwiftWhisper in Frameworks */ = {isa = PBXBuildFile; productRef = F59C72A32F20306E00D81F20 /* SwiftWhisper */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -18,11 +19,20 @@
 			remoteGlobalIDString = F5457ECD2EDAA25E00365E93;
 			remoteInfo = EnglishSubtitles;
 		};
+		F59C72882F202EF000D81F20 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F5457EC62EDAA25E00365E93 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F59C727A2F202EEF00D81F20;
+			remoteInfo = EnglishSubtitlesMacOS;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		F5457ECE2EDAA25E00365E93 /* EnglishSubtitles.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EnglishSubtitles.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F5457EDB2EDAA26000365E93 /* EnglishSubtitlesTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EnglishSubtitlesTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		F59C727B2F202EEF00D81F20 /* EnglishSubtitlesMacOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EnglishSubtitlesMacOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F59C72872F202EF000D81F20 /* EnglishSubtitlesMacOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EnglishSubtitlesMacOSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F5D4D2842EE9276400574086 /* cleanup_simulator_cache.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = cleanup_simulator_cache.sh; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -40,6 +50,16 @@
 		F5457EDE2EDAA26000365E93 /* EnglishSubtitlesTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = EnglishSubtitlesTests;
+			sourceTree = "<group>";
+		};
+		F59C727C2F202EEF00D81F20 /* EnglishSubtitlesMacOS */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = EnglishSubtitlesMacOS;
+			sourceTree = "<group>";
+		};
+		F59C728A2F202EF000D81F20 /* EnglishSubtitlesMacOSTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = EnglishSubtitlesMacOSTests;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -60,6 +80,21 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		F59C72782F202EEF00D81F20 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F59C72A42F20306E00D81F20 /* SwiftWhisper in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F59C72842F202EF000D81F20 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -70,6 +105,8 @@
 				F545613B2EE10D98004BF31D /* images */,
 				F5457ED02EDAA25E00365E93 /* EnglishSubtitles */,
 				F5457EDE2EDAA26000365E93 /* EnglishSubtitlesTests */,
+				F59C727C2F202EEF00D81F20 /* EnglishSubtitlesMacOS */,
+				F59C728A2F202EF000D81F20 /* EnglishSubtitlesMacOSTests */,
 				F599EF2D2EDACBD600905C10 /* Frameworks */,
 				F5457ECF2EDAA25E00365E93 /* Products */,
 			);
@@ -80,6 +117,8 @@
 			children = (
 				F5457ECE2EDAA25E00365E93 /* EnglishSubtitles.app */,
 				F5457EDB2EDAA26000365E93 /* EnglishSubtitlesTests.xctest */,
+				F59C727B2F202EEF00D81F20 /* EnglishSubtitlesMacOS.app */,
+				F59C72872F202EF000D81F20 /* EnglishSubtitlesMacOSTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -140,6 +179,52 @@
 			productReference = F5457EDB2EDAA26000365E93 /* EnglishSubtitlesTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		F59C727A2F202EEF00D81F20 /* EnglishSubtitlesMacOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F59C72992F202EF000D81F20 /* Build configuration list for PBXNativeTarget "EnglishSubtitlesMacOS" */;
+			buildPhases = (
+				F59C72772F202EEF00D81F20 /* Sources */,
+				F59C72782F202EEF00D81F20 /* Frameworks */,
+				F59C72792F202EEF00D81F20 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				F59C727C2F202EEF00D81F20 /* EnglishSubtitlesMacOS */,
+			);
+			name = EnglishSubtitlesMacOS;
+			packageProductDependencies = (
+				F59C72A32F20306E00D81F20 /* SwiftWhisper */,
+			);
+			productName = EnglishSubtitlesMacOS;
+			productReference = F59C727B2F202EEF00D81F20 /* EnglishSubtitlesMacOS.app */;
+			productType = "com.apple.product-type.application";
+		};
+		F59C72862F202EF000D81F20 /* EnglishSubtitlesMacOSTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F59C729C2F202EF000D81F20 /* Build configuration list for PBXNativeTarget "EnglishSubtitlesMacOSTests" */;
+			buildPhases = (
+				F59C72832F202EF000D81F20 /* Sources */,
+				F59C72842F202EF000D81F20 /* Frameworks */,
+				F59C72852F202EF000D81F20 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				F59C72892F202EF000D81F20 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				F59C728A2F202EF000D81F20 /* EnglishSubtitlesMacOSTests */,
+			);
+			name = EnglishSubtitlesMacOSTests;
+			packageProductDependencies = (
+			);
+			productName = EnglishSubtitlesMacOSTests;
+			productReference = F59C72872F202EF000D81F20 /* EnglishSubtitlesMacOSTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -147,7 +232,7 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1630;
+				LastSwiftUpdateCheck = 2610;
 				LastUpgradeCheck = 1630;
 				TargetAttributes = {
 					F5457ECD2EDAA25E00365E93 = {
@@ -156,6 +241,13 @@
 					F5457EDA2EDAA26000365E93 = {
 						CreatedOnToolsVersion = 16.3;
 						TestTargetID = F5457ECD2EDAA25E00365E93;
+					};
+					F59C727A2F202EEF00D81F20 = {
+						CreatedOnToolsVersion = 26.1.1;
+					};
+					F59C72862F202EF000D81F20 = {
+						CreatedOnToolsVersion = 26.1.1;
+						TestTargetID = F59C727A2F202EEF00D81F20;
 					};
 				};
 			};
@@ -170,6 +262,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				F5ADEC6C2EDAB3D6008ED953 /* XCRemoteSwiftPackageReference "WhisperKit" */,
+				F59C72A22F20305300D81F20 /* XCRemoteSwiftPackageReference "SwiftWhisper" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = F5457ECF2EDAA25E00365E93 /* Products */;
@@ -178,6 +271,8 @@
 			targets = (
 				F5457ECD2EDAA25E00365E93 /* EnglishSubtitles */,
 				F5457EDA2EDAA26000365E93 /* EnglishSubtitlesTests */,
+				F59C727A2F202EEF00D81F20 /* EnglishSubtitlesMacOS */,
+				F59C72862F202EF000D81F20 /* EnglishSubtitlesMacOSTests */,
 			);
 		};
 /* End PBXProject section */
@@ -191,6 +286,20 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		F5457ED92EDAA26000365E93 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F59C72792F202EEF00D81F20 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F59C72852F202EF000D81F20 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -214,6 +323,20 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		F59C72772F202EEF00D81F20 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F59C72832F202EF000D81F20 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -221,6 +344,11 @@
 			isa = PBXTargetDependency;
 			target = F5457ECD2EDAA25E00365E93 /* EnglishSubtitles */;
 			targetProxy = F5457EDC2EDAA26000365E93 /* PBXContainerItemProxy */;
+		};
+		F59C72892F202EF000D81F20 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F59C727A2F202EEF00D81F20 /* EnglishSubtitlesMacOS */;
+			targetProxy = F59C72882F202EF000D81F20 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -444,6 +572,114 @@
 			};
 			name = Release;
 		};
+		F59C729A2F202EF000D81F20 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SELECTED_FILES = readonly;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = EnglishSubtitles;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 15.7;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = org.amr.EnglishSubtitlesMacOS;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
+				SDKROOT = macosx;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		F59C729B2F202EF000D81F20 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SELECTED_FILES = readonly;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = EnglishSubtitles;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 15.7;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = org.amr.EnglishSubtitlesMacOS;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
+				SDKROOT = macosx;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		F59C729D2F202EF000D81F20 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 15.7;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = org.amr.EnglishSubtitlesMacOSTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/EnglishSubtitlesMacOS.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/EnglishSubtitlesMacOS";
+			};
+			name = Debug;
+		};
+		F59C729E2F202EF000D81F20 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 15.7;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = org.amr.EnglishSubtitlesMacOSTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/EnglishSubtitlesMacOS.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/EnglishSubtitlesMacOS";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -474,9 +710,35 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		F59C72992F202EF000D81F20 /* Build configuration list for PBXNativeTarget "EnglishSubtitlesMacOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F59C729A2F202EF000D81F20 /* Debug */,
+				F59C729B2F202EF000D81F20 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F59C729C2F202EF000D81F20 /* Build configuration list for PBXNativeTarget "EnglishSubtitlesMacOSTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F59C729D2F202EF000D81F20 /* Debug */,
+				F59C729E2F202EF000D81F20 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		F59C72A22F20305300D81F20 /* XCRemoteSwiftPackageReference "SwiftWhisper" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/amraboelela/SwiftWhisper";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 		F5ADEC6C2EDAB3D6008ED953 /* XCRemoteSwiftPackageReference "WhisperKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/argmaxinc/WhisperKit.git";
@@ -492,6 +754,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = F5ADEC6C2EDAB3D6008ED953 /* XCRemoteSwiftPackageReference "WhisperKit" */;
 			productName = WhisperKit;
+		};
+		F59C72A32F20306E00D81F20 /* SwiftWhisper */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F59C72A22F20305300D81F20 /* XCRemoteSwiftPackageReference "SwiftWhisper" */;
+			productName = SwiftWhisper;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
