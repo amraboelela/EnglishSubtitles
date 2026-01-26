@@ -7,12 +7,16 @@
 
 import Foundation
 import SwiftUI
+import Combine
 
 @MainActor
 class SubtitlesViewModel: ObservableObject {
     @Published var currentSubtitle: String = "Waiting for audio..."
     @Published var isCapturing: Bool = false
     @Published var errorMessage: String?
+    @Published var downloadProgress: Double = 0.0
+    @Published var downloadStatus: String = ""
+    @Published var isDownloading: Bool = false
 
     private var audioService: ScreenAudioCaptureService?
     private var transcriptionService: TranscriptionService?
@@ -23,9 +27,24 @@ class SubtitlesViewModel: ObservableObject {
         currentSubtitle = "Initializing..."
 
         do {
+            // Initialize transcription service (will auto-download model if needed)
+            transcriptionService = try await TranscriptionService { [weak self] fileName, progress, downloaded, total in
+                Task { @MainActor in
+                    self?.isDownloading = true
+                    self?.downloadProgress = progress
+                    let downloadedMB = Double(downloaded) / 1024 / 1024
+                    let totalMB = Double(total) / 1024 / 1024
+                    self?.downloadStatus = "Downloading \(fileName): \(String(format: "%.1f", downloadedMB)) / \(String(format: "%.1f", totalMB)) MB"
+                    self?.currentSubtitle = self?.downloadStatus ?? "Downloading..."
+                }
+            }
+
+            isDownloading = false
+            downloadProgress = 0.0
+            downloadStatus = ""
+
             // Initialize services
-            transcriptionService = try await TranscriptionService()
-            audioService = try await ScreenAudioCaptureService()
+            audioService = ScreenAudioCaptureService()
 
             // Set up transcription callback
             audioService?.onAudioData = { [weak self] audioData in
@@ -40,12 +59,14 @@ class SubtitlesViewModel: ObservableObject {
             errorMessage = "Failed to start: \(error.localizedDescription)"
             currentSubtitle = "Error - see below"
             isCapturing = false
+            isDownloading = false
         }
     }
 
-    func stopCapture() {
+    func stopCapture() async {
         audioService?.stopCapture()
         audioService = nil
+        await transcriptionService?.stop()
         transcriptionService = nil
         isCapturing = false
         currentSubtitle = "Stopped"
@@ -54,13 +75,19 @@ class SubtitlesViewModel: ObservableObject {
     private func processAudio(_ audioData: Data) async {
         guard let transcriptionService = transcriptionService else { return }
 
+        print("#DEBUG 🔄 Processing \(audioData.count) bytes of audio")
+
         do {
             let result = try await transcriptionService.transcribe(audioData)
+            print("#DEBUG 📝 Transcription result: '\(result)' (length: \(result.count))")
             if !result.isEmpty {
+                print("#DEBUG ✅ Updating subtitle to: '\(result)'")
                 currentSubtitle = result
+            } else {
+                print("#DEBUG ⚠️  Empty transcription result")
             }
         } catch {
-            print("Transcription error: \(error)")
+            print("#DEBUG ❌ Transcription error: \(error.localizedDescription)")
         }
     }
 }

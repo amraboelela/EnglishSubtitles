@@ -9,17 +9,41 @@ import Foundation
 import SwiftFasterWhisper
 
 class TranscriptionService {
-    private var whisper: WhisperContext?
+    private var recognizer: StreamingRecognizer?
 
-    init() async throws {
-        // Initialize SwiftFasterWhisper with base model for testing
-        // You can change this to "medium" or "large-v2" later
-        whisper = try await WhisperContext(modelName: "base")
+    init(progressCallback: DownloadProgressCallback? = nil) async throws {
+        print("#DEBUG Initializing TranscriptionService...")
+
+        // Get or download model to app's directory
+        // SwiftFasterWhisper automatically detects app name from Bundle.main
+        let modelURL = try await ModelFileManager.ensureWhisperModel(
+            size: .medium,
+            progressCallback: progressCallback
+        )
+
+        print("#DEBUG Using model at: \(modelURL.path)")
+
+        do {
+            // Initialize streaming recognizer
+            recognizer = StreamingRecognizer(modelPath: modelURL.path)
+            print("#DEBUG Configuring recognizer...")
+            try await recognizer?.configure(language: "en", task: "translate")
+            print("#DEBUG TranscriptionService initialized successfully with medium model")
+        } catch {
+            print("#DEBUG TranscriptionService initialization failed: \(error.localizedDescription)")
+            throw NSError(
+                domain: "TranscriptionService",
+                code: 2,
+                userInfo: [
+                    NSLocalizedDescriptionKey: "Failed to initialize: \(error.localizedDescription)"
+                ]
+            )
+        }
     }
 
     func transcribe(_ audioData: Data) async throws -> String {
-        guard let whisper = whisper else {
-            throw NSError(domain: "Transcription", code: 1, userInfo: [NSLocalizedDescriptionKey: "Whisper not initialized"])
+        guard let recognizer = recognizer else {
+            throw NSError(domain: "Transcription", code: 1, userInfo: [NSLocalizedDescriptionKey: "Recognizer not initialized"])
         }
 
         // Convert Data to Float array
@@ -28,13 +52,18 @@ class TranscriptionService {
             return Array(buffer.bindMemory(to: Float.self).prefix(count))
         }
 
-        // Transcribe with SwiftFasterWhisper
-        // The library handles VAD and segmentation internally
-        let result = try await whisper.transcribe(audio: floatArray, language: "auto", task: .translate)
+        // Feed audio chunk and get text immediately
+        let text = await recognizer.addAudioChunk(floatArray)
 
-        // Combine all segments into a single string
-        let text = result.segments.map { $0.text }.joined(separator: " ").trimmingCharacters(in: .whitespacesAndNewlines)
+        if !text.isEmpty {
+            print("#DEBUG ✅ Got transcription: '\(text)'")
+        }
 
         return text
+    }
+
+    func stop() async {
+        await recognizer?.stop()
+        recognizer = nil
     }
 }

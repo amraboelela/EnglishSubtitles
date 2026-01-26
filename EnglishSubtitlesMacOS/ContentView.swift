@@ -14,12 +14,22 @@ struct ContentView: View {
         VStack(spacing: 20) {
             // Subtitle display area
             ScrollView {
-                Text(viewModel.currentSubtitle)
-                    .font(.system(size: 24, weight: .medium))
-                    .foregroundColor(.white)
-                    .multilineTextAlignment(.center)
-                    .padding()
-                    .frame(maxWidth: .infinity)
+                VStack(spacing: 12) {
+                    Text(viewModel.currentSubtitle)
+                        .font(.system(size: 24, weight: .medium))
+                        .foregroundColor(.white)
+                        .multilineTextAlignment(.center)
+                        .padding()
+                        .frame(maxWidth: .infinity)
+
+                    // Show progress bar when downloading
+                    if viewModel.isDownloading {
+                        ProgressView(value: viewModel.downloadProgress, total: 1.0)
+                            .progressViewStyle(.linear)
+                            .frame(maxWidth: 600)
+                            .padding(.horizontal, 40)
+                    }
+                }
             }
             .frame(maxHeight: .infinity)
 
@@ -31,26 +41,13 @@ struct ContentView: View {
                     .multilineTextAlignment(.center)
                     .padding(.horizontal)
             }
-
-            // Control button
-            Button(action: {
-                Task {
-                    if viewModel.isCapturing {
-                        viewModel.stopCapture()
-                    } else {
-                        await viewModel.startCapture()
-                    }
-                }
-            }) {
-                Text(viewModel.isCapturing ? "Stop Capture" : "Start Capture")
-                    .frame(width: 150)
-            }
-            .buttonStyle(.borderedProminent)
-            .disabled(viewModel.errorMessage != nil && viewModel.isCapturing)
-            .padding(.bottom)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.black)
+        .task {
+            // Auto-start capture when view appears
+            await viewModel.startCapture()
+        }
     }
 }
 

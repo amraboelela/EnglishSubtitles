@@ -16,27 +16,22 @@ class ScreenAudioCaptureService: NSObject {
     private var audioBuffer: [Float] = []
     private let bufferSize = 16000 * 3 // 3 seconds at 16kHz
 
-    override init() async throws {
+    override init() {
         super.init()
-        try await setupScreenCapture()
-    }
-
-    private func setupScreenCapture() async throws {
-        // Request permission
-        guard try await SCShareableContent.excludingDesktopWindows(false, onScreenWindowsOnly: true) != nil else {
-            throw NSError(domain: "ScreenCapture", code: 1, userInfo: [NSLocalizedDescriptionKey: "Failed to get shareable content"])
-        }
     }
 
     func startCapture() async throws {
-        // Get available content
+        // Get available content for screen audio capture
         let content = try await SCShareableContent.excludingDesktopWindows(false, onScreenWindowsOnly: true)
 
         guard let display = content.displays.first else {
             throw NSError(domain: "ScreenCapture", code: 2, userInfo: [NSLocalizedDescriptionKey: "No display found"])
         }
 
-        // Configure stream - audio only
+        // Configure stream for audio capture
+        // Note: Using display filter enables video internally, causing harmless
+        // "stream output NOT found. Dropping frame" warnings in console.
+        // This is expected ScreenCaptureKit behavior for audio-only capture.
         let filter = SCContentFilter(display: display, excludingWindows: [])
         let config = SCStreamConfiguration()
         config.capturesAudio = true
@@ -47,6 +42,7 @@ class ScreenAudioCaptureService: NSObject {
         // Create and start stream
         stream = SCStream(filter: filter, configuration: config, delegate: self)
 
+        // Only add audio output
         try stream?.addStreamOutput(self, type: .audio, sampleHandlerQueue: DispatchQueue(label: "AudioCaptureQueue"))
         try await stream?.startCapture()
     }
@@ -63,7 +59,7 @@ class ScreenAudioCaptureService: NSObject {
 // MARK: - SCStreamDelegate
 extension ScreenAudioCaptureService: SCStreamDelegate {
     func stream(_ stream: SCStream, didStopWithError error: Error) {
-        print("Stream stopped with error: \(error)")
+        print("#DEBUG Stream stopped with error: \(error.localizedDescription)")
     }
 }
 
@@ -77,6 +73,10 @@ extension ScreenAudioCaptureService: SCStreamOutput {
             return
         }
 
+        // Log audio capture
+        let energy = audioSamples.reduce(0.0) { $0 + abs($1) } / Float(audioSamples.count)
+        print("#DEBUG 🎤 Captured \(audioSamples.count) samples, energy: \(String(format: "%.6f", energy))")
+
         // Accumulate audio samples
         audioBuffer.append(contentsOf: audioSamples)
 
@@ -84,6 +84,8 @@ extension ScreenAudioCaptureService: SCStreamOutput {
         if audioBuffer.count >= bufferSize {
             let dataToTranscribe = audioBuffer
             audioBuffer.removeAll()
+
+            print("#DEBUG 📦 Sending \(dataToTranscribe.count) samples for transcription")
 
             // Convert float array to Data
             let data = Data(bytes: dataToTranscribe, count: dataToTranscribe.count * MemoryLayout<Float>.size)
