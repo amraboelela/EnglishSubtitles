@@ -12,7 +12,7 @@ class TranscriptionService {
     private var recognizer: StreamingRecognizer?
 
     init(progressCallback: DownloadProgressCallback? = nil) async throws {
-        print("#DEBUG Initializing TranscriptionService...")
+        print("#debug Initializing TranscriptionService...")
 
         // Get or download model to app's directory
         // SwiftFasterWhisper automatically detects app name from Bundle.main
@@ -21,16 +21,17 @@ class TranscriptionService {
             progressCallback: progressCallback
         )
 
-        print("#DEBUG Using model at: \(modelURL.path)")
+        print("#debug Using model at: \(modelURL.path)")
 
         do {
             // Initialize streaming recognizer
             recognizer = StreamingRecognizer(modelPath: modelURL.path)
-            print("#DEBUG Configuring recognizer...")
-            try await recognizer?.configure(language: "en", task: "translate")
-            print("#DEBUG TranscriptionService initialized successfully with medium model")
+            print("#debug Configuring recognizer...")
+            // Auto-detect language and translate to English
+            try await recognizer?.configure(language: nil, task: "translate")
+            print("#debug TranscriptionService initialized successfully with medium model (auto-detect language)")
         } catch {
-            print("#DEBUG TranscriptionService initialization failed: \(error.localizedDescription)")
+            print("#debug TranscriptionService initialization failed: \(error.localizedDescription)")
             throw NSError(
                 domain: "TranscriptionService",
                 code: 2,
@@ -56,7 +57,7 @@ class TranscriptionService {
         let text = await recognizer.addAudioChunk(floatArray)
 
         if !text.isEmpty {
-            print("#DEBUG ✅ Got transcription: '\(text)'")
+            print("#debug ✅ Got transcription: '\(text)'")
         }
 
         return text

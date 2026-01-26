@@ -14,7 +14,7 @@ class ScreenAudioCaptureService: NSObject {
 
     private var stream: SCStream?
     private var audioBuffer: [Float] = []
-    private let bufferSize = 16000 * 3 // 3 seconds at 16kHz
+    private let bufferSize = 16000 // 1 second at 16kHz
 
     override init() {
         super.init()
@@ -51,15 +51,15 @@ class ScreenAudioCaptureService: NSObject {
         Task {
             try? await stream?.stopCapture()
             stream = nil
-            audioBuffer.removeAll()
         }
+        audioBuffer.removeAll()
     }
 }
 
 // MARK: - SCStreamDelegate
 extension ScreenAudioCaptureService: SCStreamDelegate {
     func stream(_ stream: SCStream, didStopWithError error: Error) {
-        print("#DEBUG Stream stopped with error: \(error.localizedDescription)")
+        print("#debug Stream stopped with error: \(error.localizedDescription)")
     }
 }
 
@@ -73,9 +73,14 @@ extension ScreenAudioCaptureService: SCStreamOutput {
             return
         }
 
-        // Log audio capture
-        let energy = audioSamples.reduce(0.0) { $0 + abs($1) } / Float(audioSamples.count)
-        print("#DEBUG 🎤 Captured \(audioSamples.count) samples, energy: \(String(format: "%.6f", energy))")
+        // Check actual sample rate
+        if let formatDesc = CMSampleBufferGetFormatDescription(sampleBuffer),
+           let asbd = CMAudioFormatDescriptionGetStreamBasicDescription(formatDesc)?.pointee {
+            let actualSampleRate = asbd.mSampleRate
+            if actualSampleRate != 16000 {
+                print("#debug ⚠️  Audio sample rate is \(actualSampleRate)Hz, need to resample to 16kHz")
+            }
+        }
 
         // Accumulate audio samples
         audioBuffer.append(contentsOf: audioSamples)
@@ -84,8 +89,6 @@ extension ScreenAudioCaptureService: SCStreamOutput {
         if audioBuffer.count >= bufferSize {
             let dataToTranscribe = audioBuffer
             audioBuffer.removeAll()
-
-            print("#DEBUG 📦 Sending \(dataToTranscribe.count) samples for transcription")
 
             // Convert float array to Data
             let data = Data(bytes: dataToTranscribe, count: dataToTranscribe.count * MemoryLayout<Float>.size)
@@ -97,16 +100,60 @@ extension ScreenAudioCaptureService: SCStreamOutput {
     }
 
     private func convertSampleBufferToFloatArray(_ sampleBuffer: CMSampleBuffer) -> [Float]? {
-        guard let blockBuffer = CMSampleBufferGetDataBuffer(sampleBuffer) else {
+        guard let formatDesc = CMSampleBufferGetFormatDescription(sampleBuffer) else {
+            print("#debug ❌ No format description")
             return nil
         }
 
-        let length = CMBlockBufferGetDataLength(blockBuffer)
-        var data = [Int16](repeating: 0, count: length / MemoryLayout<Int16>.size)
+        guard let asbd = CMAudioFormatDescriptionGetStreamBasicDescription(formatDesc)?.pointee else {
+            print("#debug ❌ No audio stream description")
+            return nil
+        }
 
-        CMBlockBufferCopyDataBytes(blockBuffer, atOffset: 0, dataLength: length, destination: &data)
+        // Verify Float32 format
+        guard asbd.mFormatID == kAudioFormatLinearPCM,
+              asbd.mBitsPerChannel == 32 else {
+            print("#debug ❌ Unexpected audio format: \(asbd.mFormatID), bits: \(asbd.mBitsPerChannel)")
+            return nil
+        }
 
-        // Convert Int16 to Float and normalize
-        return data.map { Float($0) / 32768.0 }
+        var audioBufferList = AudioBufferList(
+            mNumberBuffers: 1,
+            mBuffers: AudioBuffer(
+                mNumberChannels: asbd.mChannelsPerFrame,
+                mDataByteSize: 0,
+                mData: nil
+            )
+        )
+
+        var blockBuffer: CMBlockBuffer?
+        let status = CMSampleBufferGetAudioBufferListWithRetainedBlockBuffer(
+            sampleBuffer,
+            bufferListSizeNeededOut: nil,
+            bufferListOut: &audioBufferList,
+            bufferListSize: MemoryLayout<AudioBufferList>.size,
+            blockBufferAllocator: nil,
+            blockBufferMemoryAllocator: nil,
+            flags: 0,
+            blockBufferOut: &blockBuffer
+        )
+
+        guard status == noErr else {
+            print("#debug ❌ Failed to get audio buffer list: \(status)")
+            return nil
+        }
+
+        let buffer = audioBufferList.mBuffers
+        let frameCount = Int(CMSampleBufferGetNumSamples(sampleBuffer))
+
+        guard let data = buffer.mData else {
+            print("#debug ❌ No audio data")
+            return nil
+        }
+
+        let floatPtr = data.assumingMemoryBound(to: Float.self)
+        let samples = Array(UnsafeBufferPointer(start: floatPtr, count: frameCount))
+
+        return samples
     }
 }

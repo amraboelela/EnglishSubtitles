@@ -6,44 +6,67 @@
 //
 
 import SwiftUI
+import AppKit
 
 struct ContentView: View {
-    @StateObject private var viewModel = SubtitlesViewModel()
+    @EnvironmentObject private var viewModel: SubtitlesViewModel
 
     var body: some View {
-        VStack(spacing: 20) {
+        ZStack {
             // Subtitle display area
-            ScrollView {
-                VStack(spacing: 12) {
-                    Text(viewModel.currentSubtitle)
-                        .font(.system(size: 24, weight: .medium))
-                        .foregroundColor(.white)
-                        .multilineTextAlignment(.center)
-                        .padding()
-                        .frame(maxWidth: .infinity)
+            Text(viewModel.currentSubtitle)
+                .font(.system(size: 24, weight: .semibold))
+                .foregroundColor(.white)
+                .shadow(color: .black.opacity(0.8), radius: 2, x: 0, y: 1)
+                .multilineTextAlignment(.center)
+                .padding(.horizontal, 40)
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
 
-                    // Show progress bar when downloading
-                    if viewModel.isDownloading {
-                        ProgressView(value: viewModel.downloadProgress, total: 1.0)
-                            .progressViewStyle(.linear)
-                            .frame(maxWidth: 600)
-                            .padding(.horizontal, 40)
-                    }
+            // Show progress bar when downloading
+            if viewModel.isDownloading {
+                VStack {
+                    Spacer()
+                    ProgressView(value: viewModel.downloadProgress, total: 1.0)
+                        .progressViewStyle(.linear)
+                        .frame(maxWidth: 600)
+                        .padding(.horizontal, 40)
+                        .padding(.bottom, 20)
                 }
             }
-            .frame(maxHeight: .infinity)
 
             // Error message if any
             if let error = viewModel.errorMessage {
-                Text(error)
-                    .font(.caption)
-                    .foregroundColor(.red)
-                    .multilineTextAlignment(.center)
-                    .padding(.horizontal)
+                VStack {
+                    Spacer()
+                    Text(error)
+                        .font(.caption)
+                        .foregroundColor(.red)
+                        .multilineTextAlignment(.center)
+                        .padding(.horizontal)
+                        .padding(.bottom, 10)
+                }
+            }
+
+            // Close button in top-right corner
+            VStack {
+                HStack {
+                    Spacer()
+                    Button(action: {
+                        NSApp.windows.first?.close()
+                    }) {
+                        Image(systemName: "xmark.circle.fill")
+                            .font(.system(size: 20))
+                            .foregroundColor(.white.opacity(0.7))
+                            .shadow(color: .black.opacity(0.5), radius: 2, x: 0, y: 1)
+                    }
+                    .buttonStyle(.plain)
+                    .padding(8)
+                }
+                Spacer()
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color.black)
+        .background(Color.clear)
         .task {
             // Auto-start capture when view appears
             await viewModel.startCapture()
@@ -53,4 +76,5 @@ struct ContentView: View {
 
 #Preview {
     ContentView()
+        .environmentObject(SubtitlesViewModel())
 }

@@ -11,16 +11,24 @@ import AppKit
 @main
 struct EnglishSubtitlesMacOSApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+    @StateObject private var viewModel = SubtitlesViewModel()
 
     var body: some Scene {
         WindowGroup {
             ContentView()
-                .frame(minWidth: 600, idealWidth: 800, maxWidth: 1200,
-                       minHeight: 30, idealHeight: 45, maxHeight: 60)
+                .frame(minWidth: 300, idealWidth: 500, maxWidth: 700,
+                       minHeight: 40, idealHeight: 60, maxHeight: 100)
+                .environmentObject(viewModel)
         }
-        .defaultSize(width: 800, height: 45)
-        .windowStyle(.hiddenTitleBar)
-        .windowResizability(.contentSize)
+        .defaultSize(width: 500, height: 60)
+        .commands {
+            CommandGroup(replacing: .saveItem) {
+                Button("Save Audio...") {
+                    viewModel.saveAudio()
+                }
+                .keyboardShortcut("s", modifiers: [.command])
+            }
+        }
     }
 }
 
@@ -32,12 +40,29 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
 
+    func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
+        return true
+    }
+
     private func configureWindow() {
         guard let window = NSApplication.shared.windows.first else { return }
 
         // Make window always on top
         window.level = .floating
         window.collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary]
+
+        // Completely remove titlebar and traffic lights
+        window.styleMask = [.borderless, .fullSizeContentView]
+        window.standardWindowButton(.closeButton)?.isHidden = true
+        window.standardWindowButton(.miniaturizeButton)?.isHidden = true
+        window.standardWindowButton(.zoomButton)?.isHidden = true
+
+        // Make window movable by dragging background
+        window.isMovableByWindowBackground = true
+
+        // Make window semi-transparent
+        window.isOpaque = false
+        window.backgroundColor = NSColor.black.withAlphaComponent(0.7)
 
         // Position at bottom center of screen
         if let screen = NSScreen.main {
