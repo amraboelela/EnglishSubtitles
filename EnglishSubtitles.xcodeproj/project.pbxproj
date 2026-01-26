@@ -7,7 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		F51B4B7F2F26F12C0058D413 /* SwiftFasterWhisper in Frameworks */ = {isa = PBXBuildFile; productRef = F51B4B7E2F26F12C0058D413 /* SwiftFasterWhisper */; };
+		F51B4C502F2729240058D413 /* SwiftFasterWhisper in Frameworks */ = {isa = PBXBuildFile; productRef = F51B4C4F2F2729240058D413 /* SwiftFasterWhisper */; };
+		F51B4C522F2729240058D413 /* faster_whisper in Frameworks */ = {isa = PBXBuildFile; productRef = F51B4C512F2729240058D413 /* faster_whisper */; };
 		F599EF2F2EDACBD600905C10 /* WhisperKit in Frameworks */ = {isa = PBXBuildFile; productRef = F599EF2E2EDACBD600905C10 /* WhisperKit */; };
 /* End PBXBuildFile section */
 
@@ -84,7 +85,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F51B4B7F2F26F12C0058D413 /* SwiftFasterWhisper in Frameworks */,
+				F51B4C522F2729240058D413 /* faster_whisper in Frameworks */,
+				F51B4C502F2729240058D413 /* SwiftFasterWhisper in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -196,7 +198,8 @@
 			);
 			name = EnglishSubtitlesMacOS;
 			packageProductDependencies = (
-				F51B4B7E2F26F12C0058D413 /* SwiftFasterWhisper */,
+				F51B4C4F2F2729240058D413 /* SwiftFasterWhisper */,
+				F51B4C512F2729240058D413 /* faster_whisper */,
 			);
 			productName = EnglishSubtitlesMacOS;
 			productReference = F59C727B2F202EEF00D81F20 /* EnglishSubtitlesMacOS.app */;
@@ -262,7 +265,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				F5ADEC6C2EDAB3D6008ED953 /* XCRemoteSwiftPackageReference "WhisperKit" */,
-				F51B4B7D2F26F12C0058D413 /* XCLocalSwiftPackageReference "../SwiftFasterWhisper" */,
+				F51B4C4E2F2729240058D413 /* XCLocalSwiftPackageReference "../SwiftFasterWhisper" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = F5457ECF2EDAA25E00365E93 /* Products */;
@@ -731,7 +734,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		F51B4B7D2F26F12C0058D413 /* XCLocalSwiftPackageReference "../SwiftFasterWhisper" */ = {
+		F51B4C4E2F2729240058D413 /* XCLocalSwiftPackageReference "../SwiftFasterWhisper" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = ../SwiftFasterWhisper;
 		};
@@ -749,9 +752,13 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		F51B4B7E2F26F12C0058D413 /* SwiftFasterWhisper */ = {
+		F51B4C4F2F2729240058D413 /* SwiftFasterWhisper */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = SwiftFasterWhisper;
+		};
+		F51B4C512F2729240058D413 /* faster_whisper */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = faster_whisper;
 		};
 		F599EF2E2EDACBD600905C10 /* WhisperKit */ = {
 			isa = XCSwiftPackageProductDependency;

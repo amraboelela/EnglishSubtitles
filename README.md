@@ -22,12 +22,12 @@ A macOS application that generates live English subtitles from **screen audio** 
 ### macOS Features
 - **Menu bar control** - "Subtitles → Show Subtitles" toggles subtitle window
 - Real-time subtitle generation from **screen audio** using SwiftFasterWhisper
-- **Built-in VAD** - SwiftFasterWhisper handles voice activity detection internally
+- **Adaptive speech detection** - SwiftFasterWhisper performs adaptive speech detection and silence filtering
 - **Floating window** for subtitle display - always-on-top and click-through
 - **Auto-start/stop** - Opening window starts transcription, closing stops it
 - **Fullscreen support** - Works with most apps (YouTube, VLC)
 - **DRM limitations** - May not work with DRM-protected content (Netflix, Disney+, Apple TV+)
-- Large Whisper models (medium, large-v2) for highest accuracy
+- Whisper models (medium, large-v2) for high accuracy
 - Persistent model storage in Application Support
 - Works with **any application** (not just browsers)
 - **Native macOS experience** - Similar to QuickTime's Picture-in-Picture
@@ -59,7 +59,7 @@ A macOS application that generates live English subtitles from **screen audio** 
 ### macOS
 - **SwiftFasterWhisper** - Local Whisper model inference using faster-whisper backend
   - URL: `https://github.com/amraboelela/SwiftFasterWhisper.git`
-  - Includes built-in VAD (Voice Activity Detection)
+  - Includes adaptive speech detection and silence filtering
 
 ## How It Works
 
@@ -84,14 +84,14 @@ The app uses both tasks simultaneously to show:
 1. Select "Subtitles → Show Subtitles" from menu bar (or press **⌘⇧S**)
 2. Floating subtitle window opens and appears on screen
 3. ScreenCaptureKit captures screen audio (e.g., from YouTube, VLC, some streaming apps)
-4. SwiftFasterWhisper processes audio with built-in VAD
-5. SwiftFasterWhisper transcribes audio using local Whisper large models (up to large-v2)
+4. SwiftFasterWhisper processes audio with adaptive speech detection
+5. SwiftFasterWhisper transcribes audio using local Whisper models (medium, large-v2)
 6. Transcription updates ViewModel
 7. Floating window displays subtitles
 8. Close window (or select "Hide Subtitles") → Transcription stops automatically
 
-**Built-in Voice Activity Detection:**
-- SwiftFasterWhisper includes VAD for robust speech detection
+**Adaptive Speech Detection:**
+- SwiftFasterWhisper includes adaptive energy-based filtering for speech detection
 - Automatically segments audio at natural speech boundaries
 - Prevents transcribing silence or background noise
 
@@ -136,7 +136,7 @@ EnglishSubtitlesMacOS/
 │   └── SubtitleView.swift                   # Subtitle display UI
 ├── Services/
 │   ├── ScreenAudioCaptureService.swift      # ScreenCaptureKit integration
-│   ├── TranscriptionService.swift           # SwiftFasterWhisper integration (with built-in VAD)
+│   ├── TranscriptionService.swift           # SwiftFasterWhisper integration (adaptive speech detection)
 │   └── ModelDownloadService.swift           # Downloads and manages Whisper models
 ├── Utilities/
 │   └── AudioBufferProcessor.swift           # Audio buffer conversion utilities
@@ -200,7 +200,7 @@ Captures audio from the screen using ScreenCaptureKit:
 SwiftFasterWhisper integration for local transcription:
 - Loads Whisper models (medium, large-v2)
 - Transcribes audio segments to text using faster-whisper backend
-- **Built-in VAD** - Automatically detects speech vs silence
+- **Adaptive speech detection** - Automatically detects speech vs silence using energy-based filtering
 - Segments audio at natural speech boundaries
 - Supports multiple languages
 - Returns transcription results with timestamps

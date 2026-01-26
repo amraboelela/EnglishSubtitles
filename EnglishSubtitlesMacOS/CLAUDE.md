@@ -13,7 +13,7 @@ The app displays subtitles in a **floating subtitle window** controlled via the 
 - Captures **screen audio** via ScreenCaptureKit (not microphone)
 - Uses **SwiftFasterWhisper** (not WhisperKit) for local transcription
 - **Faster inference** using faster-whisper backend (CTranslate2)
-- **Built-in VAD** - SwiftFasterWhisper handles voice activity detection internally
+- **Adaptive speech detection** - SwiftFasterWhisper performs adaptive speech detection and silence filtering
 - **Floating window** - Always-on-top, click-through subtitle display
 - **Auto-start/stop** - Opening window starts transcription, closing window stops it
 - **Fullscreen support** - Works with most apps in fullscreen (YouTube, VLC)
@@ -44,7 +44,7 @@ EnglishSubtitlesMacOS/
 │   └── SubtitleView.swift                   # Subtitle display UI
 ├── Services/
 │   ├── ScreenAudioCaptureService.swift      # ScreenCaptureKit integration
-│   ├── TranscriptionService.swift           # SwiftFasterWhisper integration (with built-in VAD)
+│   ├── TranscriptionService.swift           # SwiftFasterWhisper integration (adaptive speech detection)
 │   └── ModelDownloadService.swift           # Downloads and manages Whisper models
 ├── Utilities/
 │   └── AudioBufferProcessor.swift           # Audio buffer conversion utilities
@@ -56,7 +56,7 @@ EnglishSubtitlesMacOS/
 ### macOS-Specific Services
 
 1. **ScreenAudioCaptureService** - Captures screen audio using ScreenCaptureKit
-2. **TranscriptionService** - Integrates SwiftFasterWhisper for local transcription (with built-in VAD)
+2. **TranscriptionService** - Integrates SwiftFasterWhisper for local transcription with adaptive speech detection
 3. **ModelDownloadService** - Downloads and manages large Whisper models
 4. **SubtitleFloatingWindow** - Floating, always-on-top, click-through window for subtitle display
 
@@ -67,7 +67,7 @@ EnglishSubtitlesMacOS/
 3. Floating subtitle window opens and appears on screen
 4. `ScreenAudioCaptureService` begins capturing screen audio
 5. Audio stream sent to `TranscriptionService`
-6. `TranscriptionService` uses SwiftFasterWhisper with built-in VAD to process audio
+6. `TranscriptionService` uses SwiftFasterWhisper with adaptive speech detection to process audio
 7. SwiftFasterWhisper detects speech, segments audio, and transcribes locally
 8. Transcription result updates `SubtitlesViewModel`
 9. `SubtitleFloatingWindow` displays subtitle text in floating window
@@ -96,9 +96,9 @@ The subtitle floating window:
 
 ### Voice Activity Detection (Built-in)
 
-SwiftFasterWhisper includes built-in Voice Activity Detection:
+SwiftFasterWhisper includes adaptive speech detection:
 - Monitors audio stream for speech vs silence automatically
-- Detects speech segments using faster-whisper's VAD
+- Detects speech segments using adaptive energy-based filtering
 - Segments audio into chunks at natural speech boundaries
 - Prevents transcribing silence or background noise
 - No separate VAD service needed
@@ -114,7 +114,7 @@ SwiftFasterWhisper includes built-in Voice Activity Detection:
 - **SwiftFasterWhisper** - Local Whisper model inference using faster-whisper backend
   - URL: `https://github.com/amraboelela/SwiftFasterWhisper.git`
   - Provides faster inference using CTranslate2
-  - Includes built-in VAD (Voice Activity Detection)
+  - Includes adaptive speech detection and silence filtering
 
 ### Permissions Required
 
@@ -191,12 +191,12 @@ let stream = SCStream(filter: filter, configuration: config, delegate: self)
 ### Voice Activity Detection
 
 ```swift
-// SwiftFasterWhisper handles VAD internally
+// SwiftFasterWhisper handles adaptive speech detection internally
 // No separate VAD implementation needed
 
 func transcribe(_ audioData: Data) async throws -> TranscriptionResult {
     // SwiftFasterWhisper automatically:
-    // 1. Detects speech using built-in VAD
+    // 1. Detects speech using adaptive energy-based filtering
     // 2. Segments audio at natural boundaries
     // 3. Transcribes only speech segments
     let result = try await whisper.transcribe(audioData)
