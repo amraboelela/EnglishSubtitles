@@ -4,28 +4,30 @@ This file provides guidance to Claude Code (claude.ai/code) when working with th
 
 ## Project Overview
 
-EnglishSubtitles macOS is a macOS application that generates live English subtitles from **screen audio** (not microphone). It captures audio from the screen (e.g., YouTube, VLC, Netflix, streaming videos) using ScreenCaptureKit and transcribes it locally using SwiftWhisper with Whisper large models.
+EnglishSubtitles macOS is a macOS application that generates live English subtitles from **screen audio** (not microphone). It captures audio from the screen (e.g., YouTube, VLC, some streaming apps) using ScreenCaptureKit and transcribes it locally using SwiftFasterWhisper with Whisper large models (up to large-v2).
 
 The app displays subtitles in a **floating subtitle window** controlled via the macOS menu bar. Simple, intuitive, and native macOS experience similar to QuickTime.
 
 **Key Features:**
 - **Menu bar control** - "Subtitles → Show Subtitles" toggles subtitle window
 - Captures **screen audio** via ScreenCaptureKit (not microphone)
-- Uses **SwiftWhisper** (not WhisperKit) for local transcription
+- Uses **SwiftFasterWhisper** (not WhisperKit) for local transcription
+- **Faster inference** using faster-whisper backend (CTranslate2)
+- **Built-in VAD** - SwiftFasterWhisper handles voice activity detection internally
 - **Floating window** - Always-on-top, click-through subtitle display
 - **Auto-start/stop** - Opening window starts transcription, closing window stops it
 - **Fullscreen support** - Works with most apps in fullscreen (YouTube, VLC)
-- **Voice Activity Detection (VAD)** using WebRTC for audio segmentation
-- Supports **larger Whisper models** (large-v2, large-v3) with persistent storage
+- **DRM limitations** - May not work with DRM-protected content (audio capture may work but overlay may fail)
+- Supports **Whisper models** (medium, large-v2) with persistent storage
 - Models stored in Application Support directory
 
 **Key Differences from iOS version:**
 - Captures **screen audio** via ScreenCaptureKit (not microphone)
-- Uses **SwiftWhisper** (not WhisperKit)
+- Uses **SwiftFasterWhisper** (not WhisperKit)
+- **Faster inference** using CTranslate2 backend with built-in VAD
 - **Menu bar control** - Toggle subtitle window via menu (not auto-start)
 - **Floating window** for subtitle display (not fullscreen view)
-- Includes **WebRTC VAD** for audio segmentation
-- Supports **larger Whisper models** (large-v2, large-v3) with persistent storage
+- Supports **larger Whisper models** (medium, large-v2) with persistent storage
 - Works with **any application** (not just mobile apps)
 
 ## Project Structure
@@ -42,8 +44,7 @@ EnglishSubtitlesMacOS/
 │   └── SubtitleView.swift                   # Subtitle display UI
 ├── Services/
 │   ├── ScreenAudioCaptureService.swift      # ScreenCaptureKit integration
-│   ├── TranscriptionService.swift           # SwiftWhisper integration
-│   ├── VADService.swift                     # WebRTC Voice Activity Detection
+│   ├── TranscriptionService.swift           # SwiftFasterWhisper integration (with built-in VAD)
 │   └── ModelDownloadService.swift           # Downloads and manages Whisper models
 ├── Utilities/
 │   └── AudioBufferProcessor.swift           # Audio buffer conversion utilities
@@ -55,10 +56,9 @@ EnglishSubtitlesMacOS/
 ### macOS-Specific Services
 
 1. **ScreenAudioCaptureService** - Captures screen audio using ScreenCaptureKit
-2. **TranscriptionService** - Integrates SwiftWhisper for local transcription
-3. **VADService** - Voice Activity Detection using WebRTC
-4. **ModelDownloadService** - Downloads and manages large Whisper models
-5. **SubtitleFloatingWindow** - Floating, always-on-top, click-through window for subtitle display
+2. **TranscriptionService** - Integrates SwiftFasterWhisper for local transcription (with built-in VAD)
+3. **ModelDownloadService** - Downloads and manages large Whisper models
+4. **SubtitleFloatingWindow** - Floating, always-on-top, click-through window for subtitle display
 
 ### Data Flow
 
@@ -66,9 +66,9 @@ EnglishSubtitlesMacOS/
 2. User selects "Subtitles → Show Subtitles" from menu bar
 3. Floating subtitle window opens and appears on screen
 4. `ScreenAudioCaptureService` begins capturing screen audio
-5. `VADService` uses WebRTC to monitor audio and detect speech segments
-6. When speech ends (silence detected by WebRTC VAD), audio segment sent to `TranscriptionService`
-7. `TranscriptionService` uses SwiftWhisper to transcribe segment locally
+5. Audio stream sent to `TranscriptionService`
+6. `TranscriptionService` uses SwiftFasterWhisper with built-in VAD to process audio
+7. SwiftFasterWhisper detects speech, segments audio, and transcribes locally
 8. Transcription result updates `SubtitlesViewModel`
 9. `SubtitleFloatingWindow` displays subtitle text in floating window
 10. User closes window → Transcription stops automatically
@@ -94,15 +94,14 @@ The subtitle floating window:
 - **Auto-sizing** - Adjusts size based on subtitle text length
 - **Auto-start/stop** - Opening window starts transcription, closing stops it
 
-### Voice Activity Detection (WebRTC VAD)
+### Voice Activity Detection (Built-in)
 
-The VAD service uses WebRTC's built-in Voice Activity Detection:
-- Monitors audio stream for speech vs silence
-- Detects speech start when WebRTC VAD indicates speech
-- Detects speech end when silence duration exceeds threshold (e.g., 1.5 seconds)
-- Segments audio into chunks for transcription
-- Prevents sending silence to transcription service
-- More robust than simple RMS-based detection
+SwiftFasterWhisper includes built-in Voice Activity Detection:
+- Monitors audio stream for speech vs silence automatically
+- Detects speech segments using faster-whisper's VAD
+- Segments audio into chunks at natural speech boundaries
+- Prevents transcribing silence or background noise
+- No separate VAD service needed
 
 ## Development Setup
 
@@ -112,9 +111,10 @@ The VAD service uses WebRTC's built-in Voice Activity Detection:
 - Swift 5.9+
 
 ### Dependencies (Swift Package Manager)
-- **SwiftWhisper** - Local Whisper model inference
-  - URL: TBD (SwiftWhisper package URL)
-- **WebRTC** - Voice Activity Detection
+- **SwiftFasterWhisper** - Local Whisper model inference using faster-whisper backend
+  - URL: `https://github.com/amraboelela/SwiftFasterWhisper.git`
+  - Provides faster inference using CTranslate2
+  - Includes built-in VAD (Voice Activity Detection)
 
 ### Permissions Required
 
@@ -150,18 +150,20 @@ xcodebuild test -project EnglishSubtitles.xcodeproj -scheme EnglishSubtitlesMacO
 The app supports multiple Whisper models stored in Application Support:
 
 ```swift
-// Default model: large-v3
-let modelPath = ModelDownloadService.shared.getModelPath(for: "large-v3")
+// Default model: large-v2
+let modelPath = ModelDownloadService.shared.getModelPath(for: "large-v2")
 let transcriptionService = TranscriptionService(modelPath: modelPath)
 ```
 
 **Available Models:**
-- `large-v3` (~3GB) - **Default** - Best accuracy, multilingual
-- `large-v2` (~3GB) - Previous generation, still very accurate
+- `large-v2` (~3GB) - **Default** - Best accuracy, multilingual
 - `medium` (~1.5GB) - Faster, good accuracy
 - `small` (~500MB) - Fast, decent accuracy
 - `base` (~150MB) - Very fast, lower accuracy
 - `tiny` (~75MB) - Fastest, basic accuracy
+
+⚠️ **large-v3 is not supported**
+SwiftFasterWhisper uses the 80-mel Whisper pipeline (v1–v2). large-v3 requires 128 mel bands and cannot be used.
 
 **Model Storage:**
 - Location: `~/Library/Application Support/EnglishSubtitles/models/`
@@ -189,30 +191,16 @@ let stream = SCStream(filter: filter, configuration: config, delegate: self)
 ### Voice Activity Detection
 
 ```swift
-// Detect speech segments using WebRTC VAD
-import WebRTC
+// SwiftFasterWhisper handles VAD internally
+// No separate VAD implementation needed
 
-func processAudioBuffer(_ buffer: AVAudioPCMBuffer) {
-    // Use WebRTC's built-in VAD
-    let vadResult = webRTCVAD.process(buffer)
-
-    if vadResult.isSpeech {
-        // Speech detected
-        if !isSpeaking {
-            isSpeaking = true
-            currentSegment = []
-        }
-        currentSegment.append(buffer)
-        lastSpeechTime = Date()
-    } else {
-        // Silence detected
-        if isSpeaking && Date().timeIntervalSince(lastSpeechTime) > silenceThreshold {
-            // End of speech - send for transcription
-            transcribe(currentSegment)
-            isSpeaking = false
-            currentSegment = []
-        }
-    }
+func transcribe(_ audioData: Data) async throws -> TranscriptionResult {
+    // SwiftFasterWhisper automatically:
+    // 1. Detects speech using built-in VAD
+    // 2. Segments audio at natural boundaries
+    // 3. Transcribes only speech segments
+    let result = try await whisper.transcribe(audioData)
+    return result
 }
 ```
 
@@ -308,8 +296,10 @@ struct EnglishSubtitlesMacOSApp: App {
 - **Menu bar control** - "Subtitles → Show Subtitles" to toggle
 - **Floating window** displays subtitles on top of any app
 - Works in fullscreen for most apps (YouTube, VLC)
-- DRM-protected fullscreen may block overlay (Netflix, Disney+, Apple TV+)
-- Models downloaded on first launch (~3GB for large-v3)
+- May not work with DRM-protected content (Netflix, Disney+, Apple TV+)
+  - Audio capture may work but overlay rendering may fail
+  - Sometimes both fail depending on macOS + DRM
+- Models downloaded on first launch (~3GB for large-v2)
 - 100% free and private - everything runs locally
 - No internet required after model download
 - No browser extension required

@@ -1,5 +1,5 @@
 {
-  "originHash" : "32d472c003f3b0cddbf5e57d98c70016a11efbb28fd9e4f167060f4f6b4258e3",
+  "originHash" : "be2b508cf91e00ccfdfd83e8177b94c9aee963c0dbf9b604f03fa19a3d85c0d4",
   "pins" : [
     {
       "identity" : "swift-argument-parser",
@@ -35,15 +35,6 @@
       "state" : {
         "revision" : "18ccbd247eb4bf35a0ea98aab3b95ca255f09376",
         "version" : "1.1.3"
-      }
-    },
-    {
-      "identity" : "swiftwhisper",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/amraboelela/SwiftWhisper",
-      "state" : {
-        "branch" : "master",
-        "revision" : "c340197966ebd264f3135d3955874b40f8ed58bc"
       }
     },
     {

@@ -6,6 +6,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 EnglishSubtitles is an iOS application that displays English subtitles in real-time while watching foreign language content (e.g., Turkish drama) on iPhone. The app uses WhisperKit for on-device multilingual speech recognition and translation to English - completely free and private.
 
+The macOS version generates live English subtitles from screen audio using SwiftFasterWhisper for local transcription with a floating window controlled via the menu bar.
+
 ## Project Structure
 
 This is a Swift/iOS project built with SwiftUI and follows the MVVM (Model-View-ViewModel) architecture pattern.
