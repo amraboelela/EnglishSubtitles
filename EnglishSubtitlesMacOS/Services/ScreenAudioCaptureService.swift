@@ -46,14 +46,6 @@ class ScreenAudioCaptureService: NSObject {
         try stream?.addStreamOutput(self, type: .audio, sampleHandlerQueue: DispatchQueue(label: "AudioCaptureQueue"))
         try await stream?.startCapture()
     }
-
-    func stopCapture() {
-        Task {
-            try? await stream?.stopCapture()
-            stream = nil
-        }
-        audioBuffer.removeAll()
-    }
 }
 
 // MARK: - SCStreamDelegate

@@ -19,10 +19,8 @@ struct EnglishSubtitlesMacOSApp: App {
                 .frame(minWidth: 300, idealWidth: 500, maxWidth: 700,
                        minHeight: 30, idealHeight: 50, maxHeight: 80)
                 .environmentObject(viewModel)
-                .onDisappear {
-                    Task {
-                        await viewModel.stopCapture()
-                    }
+                .onAppear {
+                    appDelegate.viewModel = viewModel
                 }
         }
         .defaultSize(width: 500, height: 50)
@@ -53,11 +51,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationWillTerminate(_ notification: Notification) {
         // Ensure screen capture is stopped
-        if let viewModel = viewModel {
-            Task {
-                await viewModel.stopCapture()
-            }
-        }
     }
 
     private func configureWindow() {

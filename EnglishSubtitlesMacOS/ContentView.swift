@@ -28,7 +28,7 @@ struct ContentView: View {
                 Spacer()
 
                 Button(action: {
-                    NSApp.windows.first?.close()
+                    NSApplication.shared.terminate(nil)
                 }) {
                     Image(systemName: "xmark.circle.fill")
                         .font(.system(size: 14))

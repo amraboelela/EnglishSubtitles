@@ -66,17 +66,6 @@ class SubtitlesViewModel: ObservableObject {
         }
     }
 
-    func stopCapture() async {
-        audioService?.stopCapture()
-        audioService = nil
-        await transcriptionService?.stop()
-        transcriptionService = nil
-        subtitleClearTask?.cancel()
-        subtitleClearTask = nil
-        isCapturing = false
-        currentSubtitle = "Stopped"
-    }
-
     private func processAudio(_ audioData: Data) async {
         guard let transcriptionService = transcriptionService else { return }
 
