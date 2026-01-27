@@ -17,10 +17,15 @@ struct EnglishSubtitlesMacOSApp: App {
         WindowGroup {
             ContentView()
                 .frame(minWidth: 300, idealWidth: 500, maxWidth: 700,
-                       minHeight: 40, idealHeight: 60, maxHeight: 100)
+                       minHeight: 30, idealHeight: 50, maxHeight: 80)
                 .environmentObject(viewModel)
+                .onDisappear {
+                    Task {
+                        await viewModel.stopCapture()
+                    }
+                }
         }
-        .defaultSize(width: 500, height: 60)
+        .defaultSize(width: 500, height: 50)
         .commands {
             CommandGroup(replacing: .saveItem) {
                 Button("Save Audio...") {
@@ -33,6 +38,8 @@ struct EnglishSubtitlesMacOSApp: App {
 }
 
 class AppDelegate: NSObject, NSApplicationDelegate {
+    var viewModel: SubtitlesViewModel?
+
     func applicationDidFinishLaunching(_ notification: Notification) {
         // Slight delay to ensure window is fully created
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
@@ -42,6 +49,15 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
         return true
+    }
+
+    func applicationWillTerminate(_ notification: Notification) {
+        // Ensure screen capture is stopped
+        if let viewModel = viewModel {
+            Task {
+                await viewModel.stopCapture()
+            }
+        }
     }
 
     private func configureWindow() {
@@ -66,13 +82,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
         // Position at bottom center of screen
         if let screen = NSScreen.main {
-            let screenFrame = screen.visibleFrame
+            let screenFrame = screen.frame  // Use full frame instead of visibleFrame
             let windowWidth = window.frame.width
             let windowHeight = window.frame.height
 
-            // Center horizontally, 100 pixels from bottom
+            // Center horizontally, at the absolute bottom
             let x = screenFrame.origin.x + (screenFrame.width - windowWidth) / 2
-            let y = screenFrame.origin.y + 100
+            let y = screenFrame.origin.y
 
             window.setFrameOrigin(NSPoint(x: x, y: y))
         }

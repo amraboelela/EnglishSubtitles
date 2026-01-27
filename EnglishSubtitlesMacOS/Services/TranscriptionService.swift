@@ -11,6 +11,13 @@ import SwiftFasterWhisper
 class TranscriptionService {
     private var recognizer: StreamingRecognizer?
 
+    // Common Whisper hallucinations to filter out
+    private let hallucinations: Set<String> = [
+        "you", "thank you", "thanks for watching",
+        "bye", "goodbye", "the", "a", "an",
+        "uh", "um", "hmm", "mm", "ah"
+    ]
+
     init(progressCallback: DownloadProgressCallback? = nil) async throws {
         print("#debug Initializing TranscriptionService...")
 
@@ -55,6 +62,12 @@ class TranscriptionService {
 
         // Feed audio chunk and get text immediately
         let text = await recognizer.addAudioChunk(floatArray)
+
+        // Filter out hallucinations
+        let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+        if hallucinations.contains(trimmed) {
+            return ""  // Skip hallucination
+        }
 
         if !text.isEmpty {
             print("#debug ✅ Got transcription: '\(text)'")

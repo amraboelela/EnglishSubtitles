@@ -13,32 +13,32 @@ struct ContentView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            // Close button row
-            HStack {
+            // Main content row with text and close button
+            HStack(alignment: .top, spacing: 0) {
                 Spacer()
+
+                Text(viewModel.currentSubtitle)
+                    .font(.system(size: 20, weight: .semibold))
+                    .foregroundColor(.white)
+                    .shadow(color: .black.opacity(0.8), radius: 2, x: 0, y: 1)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal, 40)
+                    .frame(maxHeight: .infinity, alignment: .center)
+
+                Spacer()
+
                 Button(action: {
                     NSApp.windows.first?.close()
                 }) {
                     Image(systemName: "xmark.circle.fill")
-                        .font(.system(size: 16))
-                        .foregroundColor(.white.opacity(0.6))
+                        .font(.system(size: 14))
+                        .foregroundColor(.white.opacity(0.5))
                         .shadow(color: .black.opacity(0.5), radius: 2, x: 0, y: 1)
                 }
                 .buttonStyle(.plain)
                 .padding(6)
             }
-
-            // Subtitle text centered
-            Spacer()
-
-            Text(viewModel.currentSubtitle)
-                .font(.system(size: 24, weight: .semibold))
-                .foregroundColor(.white)
-                .shadow(color: .black.opacity(0.8), radius: 2, x: 0, y: 1)
-                .multilineTextAlignment(.center)
-                .padding(.horizontal, 40)
-
-            Spacer()
+            .frame(maxHeight: .infinity)
 
             // Progress bar when downloading
             if viewModel.isDownloading {
@@ -46,7 +46,7 @@ struct ContentView: View {
                     .progressViewStyle(.linear)
                     .frame(maxWidth: 400)
                     .padding(.horizontal, 20)
-                    .padding(.bottom, 8)
+                    .padding(.bottom, 4)
             }
 
             // Error message if any
@@ -56,7 +56,7 @@ struct ContentView: View {
                     .foregroundColor(.red)
                     .multilineTextAlignment(.center)
                     .padding(.horizontal)
-                    .padding(.bottom, 8)
+                    .padding(.bottom, 4)
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
