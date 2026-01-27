@@ -26,6 +26,7 @@ class SubtitlesViewModel: ObservableObject {
     private var audioBuffer: [Float] = []
     private let maxBufferDuration: TimeInterval = 60.0 // Keep last 60 seconds
     private let sampleRate: Double = 16000
+    private var subtitleClearTask: Task<Void, Never>?
 
     func startCapture() async {
         isCapturing = true
@@ -70,6 +71,8 @@ class SubtitlesViewModel: ObservableObject {
         audioService = nil
         await transcriptionService?.stop()
         transcriptionService = nil
+        subtitleClearTask?.cancel()
+        subtitleClearTask = nil
         isCapturing = false
         currentSubtitle = "Stopped"
     }
@@ -96,6 +99,17 @@ class SubtitlesViewModel: ObservableObject {
             let result = try await transcriptionService.transcribe(audioData)
             if !result.isEmpty {
                 currentSubtitle = result
+
+                // Cancel previous clear task if any
+                subtitleClearTask?.cancel()
+
+                // Schedule subtitle to clear after 10 seconds
+                subtitleClearTask = Task { @MainActor in
+                    try? await Task.sleep(for: .seconds(10))
+                    if !Task.isCancelled {
+                        currentSubtitle = ""
+                    }
+                }
             }
         } catch {
             print("#debug ❌ Transcription error: \(error.localizedDescription)")
