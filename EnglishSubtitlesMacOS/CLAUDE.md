@@ -322,3 +322,4 @@ struct EnglishSubtitlesMacOSApp: App {
 - Use `Task.sleep(for: .seconds(2))` format for sleep
 - Do not add fallbacks - throw errors and let the user handle them
 - Created by Amr Aboelela (not "Created by Claude")
+- Never run xcodebuild by yourself
