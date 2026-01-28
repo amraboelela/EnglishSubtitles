@@ -89,16 +89,16 @@ class SubtitlesViewModel: ObservableObject {
             if !result.isEmpty {
                 currentSubtitle = result
 
-                // Cancel previous clear task if any
-                subtitleClearTask?.cancel()
-
-                // Schedule subtitle to clear after 10 seconds
-                subtitleClearTask = Task { @MainActor in
-                    try? await Task.sleep(for: .seconds(10))
-                    if !Task.isCancelled {
-                        currentSubtitle = ""
-                    }
-                }
+//                // Cancel previous clear task if any
+//                subtitleClearTask?.cancel()
+//
+//                // Schedule subtitle to clear after 10 seconds
+//                subtitleClearTask = Task { @MainActor in
+//                    try? await Task.sleep(for: .seconds(10))
+//                    if !Task.isCancelled {
+//                        currentSubtitle = ""
+//                    }
+//                }
             }
         } catch {
             print("#debug ❌ Transcription error: \(error.localizedDescription)")
